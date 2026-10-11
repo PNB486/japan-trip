@@ -91,6 +91,8 @@ html { scroll-behavior: smooth; }
   [data-screen-label="01 날짜·날씨"] [style*="font-size: 9px"] { font-size: 11px !important; }
   [data-screen-label="01 날짜·날씨"] [style*="font-size: 10px"] { font-size: 11px !important; }
   [style*="right: 187px"], [style*="right:187px"] { display: none !important; }
+  [data-plan-item] button { padding: 7px 8px !important; font-size: 12px !important; }
+  [data-plan-handle] { font-size: 16px !important; padding: 6px 8px 6px 2px !important; }
   main + div { padding: 8px 10px !important; gap: 6px !important; }
   main + div > span:not(:last-child) { display: none !important; }
   main + div > span:last-child { margin-left: 0 !important; width: 100%; }
@@ -619,14 +621,32 @@ html { scroll-behavior: smooth; }
 
               <div style="{{ dayGridStyle }}">
                 <sc-for list="{{ itinerary }}" as="day" hint-placeholder-count="3">
-                  <div style="background:rgba(0,0,0,.28);border-radius:var(--radius-md);padding:11px 13px;display:flex;flex-direction:column;gap:4px">
+                  <div data-plan-day="{{ day.idx }}" style="background:rgba(0,0,0,.28);border-radius:var(--radius-md);padding:11px 13px;display:flex;flex-direction:column;gap:2px;min-height:72px">
                     <span style="{{ dayLabelStyle }}">{{ day.label }}</span>
-                    <sc-for list="{{ day.items }}" as="it" hint-placeholder-count="2">
-                      <span style="font-size:11.5px;color:var(--color-text);line-height:1.5;border-bottom:1px dashed rgba(255,255,255,.12);padding:3px 0">{{ it }}</span>
+                    <sc-for list="{{ day.items }}" as="it" hint-placeholder-count="3">
+                      <div data-plan-item="{{ it.id }}" style="{{ it.style }}">
+                        <sc-if value="{{ it.editable }}" hint-placeholder-val="{{ true }}">
+                          <span data-plan-handle="1" style="{{ handleStyle }}" title="끌어서 이동">⋮⋮</span>
+                        </sc-if>
+                        <span style="{{ it.nameStyle }}">{{ it.n }}</span>
+                        <sc-if value="{{ it.editable }}" hint-placeholder-val="{{ true }}">
+                          <span style="display:flex;gap:2px;flex:none">
+                            <button onClick="{{ it.prev }}" style="{{ it.prevStyle }}" title="앞 날로">◀</button>
+                            <button onClick="{{ it.next }}" style="{{ it.nextStyle }}" title="다음 날로">▶</button>
+                            <button onClick="{{ it.drop }}" style="{{ it.prevStyle }}" title="일정에서 빼기">✕</button>
+                          </span>
+                        </sc-if>
+                      </div>
                     </sc-for>
                   </div>
                 </sc-for>
               </div>
+              <sc-if value="{{ canEditPlan }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px">
+                  <span style="font-size:10.5px;color:var(--color-accent-200);opacity:.85;line-height:1.5">{{ planHint }}</span>
+                  <button onClick="{{ resetPlan }}" style="{{ planResetStyle }}" style-hover="background:rgba(0,0,0,.45)">자동 배치로 되돌리기</button>
+                </div>
+              </sc-if>
 
               <sc-if value="{{ hasSpots }}" hint-placeholder-val="{{ false }}">
                 <div style="margin-top:12px;font-size:11.5px;color:var(--color-accent-100);line-height:1.6"><b style="color:var(--color-text);font-weight:500">가고 싶은 곳</b> — {{ spotLine }}</div>
@@ -741,7 +761,7 @@ html { scroll-behavior: smooth; }
 // 선택은 브라우저 localStorage 에 자동 저장된다 — 폰에서 새로고침해도, 다음에 열어도 이어진다.
 // 저장 키에 버전을 붙여 두어 상태 모양이 바뀌면 키만 올리면 된다.
 const SAVE_KEY = 'japan-trip-planner-v1';
-const DEFAULT_STATE = { step: 0, period: null, nights: '2', dow: '수목금', city: null, flightOut: null, flightBack: null, spotCity: null, spotCat: '전체', spotGenre: '전체', spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, course: null, budget: null, stay: null, copied: false, home: true, leaving: false, prep: {}, fx: null };
+const DEFAULT_STATE = { step: 0, period: null, nights: '2', dow: '수목금', city: null, flightOut: null, flightBack: null, spotCity: null, spotCat: '전체', spotGenre: '전체', spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, course: null, budget: null, stay: null, copied: false, home: true, leaving: false, prep: {}, fx: null, plan: {} };
 const loadSaved = () => {
   try {
     const j = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
@@ -765,6 +785,11 @@ const loadSaved = () => {
     CITIES4.forEach(c => { st.spots[c] = Array.isArray(sp[c]) ? sp[c].filter(x => typeof x === 'string') : []; });
     const okFlight = f => f && typeof f === 'object' && typeof f.no === 'string' && typeof f.d === 'string' && typeof f.usd === 'number' ? f : null;
     st.flightOut = okFlight(st.flightOut); st.flightBack = okFlight(st.flightBack);
+    // plan: { '도시|코스|박수': [[{t:'c'|'p', n:'이름'}, ...] × 일수] } — 모양이 다르면 통째로 버린다
+    const okItem = i => i && typeof i === 'object' && (i.t === 'c' || i.t === 'p') && typeof i.n === 'string';
+    const pl = (j.plan && typeof j.plan === 'object') ? j.plan : {};
+    st.plan = {};
+    Object.keys(pl).forEach(k => { const v = pl[k]; if (Array.isArray(v) && v.every(d => Array.isArray(d) && d.every(okItem))) st.plan[k] = v; });
     st.step = Number.isInteger(st.step) ? st.step : 0;
     if (!(st.step >= 0 && st.step <= 7)) st.step = 0;
     st.home = true; st.leaving = false;               // 열 때마다 메인부터
@@ -1653,6 +1678,66 @@ class Component extends DCLogic {
     tryPlay();
   }
 
+  // 일정 드래그 — HTML5 DnD 는 iOS 사파리에서 안 되므로 pointer events 로 직접.
+  // 손잡이(⋮⋮)에만 걸어 두어 세로 스크롤과 부딪히지 않는다(touch-action:none 은 손잡이에만).
+  // 렌더마다 새 요소가 생기므로 매번 훑되, 이미 건 요소는 건너뛴다.
+  syncPlanDrag() {
+    if (typeof document === 'undefined') return;
+    document.querySelectorAll('[data-plan-handle]').forEach(h => {
+      if (h.__jtDrag) return; h.__jtDrag = true;
+      h.addEventListener('pointerdown', e => this._planDragStart(e, h));
+    });
+  }
+  _planDragStart(e, h) {
+    if (e.button !== undefined && e.button !== 0) return;
+    const item = h.closest('[data-plan-item]'); if (!item) return;
+    e.preventDefault();
+    const [fd, fi] = item.getAttribute('data-plan-item').split(':').map(Number);
+    const rect = item.getBoundingClientRect();
+    const ghost = item.cloneNode(true);
+    ghost.style.cssText += ';position:fixed;left:'+rect.left+'px;top:'+rect.top+'px;width:'+rect.width+'px;z-index:9999;pointer-events:none;opacity:.94;transform:scale(1.03);box-shadow:0 12px 32px rgba(0,0,0,.5);background:var(--color-section);border-radius:8px;padding:4px 8px;border-bottom:0';
+    document.body.appendChild(ghost);
+    item.style.opacity = '.3';
+    const offX = e.clientX - rect.left, offY = e.clientY - rect.top;
+    let target = null, lastEl = null, lastShadow = '';
+    const clear = () => { if (lastEl) { lastEl.style.boxShadow = lastShadow; lastEl = null; } };
+    const mark = (el, shadow) => { clear(); lastEl = el; lastShadow = el.style.boxShadow; el.style.boxShadow = shadow; };
+    const onMove = ev => {
+      ghost.style.left = (ev.clientX - offX) + 'px'; ghost.style.top = (ev.clientY - offY) + 'px';
+      const els = document.elementsFromPoint(ev.clientX, ev.clientY);
+      const overItem = els.find(x => x.matches && x.matches('[data-plan-item]') && x !== item);
+      const overDay = els.find(x => x.matches && x.matches('[data-plan-day]'));
+      if (overItem) {
+        const [d, i] = overItem.getAttribute('data-plan-item').split(':').map(Number);
+        const r = overItem.getBoundingClientRect(); const after = ev.clientY > r.top + r.height / 2;
+        target = { d, i: after ? i + 1 : i };
+        mark(overItem, after ? '0 2px 0 0 var(--color-accent)' : '0 -2px 0 0 var(--color-accent)');
+      } else if (overDay) {
+        target = { d: Number(overDay.getAttribute('data-plan-day')), i: overDay.querySelectorAll('[data-plan-item]').length };
+        mark(overDay, 'inset 0 0 0 1px var(--color-accent)');
+      } else { target = null; clear(); }
+      const m = 56; if (ev.clientY < m) window.scrollBy(0, -10); else if (ev.clientY > window.innerHeight - m) window.scrollBy(0, 10);
+    };
+    const onUp = () => {
+      h.removeEventListener('pointermove', onMove); h.removeEventListener('pointerup', onUp); h.removeEventListener('pointercancel', onUp);
+      clear(); ghost.remove(); item.style.opacity = '';
+      if (target) this.movePlanItem({ d: fd, i: fi }, target);
+    };
+    try { h.setPointerCapture(e.pointerId); } catch (err) {}
+    h.addEventListener('pointermove', onMove); h.addEventListener('pointerup', onUp); h.addEventListener('pointercancel', onUp);
+  }
+  movePlanItem(from, to) {
+    const P = this._plan; if (!P || !P.key || !P.days) return;
+    const days = P.days.map(d => d.slice());
+    if (!days[from.d] || !days[to.d]) return;
+    const [it] = days[from.d].splice(from.i, 1); if (!it) return;
+    let ti = to.i; if (to.d === from.d && ti > from.i) ti--;
+    ti = Math.max(0, Math.min(ti, days[to.d].length));
+    if (to.d === from.d && ti === from.i) return;
+    days[to.d].splice(ti, 0, it);
+    this.setState({ plan: Object.assign({}, this.state.plan || {}, { [P.key]: days }) });
+  }
+
   // 환율 — 열 때 한 번, 유럽중앙은행 참조환율(frankfurter.dev, CORS 허용). 실패하면 조용히 저장값 유지.
   componentDidMount() {
     if (typeof fetch === 'undefined') return;
@@ -1789,7 +1874,7 @@ class Component extends DCLogic {
       try { document.documentElement.style.setProperty('--jt-dx', (i > s.step ? 28 : i < s.step ? -28 : 0) + 'px'); } catch (e) {}
       set({step:i});
     };
-    const reset = () => { try { if (typeof confirm === 'function' && !confirm('모든 선택(날짜·도시·항공·가고 싶은 곳·숙소·체크리스트)을 지울까요?')) return; } catch (e) {} try { localStorage.removeItem(SAVE_KEY); } catch (e) {} this.setState(Object.assign({}, DEFAULT_STATE, { spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, prep: {}, home: false, fx: s.fx })); };
+    const reset = () => { try { if (typeof confirm === 'function' && !confirm('모든 선택(날짜·도시·항공·가고 싶은 곳·숙소·체크리스트)을 지울까요?')) return; } catch (e) {} try { localStorage.removeItem(SAVE_KEY); } catch (e) {} this.setState(Object.assign({}, DEFAULT_STATE, { spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, prep: {}, plan: {}, home: false, fx: s.fx })); };
     const showEvidence = this.props.showEvidence ?? true;
     const set = (o) => this.setState(o);
     const stepLabels = ['날짜 · 날씨','일정 · 예산','도시','항공','가고 싶은 곳','숙소','종합','준비 · 교통'];
@@ -2265,9 +2350,62 @@ class Component extends DCLogic {
     const planCity = s.city || null, planCourse = s.course || 'B';
     const rawPlan = planCity ? this.plans()[planCity][planCourse][nights] : null;
     const nDays = nights==='3'?4:3;
+    // ── 일정 편집 (07) ──
+    // 코스안(t:'c')에 05에서 고른 곳(t:'p')을 끼워 넣고, 사용자가 끌어 옮긴 결과는 plan[key] 에 저장한다.
+    // 저장본이 있어도 고른 곳이 바뀌면 추가분은 끼워 넣고 해제분은 뺀다(옮겨 둔 순서는 유지).
+    const planKey = (planCity && rawPlan) ? planCity+'|'+planCourse+'|'+nights : null;
+    const isDeparture = n => /공항|KIX|→ 공항|귀국/.test(n);
+    const distribute = (days, names) => {
+      const out = days.map(d => d.slice());
+      const order = out.length >= 4 ? [1,2,0,3] : [1,0,2];
+      names.forEach((n, k) => {
+        const d = order[k % order.length];
+        const arr = out[d];
+        const at = (arr.length && isDeparture(arr[arr.length-1].n)) ? arr.length-1 : arr.length;
+        arr.splice(at, 0, { t:'p', n });
+      });
+      return out;
+    };
+    let dayPlan = null, planEdited = false;
+    if (planKey) {
+      const base = rawPlan.map(d => d.map(n => ({ t:'c', n })));
+      const myPicks = s.spots[planCity] || [];
+      const saved = s.plan && s.plan[planKey];
+      if (saved && saved.length === base.length) {
+        planEdited = true;
+        const pickSet = new Set(myPicks);
+        let np = saved.map(d => d.filter(i => i.t !== 'p' || pickSet.has(i.n)));
+        const inPlan = new Set(np.flat().filter(i => i.t === 'p').map(i => i.n));
+        const add = myPicks.filter(n => !inPlan.has(n));
+        dayPlan = add.length ? distribute(np, add) : np;
+      } else {
+        dayPlan = distribute(base, myPicks);
+      }
+    }
+    this._plan = { key: planKey, days: dayPlan };
+    const savePlan = days => set({ plan: Object.assign({}, s.plan || {}, { [planKey]: days }) });
+    const moveTo = (fd, fi, td) => { const days = dayPlan.map(d=>d.slice()); const [it] = days[fd].splice(fi,1); const arr = days[td]; const at = (arr.length && isDeparture(arr[arr.length-1].n)) ? arr.length-1 : arr.length; arr.splice(at,0,it); savePlan(days); };
+    const dropItem = (fd, fi) => { const it = dayPlan[fd][fi]; const days = dayPlan.map(d=>d.slice()); days[fd].splice(fi,1);
+      if (it.t === 'p') { const arr = (s.spots[planCity]||[]).filter(n => n !== it.n); set({ spots: Object.assign({}, s.spots, { [planCity]: arr }), plan: Object.assign({}, s.plan || {}, { [planKey]: days }) }); }
+      else savePlan(days); };
+    const resetPlan = () => { const pl = Object.assign({}, s.plan || {}); delete pl[planKey]; set({ plan: pl }); };
+    const canEditPlan = !!planKey;
+    const planHint = canEditPlan ? '⋮⋮ 를 끌어 순서·날짜를 바꾸고, ◀ ▶ 로 날짜 이동, ✕ 로 빼기 · 강조색 = 05에서 고른 곳' : '';
+    const miniBtn = 'font-size:10px;line-height:1;padding:4px 5px;border-radius:5px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);color:var(--color-accent-100);cursor:pointer;font-family:inherit';
+    const handleStyle = 'flex:none;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;font-size:12px;letter-spacing:-2px;color:var(--color-accent-300);padding:2px 4px 2px 0;opacity:.9';
+    const itemRow = 'display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.12)';
     const itinerary = Array.from({length:nDays},(_,i)=>({
+      idx: i,
       label:'DAY '+(i+1)+(dayDates?' · '+dayDates[i]:''),
-      items: rawPlan && rawPlan[i] ? rawPlan[i] : [ planCity?'—':'03에서 도시를 고르면 채워집니다' ]
+      items: dayPlan
+        ? dayPlan[i].map((it, j) => ({
+            id: i+':'+j, n: it.n, editable: true,
+            style: itemRow,
+            nameStyle: 'flex:1;min-width:0;font-size:11.5px;line-height:1.45;color:'+(it.t==='p' ? 'var(--color-accent-100)' : 'var(--color-text)')+(it.t==='p' ? ';font-weight:500' : ''),
+            prevStyle: miniBtn + (i===0 ? ';opacity:.3;pointer-events:none' : ''),
+            nextStyle: miniBtn + (i===nDays-1 ? ';opacity:.3;pointer-events:none' : ''),
+            prev: () => moveTo(i, j, i-1), next: () => moveTo(i, j, i+1), drop: () => dropItem(i, j) }))
+        : [{ id: i+':0', n: planCity ? '—' : '03에서 도시를 고르면 채워집니다', editable: false, style: itemRow, nameStyle: 'flex:1;font-size:11.5px;line-height:1.45;color:var(--color-text)', prevStyle:'', nextStyle:'', prev:()=>{}, next:()=>{}, drop:()=>{} }]
     }));
     const doneCount = doneFlags.filter(Boolean).length;
     const headline = [ pObj? (pObj.dates[s.dow]||pObj.dates[null]) : '기간 미정', s.city||'도시 미정', s.dow? (s.dow+' · '+(nights==='3'?'3박 4일':'2박 3일')) : '' ].filter(Boolean).join(' · ');
@@ -2456,7 +2594,7 @@ class Component extends DCLogic {
       let txt='[일본 여행 플래너 — 내 선택]\n기간: '+(s.period?(s.period+' '+(pObj.dates[s.dow]||pObj.dates[null])):'미정')+(s.dow?' ('+s.dow+' · '+(nights==='3'?'3박4일':'2박3일')+')':'')+'\n코스: '+(s.course?courseLabel:'미정')+' / 예산: '+budgetLabel+'\n도시: '+(s.city||'미정')+'\n숙소: '+stayLabel;
       if(s.flightOut||s.flightBack) txt+='\n항공: '+[s.flightOut?s.flightOut.d+' '+s.flightOut.al+' '+s.flightOut.no+' '+s.flightOut.dep+'→'+s.flightOut.arr:null, s.flightBack?s.flightBack.d+' '+s.flightBack.al+' '+s.flightBack.no+' '+s.flightBack.dep+'→'+s.flightBack.arr:null].filter(Boolean).join(' / ');
       if(hasSpots) txt+='\n가고 싶은 곳: '+spotLine;
-      if(rawPlan){ itinerary.forEach(d=>{ txt+='\n'+d.label+': '+d.items.join(' → '); }); }
+      if(rawPlan){ itinerary.forEach(d=>{ txt+='\n'+d.label+': '+d.items.map(i=>i.n).join(' → '); }); }
       const done=()=>{ this.setState({copied:true}); setTimeout(()=>this.setState({copied:false}),2400); };
       const legacy = () => { try { const ta=document.createElement('textarea'); ta.value=txt; ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;top:-1000px;opacity:0'; document.body.appendChild(ta); ta.select(); const ok=document.execCommand('copy'); document.body.removeChild(ta); if (ok) done(); else alert('복사가 막혔습니다 — 일정 글자를 직접 드래그해 복사하세요'); } catch(e) { alert('복사가 막혔습니다 — 일정 글자를 직접 드래그해 복사하세요'); } };
       if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done, legacy); } else legacy();
@@ -2511,7 +2649,7 @@ class Component extends DCLogic {
     // requestAnimationFrame 은 탭·패널이 숨겨져 있으면 아예 발화하지 않아, 그 상태로 열면
     // 지도가 영영 초기화되지 않는다. setTimeout 은 숨겨져 있어도(느려도) 발화하므로 이쪽을 쓴다.
     // 화면이 다시 보일 때도 한 번 맞춰 준다 — 그동안 미뤄진 크기 계산을 반영하려고.
-    if (typeof setTimeout !== 'undefined') setTimeout(()=>{ this.syncMaps(); this.syncHero(); }, 0);
+    if (typeof setTimeout !== 'undefined') setTimeout(()=>{ this.syncMaps(); this.syncHero(); this.syncPlanDrag(); }, 0);
     // 모바일에서 단계 스트립이 가로 스크롤이라, 현재 단계 버튼이 보이도록 당겨 온다.
     if (typeof setTimeout !== 'undefined' && typeof document !== 'undefined') setTimeout(()=>{ try { const b=document.querySelectorAll('aside nav button')[s.step]; if(b && b.scrollIntoView && window.innerWidth<=820 && this._lastStep !== s.step) b.scrollIntoView({inline:'center',block:'nearest'}); this._lastStep = s.step; } catch(e){} }, 0);
     if (typeof document !== 'undefined' && !this._visHooked) {
@@ -2580,7 +2718,8 @@ class Component extends DCLogic {
       stayReady, stayCands, stayLinks, stayDots, stayHead, stayNote,
       // courseLabel·budgetLabel·stayLabel·headline 은 티켓 안(ticketMeta)과 복사 문구에서만
       // 쓰이므로 템플릿으로 내보내지 않는다.
-      itinerary, doneCount, hasSpots, spotLine, dayGridStyle,
+      itinerary, doneCount, hasSpots, spotLine, dayGridStyle, canEditPlan, planHint, resetPlan, planEdited, handleStyle,
+      planResetStyle: miniBtn + ';padding:5px 9px;font-size:10.5px' + (planEdited ? '' : ';opacity:.4;pointer-events:none'),
       // 종합 = 탑승권 모양
       ticketStyle, ticketNo, ticketTo, ticketToKr, ticketMeta, barcodeBars, nightsLabel, dateShort,
       boardRows,
