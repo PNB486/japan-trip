@@ -28,7 +28,7 @@ const read = (p) => readFile(p, 'utf8');
 
 // 인라인할 텍스트에 </script> 가 들어 있으면 스크립트 블록이 조기 종료된다.
 const safeForScript = (js, label) => {
-  if (/<\/script/i.test(js)) {
+  if (/<\/script|<!--/i.test(js)) {
     throw new Error(`${label} 안에 </script> 가 있어 인라인할 수 없음 — 이스케이프 처리 필요`);
   }
   return js;
@@ -129,7 +129,8 @@ const heroScript = 'window.__HERO=' + JSON.stringify(HOSTED
 let fxScript = '';
 try {
   const from = new Date(Date.now() - 36 * 86400000).toISOString().slice(0, 10);
-  const r = await fetch('https://api.frankfurter.dev/v1/' + from + '..?base=JPY&symbols=KRW,USD');
+  const r = await fetch('https://api.frankfurter.dev/v1/' + from + '..?base=JPY&symbols=KRW,USD', { signal: AbortSignal.timeout(10000) });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
   const j = await r.json();
   const hist = Object.keys(j.rates).sort().map((d) => [d, j.rates[d].KRW]).filter((h) => h[1] > 0);
   const lastD = hist[hist.length - 1][0];
@@ -190,9 +191,10 @@ const templateLiteral = JSON.stringify(template).replace(/<\/script/gi, '<\\/scr
 const injector = `
 (function(){
   var TPL = ${templateLiteral};
-  var tries = 0;
+  var started = Date.now();
   (function apply(){
-    if (++tries > 600) { console.error('[planner] dc-runtime 부팅을 기다리다 시간 초과'); return; }
+    // 프레임 수가 아니라 시간으로 센다 — 느린 폰에서 18MB 를 파싱하는 동안 rAF 가 수백 번 지나갈 수 있다.
+    if (Date.now() - started > 90000) { console.error('[planner] dc-runtime 부팅을 기다리다 시간 초과(90s)'); return; }
     var name = window.__dcRootName && window.__dcRootName();
     var entry = name && window.__dcRegistry && window.__dcRegistry[name];
     // entry.html 이 채워졌다 = boot() 이 끝났다. 그 다음에 원문 템플릿으로 덮어쓴다.

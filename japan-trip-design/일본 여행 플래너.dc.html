@@ -90,6 +90,7 @@ html { scroll-behavior: smooth; }
   [data-screen-label="05 가고 싶은 곳"] [style*="font-size: 9.5px"], [data-screen-label="05 가고 싶은 곳"] [style*="font-size: 9.8px"], [data-screen-label="05 가고 싶은 곳"] [style*="font-size: 10px"] { font-size: 11px !important; }
   [data-screen-label="01 날짜·날씨"] [style*="font-size: 9px"] { font-size: 11px !important; }
   [data-screen-label="01 날짜·날씨"] [style*="font-size: 10px"] { font-size: 11px !important; }
+  [style*="right: 187px"], [style*="right:187px"] { display: none !important; }
   main + div { padding: 8px 10px !important; gap: 6px !important; }
   main + div > span:not(:last-child) { display: none !important; }
   main + div > span:last-child { margin-left: 0 !important; width: 100%; }
@@ -746,7 +747,25 @@ const loadSaved = () => {
     const j = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
     if (!j || typeof j !== 'object') return null;
     const st = Object.assign({}, DEFAULT_STATE, j, { copied: false });
-    st.spots = Object.assign({나고야:[],교토:[],오사카:[],후쿠오카:[]}, (j.spots && typeof j.spots === 'object') ? j.spots : {});
+    // 모르는 값은 전부 기본값으로 — 오염된 blob 하나가 플래너 전체를 못 열게 만들면 안 된다.
+    const CITIES4 = ['나고야','교토','오사카','후쿠오카'];
+    const oneOf = (v, list) => list.indexOf(v) > -1 ? v : null;
+    st.period = oneOf(st.period, ['10월 중순','11월 중순','11월 하순','12월 상순']);
+    st.dow = oneOf(st.dow, ['수목금','목금토','수목금토']) || '수목금';
+    st.nights = oneOf(String(st.nights), ['2','3']) || '2';
+    st.city = oneOf(st.city, CITIES4);
+    st.spotCity = oneOf(st.spotCity, CITIES4);
+    st.course = oneOf(st.course, ['A','B','C']);
+    st.budget = typeof st.budget === 'string' ? st.budget : null;
+    st.stay = typeof st.stay === 'string' ? st.stay : null;
+    st.spotCat = typeof st.spotCat === 'string' ? st.spotCat : '전체';
+    st.spotGenre = typeof st.spotGenre === 'string' ? st.spotGenre : '전체';
+    const sp = (j.spots && typeof j.spots === 'object') ? j.spots : {};
+    st.spots = {};
+    CITIES4.forEach(c => { st.spots[c] = Array.isArray(sp[c]) ? sp[c].filter(x => typeof x === 'string') : []; });
+    const okFlight = f => f && typeof f === 'object' && typeof f.no === 'string' && typeof f.d === 'string' && typeof f.usd === 'number' ? f : null;
+    st.flightOut = okFlight(st.flightOut); st.flightBack = okFlight(st.flightBack);
+    st.step = Number.isInteger(st.step) ? st.step : 0;
     if (!(st.step >= 0 && st.step <= 7)) st.step = 0;
     st.home = true; st.leaving = false;               // 열 때마다 메인부터
     if (!st.prep || typeof st.prep !== 'object') st.prep = {};
@@ -1646,6 +1665,7 @@ class Component extends DCLogic {
           const hist = Object.keys(j.rates).sort().map(d => [d, j.rates[d].KRW]).filter(h => h[1] > 0);
           if (!hist.length) return;
           const lastD = hist[hist.length-1][0];
+          this._fxFetched = true;
           this.setState({ fx: { date: lastD, usd: j.rates[lastD].USD || null, hist } });
         })
         .catch(() => {});
@@ -1769,7 +1789,7 @@ class Component extends DCLogic {
       try { document.documentElement.style.setProperty('--jt-dx', (i > s.step ? 28 : i < s.step ? -28 : 0) + 'px'); } catch (e) {}
       set({step:i});
     };
-    const reset = () => { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} this.setState(Object.assign({}, DEFAULT_STATE, { spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, prep: {}, home: false, fx: s.fx })); };
+    const reset = () => { try { if (typeof confirm === 'function' && !confirm('모든 선택(날짜·도시·항공·가고 싶은 곳·숙소·체크리스트)을 지울까요?')) return; } catch (e) {} try { localStorage.removeItem(SAVE_KEY); } catch (e) {} this.setState(Object.assign({}, DEFAULT_STATE, { spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, prep: {}, home: false, fx: s.fx })); };
     const showEvidence = this.props.showEvidence ?? true;
     const set = (o) => this.setState(o);
     const stepLabels = ['날짜 · 날씨','일정 · 예산','도시','항공','가고 싶은 곳','숙소','종합','준비 · 교통'];
@@ -1795,7 +1815,7 @@ class Component extends DCLogic {
       kicker:p.kicker, hi:p.hi, lo:p.lo, line1:p.line1, line2:p.line2, point:p.point,
       dates: p.dates[s.dow] || p.dates[null],
       mark: s.period===p.id?'✓ 선택됨':'',
-      pick: ()=>set({period:p.id}),
+      pick: ()=>set({period:p.id, flightOut:null, flightBack:null}),
       style: s.period===p.id?selCard:cardBase,
       kickerStyle:'font-size:11px;font-weight:600;color:'+(p.accent?'var(--color-accent-300)':'var(--color-neutral-400)')
     }));
@@ -1806,12 +1826,12 @@ class Component extends DCLogic {
     const pickSel='display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;padding:6px 12px;border-radius:var(--radius-md);border:1px solid var(--color-accent);background:var(--color-accent-900);cursor:pointer;font-family:inherit';
     const lengths = D.LENGTHS.map(l=>({
       label:l.label+(s.nights===l.id?'  ✓':''), sub:l.sub,
-      pick:()=>{ const d=D.DOWS.find(x=>x.n===l.id); set({nights:l.id, dow:d.id}); },
+      pick:()=>{ const d=D.DOWS.find(x=>x.n===l.id); set({nights:l.id, dow:d.id, flightOut:null, flightBack:null}); },
       style:s.nights===l.id?pickSel:pickBase
     }));
     const dows = D.DOWS.filter(d=>d.n===s.nights).map(d=>({
       label:d.label+(s.dow===d.id?'  ✓':''), sub:d.sub,
-      pick:()=>set({dow:d.id}), style:s.dow===d.id?pickSel:pickBase
+      pick:()=>set({dow:d.id, flightOut:null, flightBack:null}), style:s.dow===d.id?pickSel:pickBase
     }));
 
     const calCell = { v:'', k:'background:var(--c-kr);border-radius:3px;color:var(--c-kr-t)', j:'background:var(--c-jp);border-radius:3px;color:var(--c-jp-t)', p:'background:var(--color-accent);border-radius:3px;color:var(--c-on-accent);font-weight:700', a:'border:1px solid var(--color-neutral-600);border-radius:3px;box-sizing:border-box', x:'color:var(--color-neutral-600);text-decoration:line-through', 0:'color:var(--color-neutral-300)' };
@@ -1839,7 +1859,7 @@ class Component extends DCLogic {
     const cities = D.CITIES.map(c=>({
       name:c.id, theme:c.theme, p1:c.p1, p2:c.p2, p3:c.p3,
       mark:s.city===c.id?'✓ 선택됨':'',
-      pick:()=>set({city:c.id, spotCity:c.id}),
+      pick:()=>set({city:c.id, spotCity:c.id, flightOut:null, flightBack:null}),
       style:s.city===c.id?selCard:cardBase
     }));
 
@@ -2091,7 +2111,7 @@ class Component extends DCLogic {
     const krw = usd => '≈'+(Math.round(usd*USD_KRW/1000)/10).toFixed(1).replace(/\.0$/,'')+'만';
     const rowBase = 'display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:7px 12px;border:0;border-bottom:1px solid var(--color-neutral-800);background:transparent;color:inherit;cursor:pointer;font-family:inherit';
     const rowSel = rowBase+';background:var(--color-accent-900)';
-    const mkRows = (list, d, dir) => {
+    const mkRows = (list, d, dir, locked) => {
       const min = Math.min(...list.map(r=>r[4]));
       const cur = dir==='out' ? s.flightOut : s.flightBack;
       return list.map(r => {
@@ -2100,14 +2120,14 @@ class Component extends DCLogic {
         const hh = +r[2].slice(0,2);
         return { al:f.al, no:f.no, time:f.dep+' → '+f.arr, usd:'$'+f.usd, krw:krw(f.usd),
           tag: r[4]===min ? '최저가' : (dir==='out' && hh<9 ? '아침 도착' : (dir==='back' && hh>=17 ? '저녁까지 체류' : '')),
-          mark: sel ? '✓' : '', style: sel ? rowSel : rowBase,
-          pick: () => set(dir==='out' ? {flightOut: sel?null:f} : {flightBack: sel?null:f}) };
+          mark: sel ? '✓' : '', style: (sel ? rowSel : rowBase) + (locked ? ';opacity:.55;cursor:default' : ''),
+          pick: () => { if (locked) return; set(dir==='out' ? {flightOut: sel?null:f} : {flightBack: sel?null:f}); } };
       });
     };
     const hasAirTable = !!fcity;
     const airTables = fcity ? [
-      { title:'가는 편 · '+outDate+' ICN → FUK', sub: wantOut && wantOut!==outDate ? '선택 날짜 '+wantOut+' 은 미조사 — '+outDate+' 시간표 참고' : '전편 직항 · 1시간 20~50분', rows: mkRows(fcity.out[outDate], outDate, 'out') },
-      { title:'오는 편 · '+backDate+' FUK → ICN', sub: wantBack && wantBack!==backDate ? '선택 날짜 '+wantBack+' 은 미조사 — '+backDate+' 시간표 참고' : (backDate==='11/21' ? '토요일 + 일본 3연휴 첫날 — 금요일보다 비쌈' : '전편 직항 · 1시간 30~50분'), rows: mkRows(fcity.back[backDate], backDate, 'back') },
+      { title:'가는 편 · '+outDate+' ICN → FUK', sub: wantOut && wantOut!==outDate ? '선택 날짜 '+wantOut+' 은 미조사 — '+outDate+' 시간표 참고(선택 불가)' : '전편 직항 · 1시간 20~50분', rows: mkRows(fcity.out[outDate], outDate, 'out', !!(wantOut && wantOut!==outDate)) },
+      { title:'오는 편 · '+backDate+' FUK → ICN', sub: wantBack && wantBack!==backDate ? '선택 날짜 '+wantBack+' 은 미조사 — '+backDate+' 시간표 참고(선택 불가)' : (backDate==='11/21' ? '토요일 + 일본 3연휴 첫날 — 금요일보다 비쌈' : '전편 직항 · 1시간 30~50분'), rows: mkRows(fcity.back[backDate], backDate, 'back', !!(wantBack && wantBack!==backDate)) },
     ] : [];
     const airTitle = s.city ? s.city+' 항공편은요?' : '항공편은요?';
     const airHead = fcity
@@ -2274,7 +2294,9 @@ class Component extends DCLogic {
 
     // 환율 — 유럽중앙은행 참조환율(frankfurter). 저장된 최신값 → 빌드 때 구운 스냅샷 순.
     const FX_SNAP = (typeof window !== 'undefined' && window.__FX_SNAPSHOT) || null;
-    const fx = (s.fx && s.fx.hist && s.fx.hist.length) ? s.fx : FX_SNAP;
+    const savedFx = (s.fx && s.fx.hist && s.fx.hist.length) ? s.fx : null;
+    const fx = (savedFx && FX_SNAP) ? ((savedFx.date || '') >= (FX_SNAP.date || '') ? savedFx : FX_SNAP) : (savedFx || FX_SNAP);
+    const fxOrigin = fx === savedFx ? (this._fxFetched ? '방금 불러옴' : '마지막 저장값') : '빌드 시점 저장값';
     const won = v => Math.round(v).toLocaleString('ko-KR') + '원';
     const fxCardStyle = 'border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0';
     const fxKeyStyle = 'font-size:10.5px;letter-spacing:.08em;color:var(--color-neutral-400);font-weight:600';
@@ -2289,7 +2311,7 @@ class Component extends DCLogic {
       const k100 = last[1]*100;
       fx100 = k100.toFixed(1)+'원';
       fxDateNote = last[0].replace(/^2026-/,'')+' ECB 고시 · 1$ = '+(fx.usd ? (1/fx.usd).toFixed(1)+'엔' : '—');
-      fxSrcNote = (s.fx && s.fx.hist && s.fx.hist.length ? '방금 불러옴' : '빌드 시점 저장값')+' · '+last[0];
+      fxSrcNote = fxOrigin+' · '+last[0];
       const dLast = new Date(last[0]+'T00:00:00Z');
       const weekAgo = new Date(dLast.getTime()-7*86400000).toISOString().slice(0,10);
       const prev = hist.filter(h=>h[0]<=weekAgo).pop() || hist[0];
@@ -2436,7 +2458,8 @@ class Component extends DCLogic {
       if(hasSpots) txt+='\n가고 싶은 곳: '+spotLine;
       if(rawPlan){ itinerary.forEach(d=>{ txt+='\n'+d.label+': '+d.items.join(' → '); }); }
       const done=()=>{ this.setState({copied:true}); setTimeout(()=>this.setState({copied:false}),2400); };
-      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,done); } else done();
+      const legacy = () => { try { const ta=document.createElement('textarea'); ta.value=txt; ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;top:-1000px;opacity:0'; document.body.appendChild(ta); ta.select(); const ok=document.execCommand('copy'); document.body.removeChild(ta); if (ok) done(); else alert('복사가 막혔습니다 — 일정 글자를 직접 드래그해 복사하세요'); } catch(e) { alert('복사가 막혔습니다 — 일정 글자를 직접 드래그해 복사하세요'); } };
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done, legacy); } else legacy();
     };
 
     const totalSpots = Object.values(s.spots).reduce((n,a)=>n+a.length,0);
@@ -2490,7 +2513,7 @@ class Component extends DCLogic {
     // 화면이 다시 보일 때도 한 번 맞춰 준다 — 그동안 미뤄진 크기 계산을 반영하려고.
     if (typeof setTimeout !== 'undefined') setTimeout(()=>{ this.syncMaps(); this.syncHero(); }, 0);
     // 모바일에서 단계 스트립이 가로 스크롤이라, 현재 단계 버튼이 보이도록 당겨 온다.
-    if (typeof setTimeout !== 'undefined' && typeof document !== 'undefined') setTimeout(()=>{ try { const b=document.querySelectorAll('aside nav button')[s.step]; if(b && b.scrollIntoView && window.innerWidth<=820) b.scrollIntoView({inline:'center',block:'nearest'}); } catch(e){} }, 0);
+    if (typeof setTimeout !== 'undefined' && typeof document !== 'undefined') setTimeout(()=>{ try { const b=document.querySelectorAll('aside nav button')[s.step]; if(b && b.scrollIntoView && window.innerWidth<=820 && this._lastStep !== s.step) b.scrollIntoView({inline:'center',block:'nearest'}); this._lastStep = s.step; } catch(e){} }, 0);
     if (typeof document !== 'undefined' && !this._visHooked) {
       this._visHooked = true;
       document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) this.syncMaps(); });
