@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "planner", "runtimeExecutable": "node", "runtimeArgs": ["japan-trip-design/_tools/serve.mjs"], "port": 8765 }
+  ]
+}

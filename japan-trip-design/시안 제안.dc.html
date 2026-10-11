@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/nocturne-7fe60017-bd2e-4450-bb97-393b00ddaff8/styles.css">
+<script src="_ds/nocturne-7fe60017-bd2e-4450-bb97-393b00ddaff8/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#0e1019;font-family:var(--font-body,system-ui)}
+a{color:var(--color-accent-300)}a:hover{color:var(--color-accent-200)}
+.dv-turn{padding:40px 44px 32px;scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:var(--color-accent);color:#14162a;border-radius:4px;text-decoration:none}
+.dv-tname{font:500 13px/1.2 var(--font-body);color:var(--color-text)}
+.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:var(--color-neutral-800);color:var(--color-text);border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11.5px/1.4 var(--font-body);color:var(--color-neutral-300);max-width:560px}
+.dv-card{max-width:100%;background:var(--color-bg);border-radius:10px;box-shadow:var(--shadow-md);overflow:hidden}
+.dv-opt:target .dv-oid{background:var(--color-accent);color:#14162a}
+.dv-next{margin:22px 0 0;font:12px/1.5 var(--font-body);color:var(--color-neutral-400)}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname"><a class="dv-oid" href="#2a">2a</a> 보완 — 추천 + 조사했던 상세 근거를 함께 보여주는 2가지 방식</span></div>
+<div class="dv-opts">
+
+<!-- ══ 3a 추천 위 · 근거 아래 상시 노출 ══ -->
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>근거 상시형 — 추천 카드 아래에 조사 자료(실제 캘린더 · 도시별 날씨 표)가 항상 펼쳐져 있음. 스크롤은 길어지지만 숨김 없이 다 보임</div>
+<div class="dv-card" style="width:1060px">
+  <div style="display:grid;grid-template-columns:212px 1fr">
+    <aside style="border-right:1px solid var(--color-neutral-800);padding:22px 18px;display:flex;flex-direction:column">
+      <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">JAPAN · 2026</div>
+      <div style="font-family:var(--font-heading);font-weight:500;font-size:18px;color:var(--color-text);margin:4px 0 20px">일본 여행 플래너</div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md);background:var(--color-accent-900);border:1px solid var(--color-accent-700)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-accent-300)">01</span><span style="font-size:12.5px;color:var(--color-text);font-weight:500">날짜 · 날씨</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">02</span><span style="font-size:12.5px;color:var(--color-neutral-300)">도시 · 항공</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">03</span><span style="font-size:12.5px;color:var(--color-neutral-300)">가고 싶은 곳</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">04</span><span style="font-size:12.5px;color:var(--color-neutral-300)">일정 · 예산</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">05</span><span style="font-size:12.5px;color:var(--color-neutral-300)">종합 — 일정표</span></div>
+      </div>
+    </aside>
+    <div>
+      <div style="padding:24px 30px 0">
+        <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 01 — 날짜 · 날씨</div>
+        <div style="font-family:var(--font-heading);font-weight:500;font-size:23px;color:var(--color-text);margin:6px 0 4px">언제가 좋을까요?</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px 30px 0">
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 15px"><div style="font-size:11px;color:var(--color-neutral-400);font-weight:600">10월 중순</div><div style="font-size:17px;color:var(--color-text);font-weight:500;margin:2px 0">10/14–17 · 22°/13°</div><div style="font-size:11px;color:var(--color-neutral-300)">연중 가장 쾌적 · 단풍 없음</div></div>
+        <div style="border:1px solid var(--color-accent);background:var(--color-accent-900);border-radius:var(--radius-md);padding:13px 15px"><div style="font-size:11px;color:var(--color-accent-300);font-weight:600">11월 중순 · 1순위</div><div style="font-size:17px;color:var(--color-text);font-weight:500;margin:2px 0">11/11–14 · 18°/9°</div><div style="font-size:11px;color:var(--color-neutral-100)">공휴일 0일 → 항공 최저 · 단풍 초입</div></div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 15px"><div style="font-size:11px;color:var(--color-neutral-400);font-weight:600">12월 상순</div><div style="font-size:17px;color:var(--color-text);font-weight:500;margin:2px 0">12/9–12 · 11°/2°</div><div style="font-size:11px;color:var(--color-neutral-300)">일루미·온천 · 야외 축소</div></div>
+      </div>
+      <div style="margin:20px 30px 0;height:1px;background:linear-gradient(90deg,var(--color-neutral-700),transparent)"></div>
+      <div style="padding:14px 30px 0;display:flex;align-items:baseline;gap:10px"><span style="font-size:12px;color:var(--color-text);font-weight:500">조사 근거 ① — 공휴일 캘린더</span><span style="font-size:10.5px;color:var(--color-neutral-400)">한국·일본 공휴일이 항공료와 혼잡을 올립니다</span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 30px 0">
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:11px 12px">
+          <div style="font-size:11.5px;color:var(--color-text);font-weight:500;margin-bottom:6px">10월</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:8.5px;text-align:center;color:var(--color-neutral-300)">
+            <span style="color:var(--color-neutral-500)">일</span><span style="color:var(--color-neutral-500)">월</span><span style="color:var(--color-neutral-500)">화</span><span style="color:var(--color-neutral-500)">수</span><span style="color:var(--color-neutral-500)">목</span><span style="color:var(--color-neutral-500)">금</span><span style="color:var(--color-neutral-500)">토</span>
+            <span></span><span></span><span></span><span></span><span style="padding:3px 0">1</span><span style="padding:3px 0">2</span><span style="background:#4a3547;border-radius:3px;padding:3px 0">3</span>
+            <span style="padding:3px 0">4</span><span style="background:#4a3547;border-radius:3px;padding:3px 0">5</span><span style="padding:3px 0">6</span><span style="padding:3px 0">7</span><span style="padding:3px 0">8</span><span style="background:#4a3547;border-radius:3px;padding:3px 0">9</span><span style="background:#4a3547;border-radius:3px;padding:3px 0">10</span>
+            <span style="background:#4a3547;border-radius:3px;padding:3px 0">11</span><span style="background:#46402a;border-radius:3px;padding:3px 0">12</span><span style="padding:3px 0">13</span><span style="background:var(--color-accent-700);border-radius:3px;padding:3px 0;color:var(--color-text)">14</span><span style="background:var(--color-accent-700);border-radius:3px;padding:3px 0;color:var(--color-text)">15</span><span style="background:var(--color-accent-700);border-radius:3px;padding:3px 0;color:var(--color-text)">16</span><span style="background:var(--color-accent-700);border-radius:3px;padding:3px 0;color:var(--color-text)">17</span>
+            <span style="padding:3px 0">18</span><span style="padding:3px 0">19</span><span style="padding:3px 0">20</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">21</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">22</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">23</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">24</span>
+            <span style="padding:3px 0">25</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">26</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">27</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">28</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">29</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">30</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">31</span>
+          </div>
+        </div>
+        <div style="border:1px solid var(--color-accent-700);border-radius:var(--radius-md);padding:11px 12px">
+          <div style="font-size:11.5px;color:var(--color-text);font-weight:500;margin-bottom:6px">11월 <span style="font-size:9.5px;color:var(--color-accent-300)">공휴일 0일 구간</span></div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:8.5px;text-align:center;color:var(--color-neutral-300)">
+            <span style="color:var(--color-neutral-500)">일</span><span style="color:var(--color-neutral-500)">월</span><span style="color:var(--color-neutral-500)">화</span><span style="color:var(--color-neutral-500)">수</span><span style="color:var(--color-neutral-500)">목</span><span style="color:var(--color-neutral-500)">금</span><span style="color:var(--color-neutral-500)">토</span>
+            <span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">1</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">2</span><span style="background:#46402a;border-radius:3px;padding:3px 0">3</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">4</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">5</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">6</span><span style="color:var(--color-neutral-600);text-decoration:line-through;padding:3px 0">7</span>
+            <span style="padding:3px 0">8</span><span style="padding:3px 0">9</span><span style="padding:3px 0">10</span><span style="background:var(--color-accent);border-radius:3px;padding:3px 0;color:#14162a;font-weight:700">11</span><span style="background:var(--color-accent);border-radius:3px;padding:3px 0;color:#14162a;font-weight:700">12</span><span style="background:var(--color-accent);border-radius:3px;padding:3px 0;color:#14162a;font-weight:700">13</span><span style="background:var(--color-accent);border-radius:3px;padding:3px 0;color:#14162a;font-weight:700">14</span>
+            <span style="padding:3px 0">15</span><span style="padding:3px 0">16</span><span style="padding:3px 0">17</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">18</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">19</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">20</span><span style="background:#46402a;border-radius:3px;padding:3px 0">21</span>
+            <span style="background:#46402a;border-radius:3px;padding:3px 0">22</span><span style="background:#46402a;border-radius:3px;padding:3px 0">23</span><span style="padding:3px 0">24</span><span style="padding:3px 0">25</span><span style="padding:3px 0">26</span><span style="padding:3px 0">27</span><span style="padding:3px 0">28</span>
+            <span style="padding:3px 0">29</span><span style="padding:3px 0">30</span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:11px 12px">
+          <div style="font-size:11.5px;color:var(--color-text);font-weight:500;margin-bottom:6px">12월</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:8.5px;text-align:center;color:var(--color-neutral-300)">
+            <span style="color:var(--color-neutral-500)">일</span><span style="color:var(--color-neutral-500)">월</span><span style="color:var(--color-neutral-500)">화</span><span style="color:var(--color-neutral-500)">수</span><span style="color:var(--color-neutral-500)">목</span><span style="color:var(--color-neutral-500)">금</span><span style="color:var(--color-neutral-500)">토</span>
+            <span></span><span></span><span style="padding:3px 0">1</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">2</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">3</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">4</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">5</span>
+            <span style="padding:3px 0">6</span><span style="padding:3px 0">7</span><span style="padding:3px 0">8</span><span style="background:var(--color-accent-700);border-radius:3px;padding:3px 0;color:var(--color-text)">9</span><span style="background:var(--color-accent-700);border-radius:3px;padding:3px 0;color:var(--color-text)">10</span><span style="background:var(--color-accent-700);border-radius:3px;padding:3px 0;color:var(--color-text)">11</span><span style="background:var(--color-accent-700);border-radius:3px;padding:3px 0;color:var(--color-text)">12</span>
+            <span style="padding:3px 0">13</span><span style="padding:3px 0">14</span><span style="padding:3px 0">15</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">16</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">17</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">18</span><span style="border:1px solid var(--color-neutral-700);border-radius:3px;padding:2px 0">19</span>
+            <span style="padding:3px 0">20</span><span style="padding:3px 0">21</span><span style="padding:3px 0">22</span><span style="padding:3px 0">23</span><span style="padding:3px 0">24</span><span style="background:#4a3547;border-radius:3px;padding:3px 0">25</span><span style="background:#4a3547;border-radius:3px;padding:3px 0">26</span>
+            <span style="background:#4a3547;border-radius:3px;padding:3px 0">27</span><span style="background:#46402a;border-radius:3px;padding:3px 0">28</span><span style="background:#46402a;border-radius:3px;padding:3px 0">29</span><span style="background:#46402a;border-radius:3px;padding:3px 0">30</span><span style="background:#46402a;border-radius:3px;padding:3px 0">31</span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;padding:8px 30px 0;font-size:10px;color:var(--color-neutral-400)"><span><i style="display:inline-block;width:8px;height:8px;background:#4a3547;border-radius:2px;margin-right:4px"></i>한국 공휴일</span><span><i style="display:inline-block;width:8px;height:8px;background:#46402a;border-radius:2px;margin-right:4px"></i>일본 공휴일·연말</span><span><i style="display:inline-block;width:8px;height:8px;background:var(--color-accent);border-radius:2px;margin-right:4px"></i>추천 주간</span><span><i style="display:inline-block;width:8px;height:8px;border:1px solid var(--color-neutral-700);border-radius:2px;margin-right:4px"></i>차선</span><span style="text-decoration:line-through">제외 구간 10/26–11/7</span></div>
+      <div style="padding:18px 30px 0;display:flex;align-items:baseline;gap:10px"><span style="font-size:12px;color:var(--color-text);font-weight:500">조사 근거 ② — 도시별 주차 날씨</span><span style="font-size:10.5px;color:var(--color-neutral-400)">평년값 · 낮 최고/아침 최저 · 정확도 중간</span></div>
+      <div style="margin:10px 30px 0;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);overflow:hidden">
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+          <thead><tr>
+            <th style="text-align:left;padding:7px 12px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-size:10.5px;font-weight:600">주차</th>
+            <th style="text-align:left;padding:7px 12px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-size:10.5px;font-weight:600">교토</th>
+            <th style="text-align:left;padding:7px 12px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-size:10.5px;font-weight:600">오사카</th>
+            <th style="text-align:left;padding:7px 12px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-size:10.5px;font-weight:600">나고야</th>
+            <th style="text-align:left;padding:7px 12px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-size:10.5px;font-weight:600">후쿠오카</th>
+            <th style="text-align:left;padding:7px 12px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-size:10.5px;font-weight:600">특징 · 옷차림</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-text)">10월 3주</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">22/13</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">23/15</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">22/13</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">23/15</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-400)">연중 가장 쾌적 · 가디건</td></tr>
+            <tr style="background:var(--color-accent-900)"><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-text);font-weight:500">11월 2주 ★</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-100)">18/9</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-100)">19/11</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-100)">18/9</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-100)">19/11</td><td style="padding:7px 12px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-accent-200)">맑은 날 최다 · 자켓+니트</td></tr>
+            <tr><td style="padding:7px 12px;color:var(--color-text)">12월 2주</td><td style="padding:7px 12px;color:var(--color-neutral-200)">11/2</td><td style="padding:7px 12px;color:var(--color-neutral-200)">12/4</td><td style="padding:7px 12px;color:var(--color-neutral-200)">11/3</td><td style="padding:7px 12px;color:var(--color-neutral-200)">13/5</td><td style="padding:7px 12px;color:var(--color-neutral-400)">해 가장 짧음 · 패딩</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="border-top:1px solid var(--color-neutral-800);margin-top:20px;padding:14px 30px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:12px;color:var(--color-text);border:1px solid var(--color-accent-700);border-radius:99px;padding:3px 10px">11/11–14 선택됨</span>
+        <span style="margin-left:auto;font-size:12.5px;font-weight:500;color:var(--color-accent-300);border:1px solid var(--color-accent);border-radius:var(--radius-md);padding:7px 16px">다음: 도시 →</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ 3b 추천 ↔ 상세 탭 + 근거 서랍 ══ -->
+<div class="dv-opt" id="3b">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>탭 + 근거 서랍형 — 기본은 추천 뷰, 상단 토글로 "전체 데이터"로 전환. 추천 카드의 "왜?"를 누르면 해당 근거만 오른쪽 서랍으로 열림. 화면이 짧게 유지됨</div>
+<div class="dv-card" style="width:1060px">
+  <div style="display:grid;grid-template-columns:212px 1fr;min-height:600px">
+    <aside style="border-right:1px solid var(--color-neutral-800);padding:22px 18px;display:flex;flex-direction:column">
+      <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">JAPAN · 2026</div>
+      <div style="font-family:var(--font-heading);font-weight:500;font-size:18px;color:var(--color-text);margin:4px 0 20px">일본 여행 플래너</div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md);background:var(--color-accent-900);border:1px solid var(--color-accent-700)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-accent-300)">01</span><span style="font-size:12.5px;color:var(--color-text);font-weight:500">날짜 · 날씨</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">02</span><span style="font-size:12.5px;color:var(--color-neutral-300)">도시 · 항공</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">03</span><span style="font-size:12.5px;color:var(--color-neutral-300)">가고 싶은 곳</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">04</span><span style="font-size:12.5px;color:var(--color-neutral-300)">일정 · 예산</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">05</span><span style="font-size:12.5px;color:var(--color-neutral-300)">종합 — 일정표</span></div>
+      </div>
+    </aside>
+    <div style="display:flex;flex-direction:column">
+      <div style="padding:24px 30px 0;display:flex;align-items:center;gap:14px">
+        <div>
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 01 — 날짜 · 날씨</div>
+          <div style="font-family:var(--font-heading);font-weight:500;font-size:23px;color:var(--color-text);margin-top:5px">언제가 좋을까요?</div>
+        </div>
+        <div style="margin-left:auto;display:flex;background:var(--color-neutral-900);border:1px solid var(--color-neutral-800);border-radius:99px;padding:3px">
+          <span style="font-size:11.5px;color:var(--color-text);background:var(--color-accent-800);border-radius:99px;padding:5px 14px;font-weight:500">추천 보기</span>
+          <span style="font-size:11.5px;color:var(--color-neutral-300);padding:5px 14px">전체 데이터</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 316px;gap:0;flex:1">
+        <div style="padding:18px 0 18px 30px;display:flex;flex-direction:column;gap:10px">
+          <div style="border:1px solid var(--color-accent);background:var(--color-accent-900);border-radius:var(--radius-md);padding:14px 16px">
+            <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:11px;color:var(--color-accent-300);font-weight:600">11월 중순 · 1순위</span><span style="margin-left:auto;font-size:10.5px;color:var(--color-accent-300);border:1px solid var(--color-accent-700);border-radius:99px;padding:2px 9px">왜? 근거 보기 →</span></div>
+            <div style="font-size:18px;color:var(--color-text);font-weight:500;margin:4px 0">11/11 – 14 · 18°/9°</div>
+            <div style="font-size:11.5px;color:var(--color-neutral-100);line-height:1.5">한국 공휴일 0일 → 항공 최저 · 단풍 초입 · 맑은 날 비율 최고</div>
+          </div>
+          <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:14px 16px">
+            <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:11px;color:var(--color-neutral-400);font-weight:600">12월 상순</span><span style="margin-left:auto;font-size:10.5px;color:var(--color-neutral-400);border:1px solid var(--color-neutral-700);border-radius:99px;padding:2px 9px">왜? →</span></div>
+            <div style="font-size:18px;color:var(--color-text);font-weight:500;margin:4px 0">12/9 – 12 · 11°/2°</div>
+            <div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.5">비수기 최저가 · 일루미·온천 · 일몰 16:43 → 야외는 오후 3시까지</div>
+          </div>
+          <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:14px 16px">
+            <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:11px;color:var(--color-neutral-400);font-weight:600">10월 중순</span><span style="margin-left:auto;font-size:10.5px;color:var(--color-neutral-400);border:1px solid var(--color-neutral-700);border-radius:99px;padding:2px 9px">왜? →</span></div>
+            <div style="font-size:18px;color:var(--color-text);font-weight:500;margin:4px 0">10/14 – 17 · 22°/13°</div>
+            <div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.5">연중 가장 쾌적하지만 단풍·일루미 없음 · 연휴 회피 필요</div>
+          </div>
+          <div style="font-size:10.5px;color:var(--color-neutral-400);margin-top:2px">피해야 할 날 — 10/3–5 · 10/9–12 · 11/21–23 · 12/25 이후 (전체 데이터 탭에서 캘린더로 확인)</div>
+        </div>
+        <aside style="border-left:1px solid var(--color-accent-700);background:var(--color-neutral-900);padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:11px;letter-spacing:.1em;color:var(--color-accent-300);font-weight:600">근거 — 11월 중순</span><span style="font-size:12px;color:var(--color-neutral-400)">✕</span></div>
+          <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px 12px"><div style="font-size:10.5px;color:var(--color-neutral-400);font-weight:600">공휴일</div><div style="font-size:11.5px;color:var(--color-neutral-200);line-height:1.55;margin-top:3px">한국 공휴일 0일 구간 → 항공료 구조적 최저. 일본은 11/3(문화)·11/23(근로감사) 사이 골짜기</div></div>
+          <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px 12px"><div style="font-size:10.5px;color:var(--color-neutral-400);font-weight:600">날씨 상세</div><div style="font-size:11.5px;color:var(--color-neutral-200);line-height:1.55;margin-top:3px">4개 도시 18~19° / 9~11° · 맑은 날 비율 연중 최고 · 일교차 8~9℃ → 아침 겉옷 필수 · 일몰 16:52</div></div>
+          <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px 12px"><div style="font-size:10.5px;color:var(--color-neutral-400);font-weight:600">주의</div><div style="font-size:11.5px;color:var(--color-neutral-200);line-height:1.55;margin-top:3px">교토는 단풍 극성수기 — 숙박비 2배↑. 나고야·후쿠오카는 혼잡 낮음 유지</div></div>
+          <div style="font-size:10px;color:var(--color-neutral-500);line-height:1.5">정확도: 중간 · 평년값 기반. 출발 1주 전 예보로 최종 확인</div>
+        </aside>
+      </div>
+      <div style="border-top:1px solid var(--color-neutral-800);padding:14px 30px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:12px;color:var(--color-text);border:1px solid var(--color-accent-700);border-radius:99px;padding:3px 10px">11/11–14 선택됨</span>
+        <span style="margin-left:auto;font-size:12.5px;font-weight:500;color:var(--color-accent-300);border:1px solid var(--color-accent);border-radius:var(--radius-md);padding:7px 16px">다음: 도시 →</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">다음 시도: "<a class="dv-oid" href="#3a">3a</a>로 전체 만들어줘" · "<a class="dv-oid" href="#3b">3b</a>의 서랍 방식 + <a class="dv-oid" href="#3a">3a</a>의 캘린더 조합" · "종합 일정표 화면도 보여줘"</p>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">「일본 여행 플래너」 — <a class="dv-oid" href="#1a">1a</a> 발전형 3안 · 날짜+날씨 통합 → 도시 → 일정·예산 → 종합 일정표</span></div>
+<div class="dv-opts">
+
+<!-- ══ 2a 사이드바 위저드 ══ -->
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>사이드바 위저드 — <a class="dv-oid" href="#1a">1a</a> 구조 유지. 날짜 카드 안에 날씨·일몰·옷차림을 녹여 한 화면에서 비교·선택. 마지막 단계 "종합"에서 일정표 완성</div>
+<div class="dv-card" style="width:1060px">
+  <div style="display:grid;grid-template-columns:212px 1fr;min-height:620px">
+    <aside style="border-right:1px solid var(--color-neutral-800);padding:22px 18px;display:flex;flex-direction:column">
+      <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">JAPAN · 2026</div>
+      <div style="font-family:var(--font-heading);font-weight:500;font-size:18px;color:var(--color-text);margin:4px 0 20px">일본 여행 플래너</div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md);background:var(--color-accent-900);border:1px solid var(--color-accent-700)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-accent-300)">01</span><span style="font-size:12.5px;color:var(--color-text);font-weight:500">날짜 · 날씨</span><span style="margin-left:auto;font-size:10px;color:var(--color-accent-300)">진행 중</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">02</span><span style="font-size:12.5px;color:var(--color-neutral-300)">도시 · 항공</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">03</span><span style="font-size:12.5px;color:var(--color-neutral-300)">가고 싶은 곳</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">04</span><span style="font-size:12.5px;color:var(--color-neutral-300)">일정 · 예산</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">05</span><span style="font-size:12.5px;color:var(--color-neutral-300)">종합 — 일정표</span></div>
+      </div>
+      <div style="margin-top:auto;border:1px dashed var(--color-neutral-700);border-radius:var(--radius-md);padding:10px 11px;font-size:10.5px;color:var(--color-neutral-400);line-height:1.55">모든 단계를 고르면<br><b style="color:var(--color-neutral-200)">나만의 일정표</b>가<br>자동으로 완성됩니다</div>
+    </aside>
+    <div style="display:flex;flex-direction:column">
+      <div style="padding:26px 30px 0">
+        <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 01 — 날짜 · 날씨</div>
+        <div style="font-family:var(--font-heading);font-weight:500;font-size:24px;color:var(--color-text);margin:6px 0 4px">언제가 좋을까요?</div>
+        <div style="font-size:13px;color:var(--color-neutral-300)">기간마다 날씨가 다릅니다 — 카드에서 바로 비교하고 하나를 고르세요.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 30px 8px">
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:16px;display:flex;flex-direction:column;gap:10px">
+          <div><div style="font-size:11px;color:var(--color-neutral-400);font-weight:600">10월 중순</div><div style="font-family:var(--font-heading);font-size:20px;color:var(--color-text);margin-top:3px">10/14 – 17</div></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span style="font-family:var(--font-heading);font-size:26px;color:var(--color-text)">22°</span><span style="font-size:12px;color:var(--color-neutral-400)">/ 13° 아침</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--color-neutral-300)"><span>☀ 연중 가장 쾌적 · 습도 낮음</span><span>일몰 17:15 · 가디건 1벌</span><span style="color:var(--color-neutral-400)">단풍·일루미 없음</span></div>
+        </div>
+        <div style="border:1px solid var(--color-accent);border-radius:var(--radius-md);padding:16px;background:var(--color-accent-900);display:flex;flex-direction:column;gap:10px;position:relative">
+          <span style="position:absolute;top:-9px;left:12px;font-size:10px;font-weight:600;background:var(--color-accent);color:#14162a;border-radius:99px;padding:2px 8px">1순위</span>
+          <div><div style="font-size:11px;color:var(--color-accent-300);font-weight:600">11월 중순</div><div style="font-family:var(--font-heading);font-size:20px;color:var(--color-text);margin-top:3px">11/11 – 14</div></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span style="font-family:var(--font-heading);font-size:26px;color:var(--color-text)">18°</span><span style="font-size:12px;color:var(--color-accent-200)">/ 9° 아침</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--color-neutral-100)"><span>☀ 맑은 날 비율 최고 · 단풍 초입</span><span>일몰 16:52 · 자켓 + 니트</span><span style="color:var(--color-accent-200)">한국 공휴일 0일 → 항공 최저</span></div>
+        </div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:16px;display:flex;flex-direction:column;gap:10px">
+          <div><div style="font-size:11px;color:var(--color-neutral-400);font-weight:600">12월 상순</div><div style="font-family:var(--font-heading);font-size:20px;color:var(--color-text);margin-top:3px">12/9 – 12</div></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span style="font-family:var(--font-heading);font-size:26px;color:var(--color-text)">11°</span><span style="font-size:12px;color:var(--color-neutral-400)">/ 2° 아침</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--color-neutral-300)"><span>❄ 일루미 · 온천 · 겨울 미각</span><span>일몰 16:43 · 패딩 필수</span><span style="color:var(--color-neutral-400)">야외는 오후 3시까지</span></div>
+        </div>
+      </div>
+      <div style="padding:10px 30px;display:flex;gap:14px;font-size:11px;color:var(--color-neutral-400)"><span>■ 제외 구간 10/26 – 11/7 반영됨</span><span>■ 요일 조합(수목금 / 목금토 / 3박4일)은 선택 후 지정</span></div>
+      <div style="margin-top:auto;border-top:1px solid var(--color-neutral-800);padding:14px 30px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:11px;color:var(--color-neutral-400);font-weight:600;letter-spacing:.08em">내 선택</span>
+        <span style="font-size:12px;color:var(--color-text);border:1px solid var(--color-accent-700);border-radius:99px;padding:3px 10px">11/11–14 · 18°/9°</span>
+        <span style="font-size:12px;color:var(--color-neutral-400);border:1px dashed var(--color-neutral-700);border-radius:99px;padding:3px 10px">도시 —</span>
+        <span style="font-size:12px;color:var(--color-neutral-400);border:1px dashed var(--color-neutral-700);border-radius:99px;padding:3px 10px">일정 · 예산 —</span>
+        <span style="margin-left:auto;font-size:12.5px;font-weight:500;color:var(--color-accent-300);border:1px solid var(--color-accent);border-radius:var(--radius-md);padding:7px 16px">다음: 도시 →</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ 2b 라이브 일정표 패널 ══ -->
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>라이브 일정표형 — 상단 가로 스테퍼 + 우측에 "내 일정표"가 항상 떠 있음. 고를 때마다 일정표가 실시간으로 채워져 종합 단계가 따로 없어도 결과가 보임</div>
+<div class="dv-card" style="width:1060px">
+  <div style="display:flex;align-items:center;gap:18px;padding:16px 28px;border-bottom:1px solid var(--color-neutral-800)">
+    <div style="font-family:var(--font-heading);font-weight:500;font-size:15px;color:var(--color-text)">일본 여행 플래너</div>
+    <div style="display:flex;gap:4px;margin-left:8px">
+      <span style="font-size:11.5px;color:var(--color-accent-200);background:var(--color-accent-900);border:1px solid var(--color-accent-700);border-radius:99px;padding:4px 12px">1 날짜·날씨</span>
+      <span style="font-size:11.5px;color:var(--color-neutral-300);border:1px solid var(--color-neutral-800);border-radius:99px;padding:4px 12px">2 도시</span>
+      <span style="font-size:11.5px;color:var(--color-neutral-300);border:1px solid var(--color-neutral-800);border-radius:99px;padding:4px 12px">3 가고 싶은 곳</span>
+      <span style="font-size:11.5px;color:var(--color-neutral-300);border:1px solid var(--color-neutral-800);border-radius:99px;padding:4px 12px">4 일정·예산</span>
+    </div>
+    <span style="margin-left:auto;font-size:11px;color:var(--color-neutral-400)">진행 1 / 4</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 300px;min-height:540px">
+    <div style="padding:24px 28px;border-right:1px solid var(--color-neutral-800)">
+      <div style="font-family:var(--font-heading);font-weight:500;font-size:21px;color:var(--color-text)">날짜와 날씨를 함께 보고 고르세요</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+        <div style="display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 16px">
+          <div><div style="font-size:11px;color:var(--color-neutral-400)">10월 중순</div><div style="font-size:15px;color:var(--color-text);font-weight:500">10/14 – 17</div></div>
+          <div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.5">22°/13° · 연중 가장 쾌적 · 일몰 17:15<br><span style="color:var(--color-neutral-400)">단풍 없음 · 가디건이면 충분</span></div>
+          <span style="font-size:11.5px;color:var(--color-neutral-300);border:1px solid var(--color-neutral-700);border-radius:var(--radius-md);padding:5px 13px">선택</span>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center;border:1px solid var(--color-accent);background:var(--color-accent-900);border-radius:var(--radius-md);padding:13px 16px">
+          <div><div style="font-size:11px;color:var(--color-accent-300)">11월 중순 · 1순위</div><div style="font-size:15px;color:var(--color-text);font-weight:500">11/11 – 14</div></div>
+          <div style="font-size:11.5px;color:var(--color-neutral-100);line-height:1.5">18°/9° · 맑은 날 최다 · 단풍 초입 · 일몰 16:52<br><span style="color:var(--color-accent-200)">공휴일 0일 → 항공 최저 · 자켓+니트</span></div>
+          <span style="font-size:11.5px;color:#14162a;background:var(--color-accent);border-radius:var(--radius-md);padding:5px 13px;font-weight:600">✓ 선택됨</span>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 16px">
+          <div><div style="font-size:11px;color:var(--color-neutral-400)">12월 상순</div><div style="font-size:15px;color:var(--color-text);font-weight:500">12/9 – 12</div></div>
+          <div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.5">11°/2° · 일루미·온천 · 일몰 16:43<br><span style="color:var(--color-neutral-400)">야외는 오후 3시까지 · 패딩 필수</span></div>
+          <span style="font-size:11.5px;color:var(--color-neutral-300);border:1px solid var(--color-neutral-700);border-radius:var(--radius-md);padding:5px 13px">선택</span>
+        </div>
+      </div>
+      <div style="margin-top:18px;display:flex;gap:8px;align-items:center">
+        <span style="font-size:11.5px;color:var(--color-neutral-400)">요일 조합</span>
+        <span style="font-size:11.5px;color:var(--color-neutral-300);border:1px solid var(--color-neutral-700);border-radius:99px;padding:3px 11px">수목금 · 2박3일</span>
+        <span style="font-size:11.5px;color:var(--color-accent-200);background:var(--color-accent-900);border:1px solid var(--color-accent-700);border-radius:99px;padding:3px 11px">수목금토 · 3박4일 ✓</span>
+        <span style="font-size:11.5px;color:var(--color-neutral-300);border:1px solid var(--color-neutral-700);border-radius:99px;padding:3px 11px">목금토 · 2박3일</span>
+      </div>
+    </div>
+    <aside style="padding:20px;display:flex;flex-direction:column;gap:10px;background:var(--color-neutral-900)">
+      <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:11px;letter-spacing:.12em;color:var(--color-accent);font-weight:600">내 일정표</span><span style="font-size:10.5px;color:var(--color-neutral-400)">실시간 완성</span></div>
+      <div style="border:1px solid var(--color-accent-700);border-radius:var(--radius-md);padding:11px 13px"><div style="font-size:10.5px;color:var(--color-accent-300);font-weight:600">기간</div><div style="font-size:13px;color:var(--color-text);margin-top:2px">11/11(수) – 11/14(토) · 3박 4일</div><div style="font-size:10.5px;color:var(--color-neutral-400);margin-top:2px">18°/9° · 단풍 초입 · 연차 3일</div></div>
+      <div style="border:1px dashed var(--color-neutral-700);border-radius:var(--radius-md);padding:11px 13px;font-size:11.5px;color:var(--color-neutral-400)">도시 — 2단계에서 선택</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:9px 12px"><span style="font:600 9.5px ui-monospace,monospace;color:var(--color-accent-300)">DAY 1 · 11/11 수</span><div style="font-size:11px;color:var(--color-neutral-400);margin-top:2px">도시를 고르면 채워집니다</div></div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:9px 12px"><span style="font:600 9.5px ui-monospace,monospace;color:var(--color-accent-300)">DAY 2 · 11/12 목</span><div style="font-size:11px;color:var(--color-neutral-400);margin-top:2px">—</div></div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:9px 12px"><span style="font:600 9.5px ui-monospace,monospace;color:var(--color-accent-300)">DAY 3 · 11/13 금</span><div style="font-size:11px;color:var(--color-neutral-400);margin-top:2px">—</div></div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:9px 12px"><span style="font:600 9.5px ui-monospace,monospace;color:var(--color-accent-300)">DAY 4 · 11/14 토</span><div style="font-size:11px;color:var(--color-neutral-400);margin-top:2px">—</div></div>
+      </div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:11px;color:var(--color-neutral-400)">예산 — 4단계에서 · 기준선 150만/인</div>
+        <span style="text-align:center;font-size:12px;font-weight:500;color:var(--color-neutral-500);border:1px solid var(--color-neutral-700);border-radius:var(--radius-md);padding:8px">일정표 복사 (완성 후 활성화)</span>
+      </div>
+    </aside>
+  </div>
+</div>
+</div>
+
+<!-- ══ 2c 대화형 원페이지 ══ -->
+<div class="dv-opt" id="2c">
+<div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>대화형 원페이지 — 단계가 세로로 이어지고, 고르면 접히며 다음이 열림. 끝에서 완성된 일정표 카드가 만들어져 그대로 단톡방에 복사</div>
+<div class="dv-card" style="width:720px">
+  <div style="padding:30px 36px 0">
+    <div style="font-size:11px;letter-spacing:.16em;color:var(--color-accent);font-weight:600">JAPAN · 2026</div>
+    <div style="font-family:var(--font-heading);font-weight:500;font-size:26px;color:var(--color-text);margin:6px 0 2px">일본 여행 플래너</div>
+    <div style="font-size:12.5px;color:var(--color-neutral-300)">아래로 답하며 내려가면, 마지막에 일정표가 완성됩니다.</div>
+  </div>
+  <div style="padding:22px 36px 30px;display:flex;flex-direction:column;gap:10px">
+    <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:12px 16px;display:flex;align-items:center;gap:12px">
+      <span style="width:20px;height:20px;border-radius:99px;background:var(--color-accent);color:#14162a;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</span>
+      <div style="flex:1"><div style="font-size:12.5px;color:var(--color-text);font-weight:500">날짜 · 날씨</div><div style="font-size:11px;color:var(--color-neutral-400)">11/11 – 14 (수목금토) · 18°/9° 단풍 초입 · 항공 최저 구간</div></div>
+      <span style="font-size:11px;color:var(--color-neutral-400)">수정</span>
+    </div>
+    <div style="border:1px solid var(--color-accent-700);border-radius:var(--radius-md);padding:16px;background:linear-gradient(180deg,var(--color-neutral-900),var(--color-bg))">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span style="width:20px;height:20px;border-radius:99px;border:1px solid var(--color-accent);color:var(--color-accent-300);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center">2</span>
+        <div style="font-size:13.5px;color:var(--color-text);font-weight:500">어느 도시로 갈까요?</div>
+        <span style="margin-left:auto;font-size:10.5px;color:var(--color-neutral-400)">11월 기준 혼잡·숙박 반영</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div style="border:1px solid var(--color-accent);border-radius:var(--radius-md);padding:10px 11px;background:var(--color-accent-900)"><div style="font-size:12.5px;color:var(--color-text);font-weight:500">나고야 ✓</div><div style="font-size:10.5px;color:var(--color-accent-200);margin-top:2px;line-height:1.45">양조 2곳 · 혼잡 최저<br>숙박 안정</div></div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px 11px"><div style="font-size:12.5px;color:var(--color-text)">교토</div><div style="font-size:10.5px;color:var(--color-neutral-400);margin-top:2px;line-height:1.45">단풍 절정이지만<br>11월 숙박 2배↑</div></div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px 11px"><div style="font-size:12.5px;color:var(--color-text)">오사카</div><div style="font-size:10.5px;color:var(--color-neutral-400);margin-top:2px;line-height:1.45">미식 밀도 최고<br>심야 영업 강함</div></div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px 11px"><div style="font-size:12.5px;color:var(--color-text)">후쿠오카</div><div style="font-size:10.5px;color:var(--color-neutral-400);margin-top:2px;line-height:1.45">공항→시내 5분<br>야타이</div></div>
+      </div>
+    </div>
+    <div style="border:1px dashed var(--color-neutral-700);border-radius:var(--radius-md);padding:11px 16px;display:flex;gap:12px;align-items:center;opacity:.75">
+      <span style="width:20px;height:20px;border-radius:99px;border:1px solid var(--color-neutral-600);color:var(--color-neutral-400);font-size:11px;display:flex;align-items:center;justify-content:center">3</span>
+      <span style="font-size:12px;color:var(--color-neutral-400)">가고 싶은 곳 고르기 — 도시 선택 후 열립니다</span>
+    </div>
+    <div style="border:1px dashed var(--color-neutral-700);border-radius:var(--radius-md);padding:11px 16px;display:flex;gap:12px;align-items:center;opacity:.6">
+      <span style="width:20px;height:20px;border-radius:99px;border:1px solid var(--color-neutral-600);color:var(--color-neutral-400);font-size:11px;display:flex;align-items:center;justify-content:center">4</span>
+      <span style="font-size:12px;color:var(--color-neutral-400)">일정 밀도(A·B·C) · 예산 구간</span>
+    </div>
+    <div style="margin-top:8px;border-radius:var(--radius-md);background:radial-gradient(140% 160% at 20% 0%,var(--color-section-glow),var(--color-section) 60%);padding:18px 20px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:11px;letter-spacing:.14em;color:var(--color-accent-200);font-weight:600">종합 — 내 일정표</span><span style="font-size:10.5px;color:var(--color-accent-100);opacity:.7">2 / 4 완료</span></div>
+      <div style="font-family:var(--font-heading);font-weight:500;font-size:19px;color:var(--color-text);margin:8px 0 10px">11/11 – 14 · 나고야 · 3박 4일</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div style="background:rgba(0,0,0,.25);border-radius:var(--radius-sm);padding:8px 10px"><div style="font:600 9.5px ui-monospace,monospace;color:var(--color-accent-200)">DAY 1</div><div style="font-size:10.5px;color:var(--color-text);margin-top:2px;line-height:1.45">도착 · 오스상점가<br>마스터즈 드림 하우스</div></div>
+        <div style="background:rgba(0,0,0,.25);border-radius:var(--radius-sm);padding:8px 10px"><div style="font:600 9.5px ui-monospace,monospace;color:var(--color-accent-200)">DAY 2</div><div style="font-size:10.5px;color:var(--color-text);margin-top:2px;line-height:1.45">기린 공장 견학<br>히츠마부시</div></div>
+        <div style="background:rgba(0,0,0,.25);border-radius:var(--radius-sm);padding:8px 10px"><div style="font:600 9.5px ui-monospace,monospace;color:var(--color-accent-200)">DAY 3</div><div style="font-size:10.5px;color:var(--color-accent-100);opacity:.75;margin-top:2px;line-height:1.45">3·4단계 선택 시<br>채워집니다</div></div>
+        <div style="background:rgba(0,0,0,.25);border-radius:var(--radius-sm);padding:8px 10px"><div style="font:600 9.5px ui-monospace,monospace;color:var(--color-accent-200)">DAY 4</div><div style="font-size:10.5px;color:var(--color-accent-100);opacity:.75;margin-top:2px;line-height:1.45">—</div></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px;align-items:center"><span style="font-size:11.5px;font-weight:500;color:var(--color-text);border:1px solid var(--color-accent-200);border-radius:var(--radius-md);padding:6px 14px">일정표 복사 → 단톡방</span><span style="font-size:10.5px;color:var(--color-accent-100);opacity:.7">이름 · 한마디 포함</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">다음 시도: "<a class="dv-oid" href="#2b">2b</a>로 전체 만들어줘" · "<a class="dv-oid" href="#2a">2a</a>에 <a class="dv-oid" href="#2b">2b</a>의 일정표 패널 합쳐줘" · "모바일 버전도 보여줘"</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">일본 여행 결정 자료 — 구조가 다른 3가지 방향 (Nocturne)</span></div>
+<div class="dv-opts">
+
+<!-- ══ 1a 스텝 위저드 도구 ══ -->
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>결정 도구형 — 왼쪽 스텝 네비로 6단계를 진행, 하단 바에 내 선택이 실시간으로 쌓이고 마지막에 복사. "자료를 읽는다"보다 "함께 좁혀간다"에 무게</div>
+<div class="dv-card" style="width:1060px">
+  <div style="display:grid;grid-template-columns:216px 1fr;min-height:640px">
+    <aside style="border-right:1px solid var(--color-neutral-800);padding:22px 18px;display:flex;flex-direction:column;gap:4px">
+      <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600;margin-bottom:4px">JAPAN · 2026</div>
+      <div style="font-family:var(--font-heading);font-weight:500;font-size:17px;color:var(--color-text);margin-bottom:18px">일본 여행,<br>한 장씩 좁혀갑니다</div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md);background:var(--color-accent-900);border:1px solid var(--color-accent-700)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-accent-300)">01</span><span style="font-size:12.5px;color:var(--color-text);font-weight:500">날짜</span><span style="margin-left:auto;font-size:10px;color:var(--color-accent-300)">진행 중</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">02</span><span style="font-size:12.5px;color:var(--color-neutral-300)">날씨</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">03</span><span style="font-size:12.5px;color:var(--color-neutral-300)">항공·도시</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">04</span><span style="font-size:12.5px;color:var(--color-neutral-300)">가고 싶은 곳</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">05</span><span style="font-size:12.5px;color:var(--color-neutral-300)">일정·예산</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md)"><span style="font:600 10px ui-monospace,monospace;color:var(--color-neutral-400)">06</span><span style="font-size:12.5px;color:var(--color-neutral-300)">선택 제출</span></div>
+      </div>
+      <div style="margin-top:auto;font-size:11px;color:var(--color-neutral-400);line-height:1.5">각 단계에서 고르면<br>아래 바에 쌓입니다</div>
+    </aside>
+    <div style="display:flex;flex-direction:column">
+      <div style="padding:26px 30px 0">
+        <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 01 — DATE</div>
+        <div style="font-family:var(--font-heading);font-weight:500;font-size:24px;color:var(--color-text);margin:6px 0 4px">언제 갈까요?</div>
+        <div style="font-size:13px;color:var(--color-neutral-300);max-width:560px">제외 구간(10/26~11/7)을 빼면 실질 후보는 셋. 하나를 고르면 다음 단계로.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 30px">
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:14px 16px">
+          <div style="font-size:11px;color:var(--color-neutral-400);font-weight:600">10월 중순</div>
+          <div style="font-family:var(--font-heading);font-size:19px;color:var(--color-text);margin:4px 0 2px">10/14 – 17</div>
+          <div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.5">낮 22℃ · 연중 가장 쾌적<br>단풍·일루미 없음</div>
+        </div>
+        <div style="border:1px solid var(--color-accent);border-radius:var(--radius-md);padding:14px 16px;background:var(--color-accent-900);position:relative">
+          <span style="position:absolute;top:-9px;left:12px;font-size:10px;font-weight:600;letter-spacing:.08em;background:var(--color-accent);color:#14162a;border-radius:99px;padding:2px 8px">1순위</span>
+          <div style="font-size:11px;color:var(--color-accent-300);font-weight:600">11월 중순</div>
+          <div style="font-family:var(--font-heading);font-size:19px;color:var(--color-text);margin:4px 0 2px">11/11 – 14</div>
+          <div style="font-size:11.5px;color:var(--color-neutral-200);line-height:1.5">한국 공휴일 0일 → 항공 최저<br>단풍 초입 · 낮 18℃</div>
+        </div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:14px 16px">
+          <div style="font-size:11px;color:var(--color-neutral-400);font-weight:600">12월 상순</div>
+          <div style="font-family:var(--font-heading);font-size:19px;color:var(--color-text);margin:4px 0 2px">12/9 – 12</div>
+          <div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.5">비수기 최저가 · 일루미·온천<br>일몰 16:40, 야외 축소</div>
+        </div>
+      </div>
+      <div style="padding:0 30px 8px">
+        <div style="font-size:11.5px;color:var(--color-neutral-400);margin-bottom:8px">근거 — 3개월 캘린더 (공휴일·제외 구간)</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px;height:96px;display:flex;flex-direction:column;gap:6px"><div style="font-size:11px;color:var(--color-text);font-weight:500">10월</div><div style="flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:2px"><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:#4a3547;border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-accent-700);border-radius:2px"></i><i style="background:var(--color-accent-700);border-radius:2px"></i><i style="background:var(--color-accent-700);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-900);border-radius:2px"></i><i style="background:var(--color-neutral-900);border-radius:2px"></i><i style="background:var(--color-neutral-900);border-radius:2px"></i><i style="background:var(--color-neutral-900);border-radius:2px"></i></div></div>
+          <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px;height:96px;display:flex;flex-direction:column;gap:6px"><div style="font-size:11px;color:var(--color-text);font-weight:500">11월</div><div style="flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:2px"><i style="background:var(--color-neutral-900);border-radius:2px"></i><i style="background:var(--color-neutral-900);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-accent);border-radius:2px"></i><i style="background:var(--color-accent);border-radius:2px"></i><i style="background:var(--color-accent);border-radius:2px"></i><i style="background:var(--color-accent);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:#4a3547;border-radius:2px"></i><i style="background:#4a3547;border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i></div></div>
+          <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px;height:96px;display:flex;flex-direction:column;gap:6px"><div style="font-size:11px;color:var(--color-text);font-weight:500">12월</div><div style="flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:2px"><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-accent-700);border-radius:2px"></i><i style="background:var(--color-accent-700);border-radius:2px"></i><i style="background:var(--color-accent-700);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:var(--color-neutral-800);border-radius:2px"></i><i style="background:#4a3547;border-radius:2px"></i><i style="background:#4a3547;border-radius:2px"></i><i style="background:#4a3547;border-radius:2px"></i><i style="background:#4a3547;border-radius:2px"></i><i style="background:#4a3547;border-radius:2px"></i></div></div>
+        </div>
+      </div>
+      <div style="margin-top:auto;border-top:1px solid var(--color-neutral-800);padding:14px 30px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:11px;color:var(--color-neutral-400);font-weight:600;letter-spacing:.08em">내 선택</span>
+        <span style="font-size:12px;color:var(--color-text);border:1px solid var(--color-accent-700);border-radius:99px;padding:3px 10px">11월 중순 11/11–14</span>
+        <span style="font-size:12px;color:var(--color-neutral-400);border:1px dashed var(--color-neutral-700);border-radius:99px;padding:3px 10px">도시 —</span>
+        <span style="font-size:12px;color:var(--color-neutral-400);border:1px dashed var(--color-neutral-700);border-radius:99px;padding:3px 10px">예산 —</span>
+        <span style="margin-left:auto;font-size:12.5px;font-weight:500;color:var(--color-accent-300);border:1px solid var(--color-accent);border-radius:var(--radius-md);padding:7px 16px">다음 단계 →</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ 1b 브리핑 문서 ══ -->
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>브리핑 문서형 — 스크롤 없이 훑어 읽는 리포트. 우측에 고정 목차 + 요점(TL;DR) 박스, 표·근거 중심. 단톡방 공유 전에 각자 정독하는 용도</div>
+<div class="dv-card" style="width:900px">
+  <div style="padding:34px 38px 30px;border-bottom:1px solid var(--color-neutral-800);background:linear-gradient(180deg,var(--color-neutral-900),var(--color-bg))">
+    <div style="font-size:11px;letter-spacing:.16em;color:var(--color-accent);font-weight:600">BRIEFING · 2026 일본 여행</div>
+    <div style="font-family:var(--font-heading);font-weight:500;font-size:30px;color:var(--color-text);margin:10px 0 6px;letter-spacing:-.01em">읽고 나면 5가지만<br>고르면 됩니다</div>
+    <div style="font-size:13px;color:var(--color-neutral-300);max-width:520px">날짜 · 도시 · 요일 조합 · 코스 밀도 · 예산. 각 장의 근거를 읽고 마지막 장에서 선택을 제출하세요.</div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <span style="font-size:11px;color:var(--color-accent-200);background:var(--color-accent-900);border-radius:99px;padding:3px 10px">후보 도시 4곳</span>
+      <span style="font-size:11px;color:var(--color-neutral-200);background:var(--color-neutral-800);border-radius:99px;padding:3px 10px">검토 기간 10–12월</span>
+      <span style="font-size:11px;color:var(--color-neutral-200);background:var(--color-neutral-800);border-radius:99px;padding:3px 10px">제외 10/26–11/7</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 190px;gap:30px;padding:28px 38px 34px">
+    <div>
+      <div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-400);font-weight:600">02 — 날씨</div>
+      <div style="font-family:var(--font-heading);font-weight:500;font-size:19px;color:var(--color-text);margin:5px 0 10px">기온 차는 작고, 해 길이가 다릅니다</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr>
+          <th style="text-align:left;padding:7px 10px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-weight:600;font-size:10.8px">주차</th>
+          <th style="text-align:left;padding:7px 10px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-weight:600;font-size:10.8px">교토</th>
+          <th style="text-align:left;padding:7px 10px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-weight:600;font-size:10.8px">오사카</th>
+          <th style="text-align:left;padding:7px 10px;background:var(--color-neutral-900);color:var(--color-neutral-300);font-weight:600;font-size:10.8px">나고야</th>
+          <th style="text-align:left;padding:7px 10px;background:var(--color-neutral-900);color:var(--color-accent-300);font-weight:600;font-size:10.8px">후쿠오카</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-text);font-weight:500">10월 3주</td><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">22 / 13</td><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">23 / 15</td><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">22 / 13</td><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-accent-200)">23 / 15</td></tr>
+          <tr style="background:var(--color-accent-900)"><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-text);font-weight:500">11월 2주 ★</td><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">18 / 9</td><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">19 / 11</td><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-neutral-200)">18 / 9</td><td style="padding:8px 10px;border-bottom:1px solid var(--color-neutral-800);color:var(--color-accent-200)">19 / 11</td></tr>
+          <tr><td style="padding:8px 10px;color:var(--color-text);font-weight:500">12월 2주</td><td style="padding:8px 10px;color:var(--color-neutral-200)">11 / 2</td><td style="padding:8px 10px;color:var(--color-neutral-200)">12 / 4</td><td style="padding:8px 10px;color:var(--color-neutral-200)">11 / 3</td><td style="padding:8px 10px;color:var(--color-accent-200)">13 / 5</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:11px;color:var(--color-neutral-400);margin-top:8px;line-height:1.6">정확도: 중간 · 평년값 기반. 후쿠오카는 일몰이 +22분 늦고, 교토는 일교차가 가장 큽니다.</div>
+      <div style="height:1px;background:linear-gradient(90deg,transparent,var(--color-neutral-700),transparent);margin:20px 0"></div>
+      <div style="font-size:11px;letter-spacing:.12em;color:var(--color-neutral-400);font-weight:600">05 — 도시</div>
+      <div style="font-family:var(--font-heading);font-weight:500;font-size:19px;color:var(--color-text);margin:5px 0 10px">양조장 기준 2강: 교토 · 나고야</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="border:1px solid var(--color-accent-700);border-radius:var(--radius-md);padding:12px 14px"><div style="font-size:13px;color:var(--color-text);font-weight:500">나고야</div><div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55;margin-top:3px">기린 공장 + 한다 양조 마을 · 전 기간 혼잡 최저 · 숙박비 안정</div></div>
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:12px 14px"><div style="font-size:13px;color:var(--color-text);font-weight:500">교토</div><div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55;margin-top:3px">산토리 공장 + 후시미 사케 거리 · 단, 11월 극성수기 + 숙박 2배↑</div></div>
+      </div>
+    </div>
+    <aside style="display:flex;flex-direction:column;gap:14px">
+      <div style="border:1px solid var(--color-accent-700);border-radius:var(--radius-md);padding:13px 14px;background:var(--color-accent-900)">
+        <div style="font-size:10.5px;letter-spacing:.1em;color:var(--color-accent-300);font-weight:600;margin-bottom:6px">TL;DR</div>
+        <div style="font-size:11.5px;color:var(--color-neutral-100);line-height:1.6">1순위: <b>11/11–14 나고야</b><br>예산 기준선: 150만/인<br>차선: 12/9–12 (일루미)</div>
+      </div>
+      <div>
+        <div style="font-size:10.5px;letter-spacing:.1em;color:var(--color-neutral-400);font-weight:600;margin-bottom:8px">목차</div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:11.5px">
+          <span style="color:var(--color-neutral-300)">01 날짜</span>
+          <span style="color:var(--color-accent-300);border-left:2px solid var(--color-accent);padding-left:7px;margin-left:-9px">02 날씨</span>
+          <span style="color:var(--color-neutral-300)">03 요일 조합</span>
+          <span style="color:var(--color-neutral-300)">04 항공</span>
+          <span style="color:var(--color-neutral-300)">05 도시</span>
+          <span style="color:var(--color-neutral-300)">06 후보지</span>
+          <span style="color:var(--color-neutral-300)">07 일정 · 08 예산</span>
+          <span style="color:var(--color-neutral-300)">09 선택 제출</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+</div>
+
+<!-- ══ 1c 슬라이드 덱 ══ -->
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>발표 덱형 — 지금 v7과 같은 "한 장씩" 흐름을 Nocturne 덱 문법으로. 표지·간지는 딥 인디고 간지 그라운드, 데이터 장은 차분한 그라운드. 모임에서 화면에 띄우고 넘기는 용도</div>
+<div class="dv-card" style="width:760px">
+  <div style="aspect-ratio:16/9;background:radial-gradient(120% 130% at 18% 0%,var(--color-section-glow),var(--color-section) 55%,#1c1f4a);padding:44px 48px;display:flex;flex-direction:column;position:relative">
+    <div style="font-size:11px;letter-spacing:.2em;color:var(--color-accent-200);font-weight:600">TEAM DECISION DECK · 2026</div>
+    <div style="font-family:var(--font-heading);font-weight:500;font-size:44px;line-height:1.16;color:var(--color-text);margin-top:16px;letter-spacing:-.015em">일본 여행,<br>한 장씩 좁혀갑니다</div>
+    <div style="font-size:14px;color:var(--color-accent-100);opacity:.85;margin-top:14px;max-width:420px">날짜 → 날씨 → 항공 → 도시 → 일정 → 예산.<br>마지막 장에서 각자 선택해 주세요.</div>
+    <div style="margin-top:auto;display:flex;gap:22px;font-size:12px;color:var(--color-accent-100)">
+      <span><b style="color:var(--color-text)">4곳</b> 후보 도시</span>
+      <span><b style="color:var(--color-text)">10–12월</b> 검토</span>
+      <span><b style="color:var(--color-text)">3박 4일</b>까지</span>
+    </div>
+    <div style="position:absolute;right:48px;bottom:40px;font:500 11px ui-monospace,monospace;color:var(--color-accent-200)">01 / 10</div>
+  </div>
+  <div style="aspect-ratio:16/9;background:var(--color-bg);border-top:1px solid var(--color-neutral-800);padding:38px 48px;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font:600 11px ui-monospace,monospace;color:var(--color-accent)">05</span>
+      <span style="font-family:var(--font-heading);font-weight:500;font-size:24px;color:var(--color-text)">도시 비교 — 양조장 기준 2강</span>
+    </div>
+    <div style="height:1px;background:linear-gradient(90deg,var(--color-accent-700),transparent);margin:14px 0 18px"></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;flex:1">
+      <div style="border:1px solid var(--color-accent);border-radius:var(--radius-md);padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font-size:14px;color:var(--color-text);font-weight:500">나고야</div><div style="font-size:11px;color:var(--color-accent-300)">양조 + 실속</div><div style="font-size:11px;color:var(--color-neutral-300);line-height:1.5">기린 공장 · 한다 마을<br>혼잡 최저 · 숙박 안정</div><div style="margin-top:auto;font-size:10.5px;color:var(--color-accent-200);border:1px solid var(--color-accent-700);border-radius:99px;padding:2px 8px;align-self:flex-start">추천</div></div>
+      <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font-size:14px;color:var(--color-text);font-weight:500">교토</div><div style="font-size:11px;color:var(--color-neutral-400)">양조 + 고도</div><div style="font-size:11px;color:var(--color-neutral-300);line-height:1.5">산토리 · 후시미 거리<br>11월 극성수기 주의</div></div>
+      <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font-size:14px;color:var(--color-text);font-weight:500">오사카</div><div style="font-size:11px;color:var(--color-neutral-400)">미식 밀도 최고</div><div style="font-size:11px;color:var(--color-neutral-300);line-height:1.5">도톤보리 · 아사히 공장<br>심야 영업 강함</div></div>
+      <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font-size:14px;color:var(--color-text);font-weight:500">후쿠오카</div><div style="font-size:11px;color:var(--color-neutral-400)">최단 이동</div><div style="font-size:11px;color:var(--color-neutral-300);line-height:1.5">공항→시내 5분<br>야타이 · 일몰 +22분</div></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:16px;font:500 11px ui-monospace,monospace;color:var(--color-neutral-400)"><span>JAPAN 2026</span><span>06 / 10</span></div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">다음 시도: "<a class="dv-oid" href="#1a">1a</a>로 전체 만들어줘" · "<a class="dv-oid" href="#1a">1a</a> 구조에 <a class="dv-oid" href="#1b">1b</a>의 TL;DR 박스 합쳐줘" · "다른 방향 더 보여줘"</p>
+</section>
+
+</x-dc>
+</body>
+</html>

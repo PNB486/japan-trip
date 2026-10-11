@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>일본 여행 의사결정 덱 · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08090B; --card:#141920; --panel:#171D26;
+  --line:#272E39; --line-2:#3A4453;
+  --ink:#E8EBEF; --ink-2:#AEB7C4; --muted:#7E8896;
+  --momiji:#E4674C; --ginkgo:#E9BA4E; --moss:#88B96C; --sora:#5E93D6; --yuki:#9FB8D4;
+  --r:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);
+  font-family:'IBM Plex Sans KR',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  line-height:1.58;-webkit-text-size-adjust:100%;overflow:hidden}
+.deck{height:100svh;overflow-y:scroll;scroll-snap-type:y mandatory;
+  scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+.deck::-webkit-scrollbar{display:none}
+.scene{min-height:100svh;scroll-snap-align:start;scroll-snap-stop:always;
+  display:flex;align-items:center;padding:50px 24px}
+.inner{width:100%;max-width:1080px;margin:0 auto;
+  opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.scene.live .inner{opacity:1;transform:none}
+
+.rail{position:fixed;right:15px;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:10px}
+.rail button{width:9px;height:9px;padding:0;border-radius:99px;border:none;background:var(--line-2);cursor:pointer;
+  transition:all .45s cubic-bezier(.16,1,.3,1);position:relative}
+.rail button:hover{background:var(--ink-2)}
+.rail button.on{background:var(--momiji);height:24px}
+.rail button:focus-visible{outline:2px solid var(--ginkgo);outline-offset:3px}
+.rail button span{position:absolute;right:16px;top:50%;transform:translateY(-50%);white-space:nowrap;
+  font-size:10.5px;font-weight:700;color:var(--muted);opacity:0;pointer-events:none;transition:opacity .3s}
+.rail button:hover span{opacity:1}
+
+.chapter{display:inline-block;font-family:'Noto Serif KR',serif;font-weight:900;font-size:11px;letter-spacing:.22em;
+  color:var(--momiji);border:1px solid var(--momiji);border-radius:99px;padding:3px 11px;margin-bottom:11px}
+h2{font-family:'Noto Serif KR',serif;font-weight:900;font-size:clamp(22px,3.9vw,33px);line-height:1.26}
+.lead{color:var(--ink-2);font-size:clamp(12.5px,1.5vw,14.2px);margin-top:8px;max-width:840px}
+.scene-head{margin-bottom:18px}
+
+#s0{background:radial-gradient(120% 80% at 50% 0%,#151B26 0%,var(--bg) 68%)}
+.cv-eye{font-size:11px;letter-spacing:.3em;color:var(--ginkgo);font-weight:700}
+h1{font-family:'Noto Serif KR',serif;font-weight:900;font-size:clamp(30px,6.5vw,58px);line-height:1.2;margin:16px 0 8px}
+h1 em{font-style:normal;color:var(--momiji)}
+.cv-sub{color:var(--ink-2);font-size:clamp(13.5px,1.9vw,16px);max-width:680px}
+.cv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(146px,1fr));gap:10px;margin-top:26px}
+.cv-cell{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+.cv-cell .k{font-size:10px;letter-spacing:.16em;color:var(--muted);font-weight:700}
+.cv-cell .v{font-size:14.5px;font-weight:600;margin-top:4px}
+.cv-cell .v small{display:block;font-size:11.5px;font-weight:400;color:var(--ink-2);margin-top:2px}
+.hint{margin-top:26px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:9px}
+.hint i{width:1px;height:20px;background:linear-gradient(var(--momiji),transparent);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.cal-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cal{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px}
+.cal h3{font-family:'Noto Serif KR',serif;font-size:14.5px;font-weight:700}
+.cal .cap{font-size:10.5px;color:var(--muted);margin:2px 0 9px;line-height:1.45;min-height:30px}
+.grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:2.5px}
+.dow{font-size:9px;text-align:center;color:var(--muted);font-weight:700;padding-bottom:3px}
+.dow.sun{color:var(--momiji)}
+.cell{aspect-ratio:1/1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:11px;background:#10141A;color:var(--ink-2);border:1px solid transparent;overflow:hidden}
+.cell.void{background:transparent}
+.cell .m{font-size:7px;line-height:1;margin-top:1.5px;font-weight:700}
+.cell.kr{background:#3A1B16;color:#F2A491;border-color:#5C2B22}
+.cell.jp{background:#3A2E12;color:#F0CE7E;border-color:#5A481D}
+.cell.pick{background:#1D3524;color:#B8E4A0;border-color:var(--moss);font-weight:700}
+.cell.alt{background:#16222F;border-color:#2F4A6B;color:#A9C9EE}
+.cell.no{color:#4A515C;background:repeating-linear-gradient(45deg,#0E1116 0 4px,#171B21 4px 8px)}
+.cal-legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:11px;font-size:10.5px;color:var(--muted)}
+.cal-legend b{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.cal-legend .hb{background:repeating-linear-gradient(45deg,#0E1116 0 3px,#2A313A 3px 6px);border:1px solid var(--line-2)}
+
+.cards{display:grid;gap:10px}
+.c2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.c3{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.c4{grid-template-columns:repeat(auto-fit,minmax(188px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+.card.hl{border-color:var(--momiji);background:var(--panel)}
+.card.hl2{border-color:var(--yuki);background:var(--panel)}
+.card h4{font-family:'Noto Serif KR',serif;font-size:14.5px;font-weight:700;margin-bottom:2px}
+.card .sub{font-size:11px;color:var(--muted);margin-bottom:7px}
+.card ul{list-style:none}
+.card li{font-size:12px;color:var(--ink-2);padding:2.5px 0 2.5px 11px;position:relative;line-height:1.48}
+.card li::before{content:"";position:absolute;left:0;top:9.5px;width:4px;height:4px;border-radius:99px;background:var(--line-2)}
+.card li.on::before{background:var(--momiji)}
+.card li b{color:var(--ink);font-weight:600}
+.tagline{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.07em;padding:2px 8px;border-radius:99px;margin-bottom:6px}
+.t-red{background:#3A1B16;color:#F0917A}.t-gold{background:#382C10;color:var(--ginkgo)}
+.t-green{background:#1D2B18;color:var(--moss)}.t-blue{background:#16263A;color:#8DB6E4}
+.t-snow{background:#1B2634;color:var(--yuki)}
+.dowbadge{display:inline-block;font-family:'Noto Serif KR',serif;font-weight:700;font-size:11px;letter-spacing:.1em;
+  color:var(--ginkgo);background:#20242C;border-radius:5px;padding:2px 7px;margin-right:6px}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:690px}
+th,td{padding:8.5px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{background:#1B222C;font-size:10.8px;font-weight:700;white-space:nowrap}
+tbody th{background:#151A22;white-space:nowrap;font-weight:600;font-size:11.3px;width:88px}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none}
+td.best{background:#15201A}
+tr.hlrow td,tr.hlrow th{background:#1E2A20}
+td small{display:block;color:var(--muted);font-size:10.3px;margin-top:2px}
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:1.5px 7px;border-radius:99px;white-space:nowrap}
+.p-low{background:#1D2B18;color:var(--moss)}.p-mid{background:#332912;color:var(--ginkgo)}
+.p-high{background:#361B16;color:var(--momiji)}.p-snow{background:#1B2634;color:var(--yuki)}
+.temp{font-family:'Noto Serif KR',serif;font-weight:700;font-size:14px}
+.temp .hi{color:var(--momiji)}.temp .lo{color:var(--sora)}
+.temp .sep{color:var(--muted);font-weight:400;margin:0 3px}
+
+.toggle{display:inline-flex;background:#10141A;border:1px solid var(--line-2);border-radius:99px;padding:3px;gap:3px;margin:0 8px 12px 0}
+.toggle button{border:none;background:transparent;color:var(--ink-2);font-family:inherit;font-size:12.2px;font-weight:600;
+  padding:6px 14px;border-radius:99px;cursor:pointer;transition:all .35s cubic-bezier(.16,1,.3,1)}
+.toggle button[aria-pressed="true"]{background:var(--momiji);color:#0B0C0E}
+.toggle button:focus-visible{outline:2px solid var(--ginkgo);outline-offset:2px}
+.toggle.g2 button[aria-pressed="true"]{background:var(--ginkgo);color:#12151A}
+.crsdesc{font-size:11.5px;color:var(--muted);margin-bottom:11px;line-height:1.5}
+.crsdesc b{color:var(--ginkgo)}
+
+.plan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.plan .col{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.plan .col.hl{border-color:var(--momiji)}
+.plan .ch{padding:9px 13px;background:#1B222C;border-bottom:1px solid var(--line)}
+.plan .nm{font-family:'Noto Serif KR',serif;font-weight:700;font-size:14px}
+.plan .th{font-size:10.2px;color:var(--ginkgo);font-weight:600;margin-top:1px}
+.plan .cb{padding:8px 13px}
+.dl{padding:5px 0;border-bottom:1px dashed var(--line)}
+.dl:last-child{border-bottom:none}
+.dl .d{font-size:9.3px;font-weight:700;color:var(--momiji);letter-spacing:.1em}
+.dl .t{font-size:11.4px;color:var(--ink-2);margin-top:1px;line-height:1.48}
+.dl .t b{color:var(--ink);font-weight:600}
+
+.spotgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;max-height:58vh;overflow-y:auto;padding-right:3px}
+.spot{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px;text-align:left;
+  cursor:pointer;font-family:inherit;color:var(--ink);transition:all .3s cubic-bezier(.16,1,.3,1);position:relative;display:flex;flex-direction:column;gap:3px}
+.spot:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.spot:focus-visible{outline:2px solid var(--ginkgo);outline-offset:2px}
+.spot[aria-pressed="true"]{border-color:var(--momiji);background:#221419}
+.spot[aria-pressed="true"]::after{content:"\2713";position:absolute;top:8px;right:9px;font-size:11px;font-weight:900;color:var(--momiji)}
+.spot .cat{font-size:9.2px;font-weight:700;letter-spacing:.08em;padding:1.5px 6px;border-radius:99px;align-self:flex-start}
+.cat-brew{background:#3A1B16;color:#F0917A}
+.cat-see{background:#16263A;color:#8DB6E4}
+.cat-eat{background:#382C10;color:var(--ginkgo)}
+.cat-win{background:#1B2634;color:var(--yuki)}
+.spot .nm{font-size:12.6px;font-weight:700;line-height:1.32;padding-right:12px}
+.spot .ds{font-size:10.6px;color:var(--ink-2);line-height:1.42}
+.spot .mt{font-size:9.8px;color:var(--muted);line-height:1.4;margin-top:auto;padding-top:3px}
+.spotcount{font-size:11.5px;color:var(--ginkgo);font-weight:700;margin-left:6px}
+
+.bud{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:11px}
+.bcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.bcard.mid{border-color:var(--ginkgo);background:var(--panel)}
+.bcard .lv{font-size:10.2px;font-weight:700;letter-spacing:.12em;color:var(--muted)}
+.bcard .amt{font-family:'Noto Serif KR',serif;font-weight:900;font-size:27px;line-height:1.15;margin:3px 0 1px}
+.bcard.mid .amt{color:var(--ginkgo)}
+.bcard .per{font-size:10.2px;color:var(--muted);margin-bottom:8px}
+.bcard ul{list-style:none}
+.bcard li{font-size:11.3px;color:var(--ink-2);padding:2.5px 0 2.5px 10px;position:relative;line-height:1.42}
+.bcard li::before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:99px;background:var(--line-2)}
+.bcard li b{color:var(--ink)}
+
+.chk{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:9px}
+.chk .item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:11px 13px}
+.chk .item.new{border-color:var(--sora)}
+.chk .q{font-size:12.8px;font-weight:600}
+.chk .q i{font-style:normal;font-size:9.5px;color:var(--sora);font-weight:700;margin-left:5px}
+.chk .why{font-size:10.8px;color:var(--muted);margin-top:3px;line-height:1.48}
+
+.decide{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.q{margin-bottom:12px}
+.qt{font-family:'Noto Serif KR',serif;font-weight:700;font-size:13.2px;margin-bottom:6px}
+.qt span{color:var(--ginkgo);margin-right:6px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{border:1px solid var(--line-2);border-radius:9px;background:transparent;color:var(--ink);padding:6.5px 12px;
+  font-size:12.2px;cursor:pointer;font-family:inherit;text-align:left;transition:all .35s cubic-bezier(.16,1,.3,1)}
+.opt:hover{border-color:var(--ink-2)}
+.opt:focus-visible{outline:2px solid var(--ginkgo);outline-offset:2px}
+.opt[aria-pressed="true"]{background:var(--momiji);border-color:var(--momiji);color:#0B0C0E;font-weight:700}
+.opt small{display:block;font-size:9.8px;color:var(--muted);margin-top:1px}
+.opt[aria-pressed="true"] small{color:#4A1A10}
+.nm-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0 11px}
+.nm-row label{font-size:12.2px;font-weight:600}
+.nm-row input{flex:1;min-width:140px;max-width:210px;padding:6.5px 10px;border-radius:9px;border:1px solid var(--line-2);
+  background:#10141A;color:var(--ink);font-size:12.2px;font-family:inherit}
+.nm-row input:focus{outline:2px solid var(--ginkgo);outline-offset:1px}
+.sumbox{background:#10141A;border:1px dashed var(--line-2);border-radius:9px;padding:11px;font-size:12.2px;white-space:pre-line;min-height:42px}
+.sumbox.empty{color:var(--muted)}
+.crow{display:flex;gap:9px;align-items:center;margin-top:9px;flex-wrap:wrap}
+.cbtn{background:var(--ginkgo);color:#12151A;border:none;border-radius:9px;padding:8.5px 18px;font-size:12.8px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.cbtn:hover{filter:brightness(1.07)}.cbtn:active{transform:scale(.96)}
+.cbtn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.cdone{font-size:11.8px;color:var(--moss);font-weight:700;opacity:0;transition:opacity .3s}
+.cdone.show{opacity:1}
+.note{font-size:10.8px;color:var(--muted);margin-top:10px;line-height:1.62}
+.note b{color:var(--ink-2)}
+
+@media (max-width:1000px){ .plan{grid-template-columns:repeat(2,1fr)} .bud{grid-template-columns:repeat(2,1fr)} .spotgrid{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:860px){
+  .cal-wrap{grid-template-columns:1fr}
+  .scene{padding:40px 15px;align-items:flex-start}
+  .rail{right:6px;gap:7px}
+  body{overflow:auto}
+  .deck{scroll-snap-type:y proximity}
+  .plan{grid-template-columns:1fr}
+  .bud{grid-template-columns:1fr}
+  .spotgrid{grid-template-columns:repeat(2,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+  .inner{opacity:1!important;transform:none!important;transition:none}
+  *{animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<nav class="rail" id="rail" aria-label="장 이동"></nav>
+<div class="deck" id="deck">
+
+<!-- 00 -->
+<section class="scene" id="s0" data-nm="표지">
+  <div class="inner">
+    <div class="cv-eye">TEAM DECISION DECK · 2026</div>
+    <h1>일본 여행,<br>한 장씩 <em>좁혀갑니다</em></h1>
+    <p class="cv-sub">10·11·12월을 놓고 날짜 → 날씨 → 항공 → 도시 → 일정 → 예산 순으로 봅니다. 마지막 장에서 각자 선택해 주세요.</p>
+    <div class="cv-grid">
+      <div class="cv-cell"><div class="k">후보 도시</div><div class="v">4곳<small>교토·오사카·나고야·후쿠오카</small></div></div>
+      <div class="cv-cell"><div class="k">검토 기간</div><div class="v">10~12월<small>2026년</small></div></div>
+      <div class="cv-cell"><div class="k">선호 요일</div><div class="v">수목금 / 목금토<small>수목금토(3박)</small></div></div>
+      <div class="cv-cell"><div class="k">제외 구간</div><div class="v">10/26~11/7<small>개인 사정</small></div></div>
+    </div>
+    <div class="hint"><i></i>스크롤 한 번에 한 장씩 넘어갑니다</div>
+  </div>
+</section>
+
+<!-- 01 날짜 -->
+<section class="scene" id="s1" data-nm="날짜">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">01 DATE</span>
+      <h2>날짜</h2>
+      <p class="lead">한국 공휴일은 항공료를, 일본 공휴일은 현지 혼잡을 올립니다. 제외 구간을 빼면 실질 후보는 <b>10월 중순 · 11월 중순 · 12월 상순</b> 셋입니다.</p>
+    </div>
+    <div class="cal-wrap">
+      <div class="cal">
+        <h3>10월</h3>
+        <div class="cap">한국 연휴 2회 + 일본 연휴 1회. 하순은 제외 구간</div>
+        <div class="grid7">
+          <div class="dow sun">일</div><div class="dow">월</div><div class="dow">화</div><div class="dow">수</div><div class="dow">목</div><div class="dow">금</div><div class="dow">토</div>
+          <div class="cell void"></div><div class="cell void"></div><div class="cell void"></div><div class="cell void"></div>
+          <div class="cell">1</div><div class="cell">2</div><div class="cell kr">3<span class="m">개천절</span></div>
+          <div class="cell">4</div><div class="cell kr">5<span class="m">대체</span></div><div class="cell">6</div><div class="cell">7</div><div class="cell">8</div>
+          <div class="cell kr">9<span class="m">한글날</span></div><div class="cell kr">10</div>
+          <div class="cell kr">11</div><div class="cell jp">12<span class="m">스포츠</span></div><div class="cell">13</div>
+          <div class="cell pick">14</div><div class="cell pick">15</div><div class="cell pick">16</div><div class="cell pick">17</div>
+          <div class="cell">18</div><div class="cell">19</div><div class="cell">20</div>
+          <div class="cell alt">21</div><div class="cell alt">22</div><div class="cell alt">23</div><div class="cell alt">24</div>
+          <div class="cell">25</div>
+          <div class="cell no">26</div><div class="cell no">27</div><div class="cell no">28</div><div class="cell no">29</div><div class="cell no">30</div><div class="cell no">31</div>
+        </div>
+      </div>
+      <div class="cal">
+        <h3>11월</h3>
+        <div class="cap">한국 공휴일 <b style="color:var(--moss)">0일</b>. 제외 구간 직후 첫 가용 주간</div>
+        <div class="grid7">
+          <div class="dow sun">일</div><div class="dow">월</div><div class="dow">화</div><div class="dow">수</div><div class="dow">목</div><div class="dow">금</div><div class="dow">토</div>
+          <div class="cell no">1</div><div class="cell no">2</div><div class="cell jp">3<span class="m">문화</span></div>
+          <div class="cell no">4</div><div class="cell no">5</div><div class="cell no">6</div><div class="cell no">7</div>
+          <div class="cell">8</div><div class="cell">9</div><div class="cell">10</div>
+          <div class="cell pick">11</div><div class="cell pick">12</div><div class="cell pick">13</div><div class="cell pick">14</div>
+          <div class="cell">15</div><div class="cell">16</div><div class="cell">17</div>
+          <div class="cell alt">18</div><div class="cell alt">19</div><div class="cell alt">20</div><div class="cell jp">21</div>
+          <div class="cell jp">22</div><div class="cell jp">23<span class="m">근로감사</span></div>
+          <div class="cell">24</div><div class="cell">25</div><div class="cell">26</div><div class="cell">27</div><div class="cell">28</div>
+          <div class="cell">29</div><div class="cell">30</div>
+        </div>
+      </div>
+      <div class="cal">
+        <h3>12월</h3>
+        <div class="cap">일본 공휴일 0일. 상순은 비수기, 25일 이후는 양국 동시 피크</div>
+        <div class="grid7">
+          <div class="dow sun">일</div><div class="dow">월</div><div class="dow">화</div><div class="dow">수</div><div class="dow">목</div><div class="dow">금</div><div class="dow">토</div>
+          <div class="cell void"></div><div class="cell void"></div>
+          <div class="cell">1</div><div class="cell alt">2</div><div class="cell alt">3</div><div class="cell alt">4</div><div class="cell alt">5</div>
+          <div class="cell">6</div><div class="cell">7</div><div class="cell">8</div>
+          <div class="cell pick">9</div><div class="cell pick">10</div><div class="cell pick">11</div><div class="cell pick">12</div>
+          <div class="cell">13</div><div class="cell">14</div><div class="cell">15</div>
+          <div class="cell alt">16</div><div class="cell alt">17</div><div class="cell alt">18</div><div class="cell alt">19</div>
+          <div class="cell">20</div><div class="cell">21</div><div class="cell">22</div><div class="cell">23</div><div class="cell">24</div>
+          <div class="cell kr">25<span class="m">성탄</span></div><div class="cell kr">26</div>
+          <div class="cell kr">27</div><div class="cell jp">28<span class="m">연말</span></div><div class="cell jp">29</div><div class="cell jp">30</div><div class="cell jp">31</div>
+        </div>
+      </div>
+    </div>
+    <div class="cal-legend">
+      <span><b style="background:#5C2B22"></b>한국 공휴일</span>
+      <span><b style="background:#5A481D"></b>일본 공휴일·연말</span>
+      <span><b style="background:var(--moss)"></b>추천 주간</span>
+      <span><b style="background:#2F4A6B"></b>차선 주간</span>
+      <span><b class="hb"></b>제외(개인 사정)</span>
+    </div>
+    <p class="note"><b>제외 구간 해석</b> · "11/4~7과 그 전주"를 10/26(월)~11/7(토)로 잡았습니다. 해석이 다르면 알려주세요.</p>
+  </div>
+</section>
+
+<!-- 02 날씨 -->
+<section class="scene" id="s2" data-nm="날씨">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">02 WEATHER</span>
+      <h2>도시별 주차 날씨</h2>
+      <p class="lead">평년값 기준 <b>낮 최고 / 아침 최저</b>입니다. 네 도시의 기온 차는 크지 않지만, <b>후쿠오카는 해가 20분 늦게 지고</b> 교토는 일교차가 가장 큽니다.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>주차</th><th>교토</th><th>오사카</th><th>나고야</th><th>후쿠오카</th><th>공통 특징</th><th>옷차림</th></tr></thead>
+        <tbody>
+          <tr><th>10월 2주<br><small style="color:var(--muted)">10/8~14</small></th>
+            <td><span class="temp"><span class="hi">24</span><span class="sep">/</span><span class="lo">14</span></span></td>
+            <td><span class="temp"><span class="hi">24</span><span class="sep">/</span><span class="lo">16</span></span></td>
+            <td><span class="temp"><span class="hi">24</span><span class="sep">/</span><span class="lo">15</span></span></td>
+            <td class="best"><span class="temp"><span class="hi">24</span><span class="sep">/</span><span class="lo">16</span></span></td>
+            <td>쾌청<small>초순 태풍 잔여 가능성</small></td><td>얇은 겉옷 1벌</td></tr>
+          <tr class="hlrow"><th>10월 3주<br><small style="color:var(--muted)">10/15~21</small></th>
+            <td><span class="temp"><span class="hi">22</span><span class="sep">/</span><span class="lo">13</span></span></td>
+            <td><span class="temp"><span class="hi">23</span><span class="sep">/</span><span class="lo">15</span></span></td>
+            <td><span class="temp"><span class="hi">22</span><span class="sep">/</span><span class="lo">13</span></span></td>
+            <td class="best"><span class="temp"><span class="hi">23</span><span class="sep">/</span><span class="lo">15</span></span></td>
+            <td>연중 가장 쾌적<small>습도 낮고 맑음</small></td><td>가디건·얇은 자켓</td></tr>
+          <tr><th>10월 4주<br><small style="color:var(--muted)">10/22~28</small></th>
+            <td><span class="temp"><span class="hi">21</span><span class="sep">/</span><span class="lo">11</span></span></td>
+            <td><span class="temp"><span class="hi">22</span><span class="sep">/</span><span class="lo">13</span></span></td>
+            <td><span class="temp"><span class="hi">21</span><span class="sep">/</span><span class="lo">12</span></span></td>
+            <td class="best"><span class="temp"><span class="hi">22</span><span class="sep">/</span><span class="lo">14</span></span></td>
+            <td>맑고 건조</td><td>얇은 자켓</td></tr>
+          <tr class="hlrow"><th>11월 2주<br><small style="color:var(--muted)">11/8~14</small></th>
+            <td><span class="temp"><span class="hi">18</span><span class="sep">/</span><span class="lo">9</span></span></td>
+            <td><span class="temp"><span class="hi">19</span><span class="sep">/</span><span class="lo">11</span></span></td>
+            <td><span class="temp"><span class="hi">18</span><span class="sep">/</span><span class="lo">9</span></span></td>
+            <td class="best"><span class="temp"><span class="hi">19</span><span class="sep">/</span><span class="lo">11</span></span></td>
+            <td>맑은 날 비율 최고<small>일교차 8~9℃</small></td><td>자켓·니트<br><small style="color:var(--muted)">아침 겉옷 필수</small></td></tr>
+          <tr><th>11월 3주<br><small style="color:var(--muted)">11/15~21</small></th>
+            <td><span class="temp"><span class="hi">17</span><span class="sep">/</span><span class="lo">7</span></span></td>
+            <td><span class="temp"><span class="hi">17</span><span class="sep">/</span><span class="lo">9</span></span></td>
+            <td><span class="temp"><span class="hi">17</span><span class="sep">/</span><span class="lo">8</span></span></td>
+            <td class="best"><span class="temp"><span class="hi">18</span><span class="sep">/</span><span class="lo">10</span></span></td>
+            <td>건조·청명<small>단풍 본격</small></td><td>코트·두꺼운 자켓</td></tr>
+          <tr><th>11월 4주<br><small style="color:var(--muted)">11/22~30</small></th>
+            <td><span class="temp"><span class="hi">15</span><span class="sep">/</span><span class="lo">5</span></span></td>
+            <td><span class="temp"><span class="hi">16</span><span class="sep">/</span><span class="lo">7</span></span></td>
+            <td><span class="temp"><span class="hi">15</span><span class="sep">/</span><span class="lo">6</span></span></td>
+            <td class="best"><span class="temp"><span class="hi">16</span><span class="sep">/</span><span class="lo">8</span></span></td>
+            <td>아침 쌀쌀<small>단풍 절정</small></td><td>코트·목도리</td></tr>
+          <tr class="hlrow"><th>12월 2주<br><small style="color:var(--muted)">12/8~14</small></th>
+            <td><span class="temp"><span class="hi">11</span><span class="sep">/</span><span class="lo">2</span></span></td>
+            <td><span class="temp"><span class="hi">12</span><span class="sep">/</span><span class="lo">4</span></span></td>
+            <td><span class="temp"><span class="hi">11</span><span class="sep">/</span><span class="lo">3</span></span></td>
+            <td class="best"><span class="temp"><span class="hi">13</span><span class="sep">/</span><span class="lo">5</span></span></td>
+            <td>해가 가장 짧은 시기<small>바람 체감 −3℃</small></td><td>패딩·장갑</td></tr>
+          <tr><th>12월 3주<br><small style="color:var(--muted)">12/15~21</small></th>
+            <td><span class="temp"><span class="hi">10</span><span class="sep">/</span><span class="lo">1</span></span></td>
+            <td><span class="temp"><span class="hi">11</span><span class="sep">/</span><span class="lo">3</span></span></td>
+            <td><span class="temp"><span class="hi">10</span><span class="sep">/</span><span class="lo">2</span></span></td>
+            <td class="best"><span class="temp"><span class="hi">12</span><span class="sep">/</span><span class="lo">4</span></span></td>
+            <td>간헐적 눈 가능<small>산간부 적설</small></td><td>패딩 필수<br><small style="color:var(--muted)">방수 신발</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cards c4" style="margin-top:10px">
+      <div class="card"><span class="tagline t-red">교토</span><h4>일교차 최대</h4>
+        <ul><li>분지 지형 → <b>아침이 가장 춥고</b> 낮은 4곳과 비슷</li>
+        <li>11월 일교차 9~10℃, 아침 안개 잦음</li>
+        <li>일몰 <b>10월 17:15 · 11월 16:52 · 12월 16:43</b></li>
+        <li>겨울 아침 사찰 방문 시 방한 필수</li></ul></div>
+      <div class="card"><span class="tagline t-blue">오사카</span><h4>도심 열섬</h4>
+        <ul><li>4곳 중 <b>밤 기온이 가장 덜 떨어짐</b>(열섬)</li>
+        <li>야간 도보 이동이 가장 편함</li>
+        <li>일몰 <b>10월 17:16 · 11월 16:53 · 12월 16:44</b></li>
+        <li>강수는 교토·나고야와 유사</li></ul></div>
+      <div class="card hl"><span class="tagline t-gold">나고야</span><h4>겨울 바람</h4>
+        <ul><li>기온 자체는 교토와 거의 동일</li>
+        <li>12월 <b>이부키오로시</b>(북서 계절풍)로 체감 −2~3℃</li>
+        <li>일몰 <b>10월 17:12 · 11월 16:50 · 12월 16:40</b> — 4곳 중 가장 이름</li>
+        <li>게로온천 등 산간부는 12월 중순부터 적설</li></ul></div>
+      <div class="card hl2"><span class="tagline t-snow">후쿠오카</span><h4>온화하지만 흐림</h4>
+        <ul><li>전 기간 <b>+1~2℃ 온화</b>, 겨울에도 영하 드묾</li>
+        <li>일몰 <b>10월 17:38 · 11월 17:14 · 12월 17:07</b> — <b>+22분</b></li>
+        <li>단, 겨울은 동해 영향으로 <b>흐리고 비·진눈깨비 잦음</b></li>
+        <li>맑은 날 비율은 4곳 중 가장 낮음</li></ul></div>
+    </div>
+    <p class="note"><b>정확도: 중간 · 평년값 기반 추정</b>입니다. 실제 기온은 해마다 3~4℃ 차이가 날 수 있고 일몰 시각도 대략치입니다. <b>12월 선택 시 야외 일정은 오후 3시까지</b>로 접고 양조장·박물관·온천 등 실내 비중을 올려야 합니다. 출발 1주 전 예보로 최종 확인이 필요합니다.</p>
+  </div>
+</section>
+
+<!-- 03 후보 -->
+<section class="scene" id="s3" data-nm="후보 일정">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">03 SLOT</span>
+      <h2>요일 조합별 후보</h2>
+      <p class="lead">양조장 견학은 토·일에 제조 라인이 멈추므로, 목금토·수목금토 조합은 견학을 앞쪽 평일에 배치해야 합니다.</p>
+    </div>
+    <div class="tw" style="margin-bottom:11px">
+      <table>
+        <thead><tr><th>구간</th><th>수목금 (2박3일)</th><th>목금토 (2박3일)</th><th>수목금토 (3박4일)</th><th>연차</th><th>특징</th></tr></thead>
+        <tbody>
+          <tr><td><b>10월 중순</b></td><td>10/14~16</td><td>10/15~17</td><td>10/14~17</td>
+            <td>3일 / <small>목금토 2일</small></td><td>낮 22℃, 가장 쾌적<small>단풍·일루미 없음</small></td></tr>
+          <tr><td class="best"><b>11월 중순</b></td><td class="best">11/11~13</td><td class="best">11/12~14</td><td class="best">11/11~14</td>
+            <td>3일 / <small>목금토 2일</small></td><td class="best">단풍 초입 + 항공료 최저<small>한국 공휴일 0일 구간</small></td></tr>
+          <tr><td><b>12월 상순</b></td><td>12/9~11</td><td>12/10~12</td><td>12/9~12</td>
+            <td>3일 / <small>목금토 2일</small></td><td>비수기 최저가 + 일루미·온천<small>낮 11℃, 16:40 일몰</small></td></tr>
+          <tr><td>차선</td><td>10/21~23 · 12/16~18</td><td>10/22~24 · 12/17~19</td><td>10/21~24 · 12/16~19</td>
+            <td>동일</td><td>1순위가 막힐 경우 대체</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cards c3">
+      <div class="card"><span class="tagline t-gold">10월 중순</span><h4><span class="dowbadge">수목금</span>10/14~16</h4>
+        <ul><li>기온 최적, 한·일 연휴 모두 회피</li><li><b>단풍 없음</b></li><li>준비 기간 약 2.5개월</li></ul></div>
+      <div class="card hl"><span class="tagline t-red">11월 중순 · 1순위</span><h4><span class="dowbadge">수목금</span>11/11~13</h4>
+        <ul><li class="on">한국 공휴일 0일 → 항공료 최저</li><li class="on">일본 연휴 사이 골짜기</li><li class="on">단풍 초입, 낮 18℃</li></ul></div>
+      <div class="card hl2"><span class="tagline t-snow">12월 상순</span><h4><span class="dowbadge">수목금</span>12/9~11</h4>
+        <ul><li class="on">연말 성수기 직전 = 비수기</li><li class="on">일루미네이션·온천·겨울 미각</li><li>야외 일정 축소 필요</li></ul></div>
+    </div>
+    <p class="note"><b>피해야 할 날</b> · 10/3~5·10/9~12, 11/21~23, 12/25~27, 12/28 이후.</p>
+  </div>
+</section>
+
+<!-- 04 항공 -->
+<section class="scene" id="s4" data-nm="항공">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">04 FLIGHT</span>
+      <h2>항공편</h2>
+      <p class="lead">4개 도시 모두 인천 직항이 있습니다. 실제 차이는 공항에서 시내까지 걸리는 시간에서 발생합니다.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>도시</th><th>공항</th><th>비행시간</th><th>공항 → 시내</th><th>편수</th><th>총 체감</th></tr></thead>
+        <tbody>
+          <tr><td><b>후쿠오카</b></td><td>후쿠오카(FUK)</td><td>약 1시간 30분<small>4곳 중 최단</small></td>
+            <td class="best">지하철 5분<small>공항이 시내에 위치</small></td><td>매우 많음</td><td class="best"><span class="pill p-low">최단</span></td></tr>
+          <tr><td><b>오사카</b></td><td>간사이(KIX)</td><td>약 1시간 50분</td><td>난바 약 40분</td>
+            <td class="best">가장 많음<small>가격 경쟁 치열</small></td><td><span class="pill p-low">양호</span></td></tr>
+          <tr><td><b>나고야</b></td><td>주부(NGO)</td><td>약 1시간 50분</td><td>나고야역 약 30분<small>뮤스카이 직결</small></td>
+            <td>보통</td><td><span class="pill p-low">양호</span></td></tr>
+          <tr><td><b>교토</b></td><td>간사이(KIX)</td><td>약 1시간 50분</td><td>교토역 약 80분<small>하루카 특급</small></td>
+            <td>오사카편 공용</td><td><span class="pill p-high">+1시간</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cards c3" style="margin-top:11px">
+      <div class="card"><span class="tagline t-gold">가격</span><h4>지금은 확정 불가</h4>
+        <ul><li>실시간 변동 — 도시·날짜 확정 후 즉시 조회</li><li>구조적으로 <b>11·12월 평일 &lt; 10월 연휴 &lt; 12월 성탄</b></li><li>후쿠오카·오사카가 편수 많아 가격 우위</li></ul></div>
+      <div class="card"><span class="tagline t-green">시간대</span><h4>오전 출발 / 저녁 귀국</h4>
+        <ul><li>첫날·마지막날 시간대가 일정의 절반</li><li>12월은 일몰이 빨라 오전 출발이 더 중요</li><li>목금토 조합이면 <b>목요일 첫 비행기</b>가 관건</li></ul></div>
+      <div class="card"><span class="tagline t-blue">예약 전</span><h4>놓치기 쉬운 것</h4>
+        <ul><li>LCC 수하물 별도 과금 여부</li><li>귀국 도착 시각과 다음 일정</li><li>여권 잔여 유효기간</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 도시 -->
+<section class="scene" id="s5" data-nm="도시">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">05 CITY</span>
+      <h2>도시 비교</h2>
+      <p class="lead">양조장까지 넣으면 교토(산토리+후시미)와 나고야(기린+한다)가 2강입니다. 미식 밀도는 오사카가, 심야 영업은 후쿠오카가 강합니다.</p>
+    </div>
+    <div class="tw" style="margin-bottom:10px">
+      <table>
+        <thead><tr><th></th><th>교토</th><th>오사카</th><th>나고야</th><th>후쿠오카</th></tr></thead>
+        <tbody>
+          <tr><th>테마</th>
+            <td>고도·사케·단풍<small>정통 일본</small></td>
+            <td>도시·미식·쇼핑<small>번화가 밀집</small></td>
+            <td class="best">양조·산업관광<small>한적한 실속형</small></td>
+            <td>미식·야타이<small>짧고 가벼움</small></td></tr>
+          <tr><th>10월 혼잡</th><td><span class="pill p-mid">중간</span><small>연휴 외 안정</small></td><td><span class="pill p-mid">중간</span></td>
+            <td class="best"><span class="pill p-low">낮음</span></td><td><span class="pill p-low">낮음</span></td></tr>
+          <tr><th>11월 혼잡</th><td><span class="pill p-high">극성수기</span></td><td><span class="pill p-high">높음</span></td>
+            <td class="best"><span class="pill p-low">낮음</span></td><td><span class="pill p-mid">중간</span></td></tr>
+          <tr><th>12월 혼잡</th><td><span class="pill p-mid">중간</span><small>단풍 후 급감</small></td><td><span class="pill p-mid">중간</span></td>
+            <td class="best"><span class="pill p-low">낮음</span></td><td><span class="pill p-low">낮음</span></td></tr>
+          <tr><th>숙박비</th><td><span class="pill p-high">11월 2배↑</span></td><td><span class="pill p-mid">상승</span></td>
+            <td class="best"><span class="pill p-low">안정</span></td><td><span class="pill p-low">안정</span></td></tr>
+          <tr><th>미식 밀도</th>
+            <td><span class="pill p-mid">중간</span><small>관광지 집중·조기 마감</small></td>
+            <td class="best"><span class="pill p-low">최고</span><small>도톤보리 일대 초밀집</small></td>
+            <td><span class="pill p-low">높음</span><small>역·사카에·오스 3거점</small></td>
+            <td><span class="pill p-low">높음</span><small>하카타·나카스·텐진</small></td></tr>
+          <tr><th>음식 구성</th>
+            <td>가이세키·정식·두부·말차<small>사케 페어링 강세</small></td>
+            <td>코나모노·쿠시카츠·이자카야<small>저가~중가 비중 최고</small></td>
+            <td class="best">나고야메시 단일 장르<small>히츠마부시·미소카츠·테바사키·모닝</small></td>
+            <td>라멘·모츠나베·해산물<small>야타이 포장마차 문화</small></td></tr>
+          <tr><th>심야 영업</th><td><span class="pill p-high">약함</span><small>21~22시 마감 다수</small></td>
+            <td class="best"><span class="pill p-low">강함</span></td><td><span class="pill p-mid">보통</span></td>
+            <td class="best"><span class="pill p-low">최고</span><small>야타이 심야까지</small></td></tr>
+          <tr><th>맥주</th><td class="best">산토리 교토공장<small>마스터즈 드림 시음 3잔</small></td><td>아사히 스이타공장<small>무료·예약제</small></td>
+            <td class="best">기린 나고야공장<br>+ 마스터즈 드림 하우스</td><td>아사히 하카타공장<small>역에서 1정거장</small></td></tr>
+          <tr><th>사케</th><td class="best">후시미 사케 거리<small>18개 양조장 시음</small></td><td>나다(고베) 접근</td>
+            <td class="best">한다 양조 마을<small>+ 미츠칸 식초</small></td><td>규슈 사케·소주</td></tr>
+          <tr><th>겨울</th><td>초겨울 단풍 잔여</td><td>도시 일루미네이션</td>
+            <td class="best">나바나노사토<small>국내 최대급</small></td><td>굴·복어 제철</td></tr>
+          <tr><th>인접성</th><td>오사카·나라·우지</td><td class="best">교토·고베·나라</td>
+            <td>이누야마·한다·게로온천</td><td>유후인·벳푸</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>공통</b> · 맥주공장은 토·일·공휴일에 제조 라인이 멈춰 영상 견학으로 대체됩니다. 전 시설 사전 예약제이며 운영 내용은 변경될 수 있어 예약 시 공식 사이트 확인이 필요합니다. <b>미식 밀도·심야 영업은 일반적으로 알려진 경향(정확도: 중간)</b>입니다.</p>
+  </div>
+</section>
+
+<!-- 06 일정 -->
+<!-- 06 후보지 -->
+<section class="scene" id="s6spot" data-nm="후보지">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">06 SPOT</span>
+      <h2>도시별 후보지 10곳</h2>
+      <p class="lead">도시 탭을 누르고 <b>가고 싶은 곳을 눌러 선택</b>하세요. 선택 결과는 마지막 장의 요약에 함께 복사됩니다.</p>
+    </div>
+    <div class="toggle" role="group" aria-label="도시 선택" id="spotTabs">
+      <button type="button" data-city="나고야" aria-pressed="true">나고야</button>
+      <button type="button" data-city="교토" aria-pressed="false">교토</button>
+      <button type="button" data-city="오사카" aria-pressed="false">오사카</button>
+      <button type="button" data-city="후쿠오카" aria-pressed="false">후쿠오카</button>
+    </div>
+    <div class="spotgrid" id="spotGrid"></div>
+    <p class="note" id="spotNote"></p>
+  </div>
+</section>
+
+<!-- 07 일정 -->
+<section class="scene" id="s6" data-nm="일정">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">07 PLAN</span>
+      <h2>도시별 일정안</h2>
+      <p class="lead">코스 A·B·C는 <b>밀도</b>가 다릅니다. 각 날짜는 블록 단위로 짜여 있어 나중에 도시가 정해지면 블록을 섞어 재조합할 수 있습니다.</p>
+    </div>
+    <div>
+      <div class="toggle" role="group" aria-label="코스 선택">
+        <button type="button" data-c="A" aria-pressed="true">A 여유</button>
+        <button type="button" data-c="B" aria-pressed="false">B 균형</button>
+        <button type="button" data-c="C" aria-pressed="false">C 밀도</button>
+      </div>
+      <div class="toggle g2" role="group" aria-label="기간 선택">
+        <button type="button" data-d="2" aria-pressed="true">2박 3일</button>
+        <button type="button" data-d="3" aria-pressed="false">3박 4일</button>
+      </div>
+    </div>
+    <div class="crsdesc" id="crsdesc"></div>
+    <div class="plan" id="plan"></div>
+    <p class="note" id="plannote"></p>
+  </div>
+</section>
+
+<!-- 07 예산 -->
+<section class="scene" id="s7" data-nm="예산">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">08 BUDGET</span>
+      <h2>예산 구간</h2>
+      <p class="lead">1인 총액 기준 4단계입니다. 무엇을 포기하고 무엇을 사는지가 구간마다 다릅니다.</p>
+    </div>
+    <div class="bud">
+      <div class="bcard">
+        <div class="lv">실속형</div><div class="amt">100만</div><div class="per">1인 · 2박 3일 · 추정</div>
+        <ul><li>항공 LCC 특가, 수하물 별도</li><li>역세권 비즈니스호텔 2인 1실</li>
+        <li>로컬·체인 위주, 특식 1회</li><li>무료 견학 중심(아사히·국성)</li><li>대중교통만</li></ul>
+      </div>
+      <div class="bcard mid">
+        <div class="lv">표준형 · 권장</div><div class="amt">150만</div><div class="per">1인 · 2박 3일 · 추정</div>
+        <ul><li>LCC/FSC 일반운임, 수하물 포함</li><li>3~4성 호텔, 역 도보권</li>
+        <li><b>하루 1회 특식</b> — 히츠마부시·마스터즈 드림</li><li>유료 견학 2곳 + 기념품</li><li>일부 특급열차, 예비비 10만</li></ul>
+      </div>
+      <div class="bcard">
+        <div class="lv">여유형</div><div class="amt">200만</div><div class="per">1인 · 2박 3일 · 추정</div>
+        <ul><li>FSC 정규 시간대, 좌석 선택</li><li>4성급 호텔 또는 온천 1박</li>
+        <li>가이세키 or 특급 장어·스시 1회</li><li>견학 자유 + 유료 프리미엄 투어</li><li>특급 자유, 예비비 20만</li></ul>
+      </div>
+      <div class="bcard">
+        <div class="lv">프리미엄</div><div class="amt">250만+</div><div class="per">1인 · 2박 3일 · 추정</div>
+        <ul><li>FSC 프리미엄 이코노미 검토</li><li><b>온천 료칸 1박(가이세키 포함)</b></li>
+        <li>오마카세·미슐랭급 1회 이상</li><li>프라이빗 투어·가이드 옵션</li><li>택시·전세 이동, 예비비 30만+</li></ul>
+      </div>
+    </div>
+    <div class="cards c2">
+      <div class="card"><h4>3박 4일로 늘리면</h4>
+        <ul><li>숙박 1박 + 식사 3끼 + 근교 이동 추가</li>
+        <li>대략 <b>1인 +40~60만</b> — 실속 150 / 표준 200 / 여유 250 / 프리미엄 310만+</li>
+        <li>온천 료칸 1박은 대개 한 구간 위로 밀어올림</li></ul></div>
+      <div class="card"><h4>도시별 가감</h4>
+        <ul><li><b>나고야·후쿠오카</b> — 표 기준 그대로</li>
+        <li><b>오사카</b> — 비슷하나 유흥·쇼핑 지출이 늘기 쉬움</li>
+        <li><b>교토 11월</b> — 숙박비 급등으로 <b>1인 +20~40만</b></li></ul></div>
+    </div>
+    <p class="note"><b>정확도: 낮음~중간 · 추정치입니다.</b> 항공·숙박이 실시간 변동이라 확정 근거가 아니라 <b>구간을 합의하기 위한 기준선</b>으로만 쓰세요.</p>
+  </div>
+</section>
+
+<!-- 08 남은 항목 -->
+<section class="scene" id="s8" data-nm="남은 항목">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">09 OPEN</span>
+      <h2>남은 항목</h2>
+      <p class="lead">도시·날짜가 정해져도 남는 것들입니다.</p>
+    </div>
+    <div class="chk">
+      <div class="item"><div class="q">예산 구간</div><div class="why">100 / 150 / 200 / 250만+ 중 어디로 맞출지 — 항공·숙소 등급이 여기서 결정됩니다</div></div>
+      <div class="item"><div class="q">숙소 타입</div><div class="why">역 근처 비즈니스호텔 vs 료칸·온천 — 3박 4일 전환과 직결</div></div>
+      <div class="item"><div class="q">코스 밀도</div><div class="why">A 여유 / B 균형 / C 밀도 중 합의. 사람마다 체력·선호가 크게 갈립니다</div></div>
+      <div class="item new"><div class="q">확정 데드라인 <i>NEW</i></div><div class="why">항공은 늦을수록 오르고 견학은 정원이 찹니다</div></div>
+      <div class="item new"><div class="q">예약 분담 <i>NEW</i></div><div class="why">견학은 일본어 사이트 예약이 필요할 수 있습니다</div></div>
+      <div class="item new"><div class="q">여권 유효기간 <i>NEW</i></div><div class="why">잔여 6개월 미만이면 갱신에 2~3주 — 가장 먼저 확인할 항목</div></div>
+      <div class="item new"><div class="q">결제·환전 방식 <i>NEW</i></div><div class="why">야타이·소규모 양조장은 현금만 받는 곳이 있습니다</div></div>
+      <div class="item"><div class="q">쇼핑 비중</div><div class="why">면세·드럭스토어 시간이 필요하면 마지막 날 구성이 바뀝니다</div></div>
+    </div>
+    <p class="note">빠진 항목이 있으면 다음 장 "한마디" 칸에 적어 주세요.</p>
+  </div>
+</section>
+
+<!-- 09 선택 -->
+<section class="scene" id="s9" data-nm="선택">
+  <div class="inner">
+    <div class="scene-head">
+      <span class="chapter">10 DECIDE</span>
+      <h2>선택</h2>
+      <p class="lead">항목을 고르고 이름을 적은 뒤 <b>「내 선택 복사」</b>를 눌러 단톡방에 붙여넣어 주세요.</p>
+    </div>
+    <div class="decide">
+      <div class="q" data-q="도시">
+        <div class="qt"><span>Q1</span>도시</div>
+        <div class="opts">
+          <button class="opt" type="button" aria-pressed="false" data-v="나고야">나고야<small>양조 2곳 + 최저 혼잡</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="교토">교토<small>산토리 + 후시미</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="오사카">오사카<small>미식 밀도 최고</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="후쿠오카">후쿠오카<small>최단 이동 · 심야 야타이</small></button>
+        </div>
+      </div>
+      <div class="q" data-q="구간">
+        <div class="qt"><span>Q2</span>시기 구간</div>
+        <div class="opts">
+          <button class="opt" type="button" aria-pressed="false" data-v="11월 중순">11월 중순<small>11/11~14 · 1순위</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="12월 상순">12월 상순<small>12/9~12 · 일루미·온천</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="10월 중순">10월 중순<small>10/14~17 · 기온 최적</small></button>
+        </div>
+      </div>
+      <div class="q" data-q="요일">
+        <div class="qt"><span>Q3</span>요일 조합</div>
+        <div class="opts">
+          <button class="opt" type="button" aria-pressed="false" data-v="수목금 (2박3일)">수목금<small>2박 3일 · 연차 3일</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="목금토 (2박3일)">목금토<small>2박 3일 · 연차 2일</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="수목금토 (3박4일)">수목금토<small>3박 4일 · 연차 3일</small></button>
+        </div>
+      </div>
+      <div class="q" data-q="코스">
+        <div class="qt"><span>Q4</span>코스 밀도</div>
+        <div class="opts">
+          <button class="opt" type="button" aria-pressed="false" data-v="A 여유">A 여유<small>하루 2~3곳 · 늦은 시작</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="B 균형">B 균형<small>하루 3~4곳</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="C 밀도">C 밀도<small>하루 5곳 이상</small></button>
+        </div>
+      </div>
+      <div class="q" data-q="예산">
+        <div class="qt"><span>Q5</span>예산 구간 <small style="font-weight:400;color:var(--muted);font-size:11px">(1인 · 2박 3일)</small></div>
+        <div class="opts">
+          <button class="opt" type="button" aria-pressed="false" data-v="100만 실속형">100만<small>실속형</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="150만 표준형">150만<small>표준형 · 권장</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="200만 여유형">200만<small>여유형</small></button>
+          <button class="opt" type="button" aria-pressed="false" data-v="250만+ 프리미엄">250만+<small>프리미엄</small></button>
+        </div>
+      </div>
+      <div class="q" data-q="논의필요" data-multi="1">
+        <div class="qt"><span>Q6</span>추가 논의 필요 (복수)</div>
+        <div class="opts">
+          <button class="opt" type="button" aria-pressed="false" data-v="숙소타입">숙소 타입</button>
+          <button class="opt" type="button" aria-pressed="false" data-v="확정데드라인">확정 데드라인</button>
+          <button class="opt" type="button" aria-pressed="false" data-v="예약분담">예약 분담</button>
+          <button class="opt" type="button" aria-pressed="false" data-v="결제·환전">결제·환전</button>
+          <button class="opt" type="button" aria-pressed="false" data-v="쇼핑비중">쇼핑 비중</button>
+        </div>
+      </div>
+      <div class="nm-row">
+        <label for="voter">이름</label>
+        <input id="voter" type="text" placeholder="예: 김철수" maxlength="20">
+        <label for="memo">한마디</label>
+        <input id="memo" type="text" placeholder="선택 · 의견이나 빠진 항목" maxlength="60">
+      </div>
+      <div class="sumbox empty" id="summary">선택하면 여기에 요약이 만들어집니다.</div>
+      <div class="crow">
+        <button class="cbtn" type="button" id="copyBtn">내 선택 복사</button>
+        <span class="cdone" id="copyDone">복사됨 — 단톡방에 붙여넣기</span>
+      </div>
+    </div>
+    <p class="note"><b>다음 단계</b> · 결과가 모이면 ① 항공편 실시간 조회 → ② 숙소 후보 3곳 → ③ 견학 예약 오픈일 확인 순으로 진행합니다.</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+/* ───────── 후보지 40곳 ───────── */
+var SPOT={
+'나고야':[
+ ['brew','기린 나고야공장','기요스 소재 맥주공장 견학. 갓 만든 맥주 3잔까지 시음','약 80분 · 웹예약 필수 · 토·일 라인 정지'],
+ ['brew','마스터즈 드림 하우스','산토리 직영 비어홀. 마스터즈 드림 생맥주','나고야역 직결 JR게이트타워 13F · 야경'],
+ ['brew','한다 양조 마을','국성 사케문화관(무료) + 미츠칸 뮤지엄. 운하변 검은 벽 창고 거리','JR 한다역 도보 10분 · 둘 다 사전 예약'],
+ ['see','아츠타신궁','쿠사나기 검을 모신 대신궁. 숲길·고목 산책','24시간 개방 · 평점 4.5 / 리뷰 2.3만'],
+ ['see','나고야성','혼마루고텐(복원 어전)이 핵심. 천수각은 내부 폐쇄 중','9:00~16:30 · 500엔 · 평점 4.2'],
+ ['see','오스상점가','빈티지·먹거리·애니 굿즈 혼재. 아케이드라 우천에도 OK','24시간 · 평점 4.2 / 리뷰 1만'],
+ ['win','나바나노사토 일루미','국내 최대급 일루미네이션. 12월 선택 시 핵심 야간 일정','나고야역 직통버스 · 시즌 기간 확인 필요'],
+ ['eat','아츠타 호라이켄','히츠마부시 원조(1873년 창업). 3가지 방식으로 먹는 장어덮밥','수요일 휴무 · 대기 1~2시간 · 평점 4.5'],
+ ['eat','테바사키 무츠미 본점','사카에의 닭날개 튀김 노포. 심야까지 영업','17:00~24:00 · 평점 4.7 · 저가'],
+ ['eat','코메다커피 모닝','나고야 모닝 문화. 음료값에 오구라토스트 포함','07:00 오픈 · 시내 다수 지점'],
+ ['see','이누야마성','현존 국보 천수각. 성하마을 먹거리 골목이 함께','메이테츠 약 30분 · 근교 반나절'],
+ ['see','도쿠가와엔','오와리 도쿠가와가의 지천회유식 정원. 11월 단풍','9:30~17:30 · 월요일 휴관 · 300엔'],
+ ['see','도요타산업기술기념관','방직기→자동차로 이어진 산업사. 실물 기계 실연이 핵심','9:30~17:00 · 월요일 휴관 · 평점 4.6'],
+ ['see','리니어·철도관','신칸센 실물 전시와 운전 시뮬레이터','10:00~17:30 · 화요일 휴관 · 평점 4.4'],
+ ['see','노리타케의 숲','붉은 벽돌 도자기 공장터. 나고야역 도보 15분','10:00~17:00 · 월요일 휴관 · 평점 4.1'],
+ ['see','도요타박물관','토요타 외 세계 명차까지. 나가쿠테 소재','9:30~17:00 · 월요일 휴관 · 평점 4.5'],
+ ['see','오아시스21','사카에의 물 지붕 전망대. 무료 야경 스폿','6:00~23:00 · 무료 · 평점 4.1'],
+ ['eat','히츠마부시 하나오카','사카에의 인기 장어집. 호라이켄 대안','11:00~16:00 / 18:00~22:00 · 평점 4.6'],
+ ['eat','야바톤','1947년 창업 미소카츠 원조. 에스카 지하상가점이 편리','나고야역·사카에 등 다수 지점'],
+ ['win','게로온천','일본 3대 온천. 3박 4일 선택 시 온천 1박','나고야서 특급 약 1시간 40분']
+],
+'교토':[
+ ['brew','산토리 교토공장','마스터즈 드림 포함 3잔 시음. 나가오카쿄 소재','약 90분 · 1,000엔 · 20세↑ 웹예약'],
+ ['brew','후시미 사케 거리','월계관 오쿠라기념관(400엔) + 기자쿠라 후시미구라(사케·지비루 동시 견학)','일본 2대 사케 산지 · 도보 회유'],
+ ['brew','후시미 사카구라코지','18개 양조장 술을 한자리에서 비교 시음','저녁 일정으로 적합'],
+ ['see','후시미이나리 타이샤','천 개의 붉은 도리이. 산 위로 갈수록 한산','24시간 · 무료 · 평점 4.6 / 리뷰 9만'],
+ ['see','청수사 + 산넨자카','절벽 위 목조 무대와 옛 돌계단 거리','6:00~18:00 · 이른 아침 권장'],
+ ['see','아라시야마 대나무숲','대나무 터널 산책로. 8시 이전이 한산','24시간 · 무료 · 평점 4.4'],
+ ['see','텐류지','아라시야마의 지천회유식 정원. 단풍 명소','8:30~17:00 · 정원 500엔 · 평점 4.5'],
+ ['see','금각사','금박 누각과 연못 반영. 관람 소요 약 30분','9:00~17:00 · 평점 4.6 / 리뷰 6.9만'],
+ ['eat','니시키시장','교토 부엌. 꼬치·어묵·절임 등 시식 위주','현금 준비 필수 · 보행 중 취식 금지'],
+ ['eat','마츠바 니신소바','160년 노포. 청어를 올린 교토식 소바','10:30~20:30 · 수요일 휴무 · 평점 4.0'],
+ ['see','기온 하나미코지','목조 찻집이 늘어선 화류가. 해질녘이 가장 좋음','24시간 · 사진 촬영 제한 구역 주의'],
+ ['see','기온 시라카와','수로변 버드나무와 돌다리. 기온에서 가장 조용','24시간 · 평점 4.7'],
+ ['see','야사카 탑(호칸지)','히가시야마의 상징 오층탑. 골목 사진 명소','내부는 토·일 10:00~15:00만 · 평점 4.6'],
+ ['see','겐닌지','쌍룡 천장화와 풍신뇌신도. 교토 최고(最古) 선종 사찰','10:00~16:30 · 평점 4.5'],
+ ['see','산주산겐도','1,001기 관음상이 늘어선 목조 법당','8:30~17:00 · 내부 촬영 금지 · 평점 4.7'],
+ ['see','도후쿠지','교토 최고의 단풍 명소. 통천교에서 내려다보는 계곡','11월엔 극심한 혼잡 · 오전 권장'],
+ ['see','니조성','도쿠가와 쇼군의 교토 거처. 우는 마루','9:00~17:00 · 휴관일 확인 필요'],
+ ['see','은각사·철학의 길','모래정원과 이끼 정원. 수로 산책로로 연결','8:30~17:00 · 평점 4.5'],
+ ['see','난젠지','거대 삼문과 벽돌 수로각. 사진 명소','8:40~16:30 · 평점 4.5'],
+ ['eat','교토 카츠규','교토 발상 규카츠. 직접 구워 먹는 방식','10:00~22:30 · 평점 4.8 / 리뷰 1.2만']
+],
+'오사카':[
+ ['brew','아사히 스이타공장','아사히 발상지. 갓 만든 생맥주 시음','약 90분 · 무료 · 예약제'],
+ ['brew','교토 당일치기','산토리 교토공장 + 후시미 사케 거리를 하루에','오사카역 기준 편도 약 40~60분'],
+ ['see','도톤보리','글리코 간판·강변 네온. 심야까지 활기','24시간 · 4곳 중 미식 밀도 최고'],
+ ['see','우메다 스카이빌딩','공중정원 전망대. 일몰·야경 명소','9:30~22:30 · 평점 4.4 / 리뷰 4.3만'],
+ ['see','오사카성','천수각과 공원. 가을 단풍도 무난','9:00~17:00 · 성곽 공원은 무료'],
+ ['see','신세카이·츠텐카쿠','쇼와 레트로 거리. 쿠시카츠 발상지','저녁 조명이 볼거리'],
+ ['see','에비스타워 관람차','도톤보리 한복판의 타원형 관람차','11:00~22:00 · 약 15분 탑승'],
+ ['eat','쿠로몬시장','해산물·와규 꼬치 등 즉석 먹거리','오전~오후 · 현금 위주'],
+ ['eat','쿠시카츠 골목','소스 두 번 찍기 금지가 규칙','신세카이·도톤보리에 밀집'],
+ ['eat','오코노미야키·타코야키','오사카 코나모노 2대장. 골목 소규모 가게가 강함','일부 현금 전용 · 저녁 대기 많음'],
+ ['see','아베노 하루카스 300','일본 최상위 높이 전망대. 360도 조망','9:00~22:00 · 평점 4.6 / 리뷰 2.3만'],
+ ['see','가이유칸 수족관','고래상어가 있는 대형 수족관. 우천 대비용','오사카항 · 실내 일정'],
+ ['see','호젠지 요코초','도톤보리 뒤 돌길 골목. 이끼 낀 부동명왕상','저녁 분위기가 핵심'],
+ ['see','나카자키초','레트로 개조 주택 카페 거리. 우메다 인근','평일 오후가 한산'],
+ ['see','스미요시타이샤','반원형 다리로 유명한 고신사','24시간 개방 · 무료'],
+ ['see','아메리카무라','빈티지·스트리트 패션 거리','신사이바시 인접'],
+ ['see','유니버설 스튜디오','하루를 통째로 쓰는 테마파크','2박 3일이면 다른 일정 포기 필요'],
+ ['brew','고베 나다 사케','일본 최대 사케 산지. 양조장 여러 곳 견학','오사카서 약 40분 · 3박 4일 권장'],
+ ['see','나라 당일치기','도다이지·나라공원 사슴','오사카서 약 40분'],
+ ['eat','신사이바시스지','아케이드 쇼핑가. 드럭스토어·면세 밀집','우천에도 이동 가능']
+],
+'후쿠오카':[
+ ['brew','아사히 하카타공장','생맥주 3종 3잔 시음. 접근성 최상','약 90분 · 다케시타역 도보 3분'],
+ ['see','다자이후 텐만구','학문의 신을 모신 1,100년 신사. 참배길 상점가','6:00~19:30 · 하카타역서 버스 약 1시간'],
+ ['see','캐널시티 하카타','운하가 흐르는 복합몰. 30분마다 분수쇼','10:00~21:00 · 평점 4.2 / 리뷰 5.5만'],
+ ['see','오호리공원','호수를 낀 도심 공원. 산책·러닝','24시간 · 무료'],
+ ['see','후쿠오카타워·모모치','해변과 전망대. 일몰 시간대 추천','후쿠오카는 일몰이 20분 늦음'],
+ ['see','텐진 지하상가','비 와도 걷는 쇼핑 거리. 지하로 연결','드럭스토어·면세 집중'],
+ ['win','유후인 온천','3박 4일 선택 시 온천 1박. 료칸·가이세키','하카타서 특급 약 2시간'],
+ ['eat','나카스 야타이','강변 포장마차 거리. 후쿠오카 상징','18:00~24:00 · 평점 3.5(위생·가격 지적 있음)'],
+ ['eat','모츠나베 라쿠텐치','하카타역 앞 모츠나베 인기점','17:00~01:00 · 평점 4.8 / 리뷰 2.3만'],
+ ['eat','하카타 라멘','돈코츠 라멘 본고장. 인기점은 대기 김','대기 회피하려면 점심 피크 이후'],
+ ['see','쿠시다신사','하카타 총진수. 야마카사 축제 수레 상설 전시','9:00~17:00 · 평점 4.3 / 리뷰 1.4만'],
+ ['see','모지코 레트로','다이쇼 시대 항구 건축가. 전망대 300엔, 야키카레가 명물','기타큐슈 · 편도 약 1시간 20분'],
+ ['see','이토시마','바다 카페·석양 드라이브 코스','렌터카 or 버스 · 반나절~하루'],
+ ['see','야나가와 뱃놀이','수로를 도는 나룻배와 장어 세이로무시','편도 약 50분 · 근교 반나절'],
+ ['win','벳푸 지옥순례','색이 다른 온천 웅덩이 순례. 유후인과 묶기 좋음','하카타서 특급 약 2시간'],
+ ['see','우미노나카미치 해변공원','바다를 낀 대형 공원. 계절 화훼','하카타서 전철 약 40분'],
+ ['see','하카타 마치야 후루사토관','하카타 전통 마치야와 공예 시연','쿠시다신사 바로 옆'],
+ ['eat','미즈타키','하카타식 닭백숙 전골. 겨울에 특히 강함','인기점은 예약 권장'],
+ ['eat','멘타이코','명란 본고장. 시식·구입 모두 가능','하카타역 지하·공항에서 구입'],
+ ['see','텐진 파르코·다이마루','텐진 백화점 밀집 구역. 면세 카운터 운영','10:00~20:00 전후']
+]};
+var CATNM={brew:'양조',see:'관광',eat:'맛집',win:'계절'};
+var spotSel={'나고야':[],'교토':[],'오사카':[],'후쿠오카':[]};
+var curCity='나고야';
+var spotGrid=document.getElementById('spotGrid'),
+    spotNote=document.getElementById('spotNote');
+
+function drawSpots(){
+  var list=SPOT[curCity], html='';
+  list.forEach(function(s,i){
+    var on=spotSel[curCity].indexOf(s[1])>-1;
+    html+='<button class="spot" type="button" aria-pressed="'+(on?'true':'false')+'" data-i="'+i+'">'
+        +'<span class="cat cat-'+s[0]+'">'+CATNM[s[0]]+'</span>'
+        +'<span class="nm">'+s[1]+'</span>'
+        +'<span class="ds">'+s[2]+'</span>'
+        +'<span class="mt">'+s[3]+'</span></button>';
+  });
+  spotGrid.innerHTML=html;
+  var n=spotSel[curCity].length;
+  spotNote.innerHTML='<b>'+curCity+'</b> 선택 <span class="spotcount">'+n+' / 20</span> &nbsp;·&nbsp; '
+    +'2박 3일이면 <b>5~6곳</b>, 3박 4일이면 <b>7~8곳</b>이 현실적인 상한입니다. 위 10곳이 1순위, 아래 10곳이 2순위 후보입니다. '
+    +'영업시간·휴무일·평점은 조회 시점 기준이며 변경될 수 있어 방문 전 확인이 필요합니다.';
+  spotGrid.querySelectorAll('.spot').forEach(function(b){
+    b.addEventListener('click',function(){
+      var nm=SPOT[curCity][+b.getAttribute('data-i')][1];
+      var arr=spotSel[curCity], p=arr.indexOf(nm);
+      if(p>-1) arr.splice(p,1); else arr.push(nm);
+      drawSpots(); render();
+    });
+  });
+}
+document.querySelectorAll('#spotTabs button').forEach(function(b){
+  b.addEventListener('click',function(){
+    curCity=b.getAttribute('data-city');
+    document.querySelectorAll('#spotTabs button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    drawSpots();
+  });
+});
+
+/* ───────── 일정 데이터 (블록 단위 · 재조합 가능) ───────── */
+var CITY=[
+ {k:'나고야',th:'양조 + 먹방',hl:true},
+ {k:'교토',th:'양조 + 고도'},
+ {k:'오사카',th:'미식 + 거점'},
+ {k:'후쿠오카',th:'미식 + 최소 이동'}
+];
+var CDESC={
+ A:'<b>A 여유</b> — 하루 2~3곳. 오전 늦게 시작하고 이동을 최소화합니다. 카페·산책 여백이 있고, 웨이팅이 생겨도 일정이 무너지지 않습니다.',
+ B:'<b>B 균형</b> — 하루 3~4곳. 양조장 + 근교 1곳을 넣되 저녁은 여유롭게 둡니다. 대부분의 팀에 무난한 기본값입니다.',
+ C:'<b>C 밀도</b> — 하루 5곳 이상. 첫차·막차를 쓰고 식사 시간도 이동에 붙입니다. 체력 소모가 크고 웨이팅에 취약합니다.'
+};
+var CNOTE={
+ A:'여유형은 <b>양조장 1곳 + 시내 미식</b>이 중심입니다. 12월처럼 해가 짧을 때 특히 유리합니다.',
+ B:'균형형은 <b>양조장 1~2곳 + 근교 1곳</b> 구성입니다. 근교 이동은 편도 40분 이내로 묶었습니다.',
+ C:'밀도형은 <b>양조장 2~3곳 + 근교 2곳</b>까지 넣습니다. 시음이 이어지므로 음주량 관리가 필요합니다.'
+};
+var P={
+ '나고야':{
+  A:{2:[['DAY 1','오후 도착 · 숙소 체크인','오스상점가 산책','저녁 <b>마스터즈 드림 하우스</b>'],
+        ['DAY 2','늦은 오전 <b>기린 나고야공장</b> 견학','오후 사카에 카페·산책','저녁 <b>히츠마부시</b>'],
+        ['DAY 3','킷사텐 <b>모닝</b>','느긋한 쇼핑 → 공항']],
+     3:[['DAY 1','오후 도착 · 오스상점가','저녁 <b>마스터즈 드림 하우스</b>'],
+        ['DAY 2','<b>기린 나고야공장</b> 견학','오후 나고야성 or 사카에','저녁 <b>히츠마부시</b>'],
+        ['DAY 3','오전 여유 → <b>게로온천</b> 이동','료칸 체크인 · 온천 · 가이세키'],
+        ['DAY 4','아침 온천 · 조식','게로 산책 → 나고야 → 공항']]},
+  B:{2:[['DAY 1','오스상점가 · 나고야성','저녁 <b>마스터즈 드림 하우스</b> · 테바사키'],
+        ['DAY 2','오전 <b>기린 나고야공장</b>','오후 <b>한다 양조 마을</b>(국성·미츠칸)','저녁 <b>히츠마부시</b>'],
+        ['DAY 3','킷사텐 모닝 · 사카에 쇼핑 → 공항']],
+     3:[['DAY 1','오스상점가 · 나고야성','<b>마스터즈 드림 하우스</b> · 테바사키'],
+        ['DAY 2','<b>기린 나고야공장</b> → <b>한다 양조 마을</b>','저녁 <b>히츠마부시</b>'],
+        ['DAY 3','<b>게로온천</b> 이동 · 료칸 1박'],
+        ['DAY 4','온천 조식 → 나고야 → 공항']]},
+  C:{2:[['DAY 1','오스 · 나고야성 · 아츠타신궁','<b>마스터즈 드림 하우스</b> · 테바사키 2차'],
+        ['DAY 2','<b>기린 나고야공장</b> → <b>한다 양조 마을</b>','저녁 <b>나바나노사토</b>(12월) or 이누야마'],
+        ['DAY 3','모닝 · 사카에·오스 쇼핑 → 공항 미소카츠']],
+     3:[['DAY 1','오스 · 나고야성 · 아츠타신궁','<b>마스터즈 드림 하우스</b>'],
+        ['DAY 2','<b>기린 나고야공장</b> → <b>한다 양조 마을</b> → 히츠마부시'],
+        ['DAY 3','<b>이누야마성</b> 오전 → 오후 <b>게로온천</b> 1박'],
+        ['DAY 4','온천 조식 → 나고야 쇼핑 → 공항']]}},
+ '교토':{
+  A:{2:[['DAY 1','KIX → 교토(80분) · 체크인','니시키시장 산책','저녁 기온 일대'],
+        ['DAY 2','늦은 오전 <b>산토리 교토공장</b> 견학','오후 <b>후시미</b> 사케 거리 느긋하게','저녁 후시미 사카구라코지'],
+        ['DAY 3','청수사 or 카페 여유 → KIX']],
+     3:[['DAY 1','KIX → 교토 · 니시키시장 · 기온'],
+        ['DAY 2','<b>산토리 교토공장</b> → <b>후시미</b> 사케 거리'],
+        ['DAY 3','아라시야마 or 우지 반나절 · 오후 카페'],
+        ['DAY 4','오사카 경유 쇼핑 → KIX']]},
+  B:{2:[['DAY 1','KIX → 교토 · 니시키시장 · 기온 야경'],
+        ['DAY 2','오전 <b>산토리 교토공장</b>','오후 <b>후시미</b>(월계관·기자쿠라)','저녁 사카구라코지 18개 양조장'],
+        ['DAY 3','아라시야마 → KIX']],
+     3:[['DAY 1','교토 도착 · 니시키 · 기온'],
+        ['DAY 2','<b>산토리 교토공장</b> → <b>후시미</b>'],
+        ['DAY 3','아라시야마 · 금각사'],
+        ['DAY 4','나라 반나절 or 오사카 쇼핑 → KIX']]},
+  C:{2:[['DAY 1','교토 도착 · 니시키 · 청수사 · 기온 야경'],
+        ['DAY 2','<b>산토리 교토공장</b> → <b>후시미</b> 3곳 → 사카구라코지'],
+        ['DAY 3','아라시야마 · 금각사 · 교토역 쇼핑 → KIX']],
+     3:[['DAY 1','교토 도착 · 니시키 · 청수사 · 기온'],
+        ['DAY 2','<b>산토리 교토공장</b> → <b>후시미</b> 3곳'],
+        ['DAY 3','아라시야마 · 금각사 · 후시미이나리'],
+        ['DAY 4','나라 or 고베 → KIX']]}},
+ '오사카':{
+  A:{2:[['DAY 1','KIX → 난바 체크인','도톤보리 산책','저녁 쿠시카츠'],
+        ['DAY 2','늦은 오전 <b>아사히 스이타공장</b>(무료)','오후 우메다 카페·전망대','저녁 이자카야'],
+        ['DAY 3','신사이바시 쇼핑 → KIX']],
+     3:[['DAY 1','KIX → 난바 · 도톤보리'],
+        ['DAY 2','<b>아사히 스이타공장</b> · 우메다'],
+        ['DAY 3','교토 당일치기 — <b>산토리 교토공장</b>'],
+        ['DAY 4','신사이바시 쇼핑 → KIX']]},
+  B:{2:[['DAY 1','KIX → 난바 · 도톤보리 · 쿠시카츠'],
+        ['DAY 2','교토 당일치기 — <b>산토리 교토공장</b> + <b>후시미</b>'],
+        ['DAY 3','<b>아사히 스이타공장</b> or 우메다 쇼핑 → KIX']],
+     3:[['DAY 1','난바 · 도톤보리 · 쿠시카츠'],
+        ['DAY 2','<b>아사히 스이타공장</b> · 우메다'],
+        ['DAY 3','교토 당일 — <b>산토리</b> + <b>후시미</b>'],
+        ['DAY 4','고베(나다 사케) or 쇼핑 → KIX']]},
+  C:{2:[['DAY 1','난바 · 도톤보리 · 신세카이 · 쿠시카츠'],
+        ['DAY 2','<b>아사히 스이타공장</b> → 교토 <b>후시미</b> 이동'],
+        ['DAY 3','우메다·신사이바시 쇼핑 → KIX']],
+     3:[['DAY 1','난바 · 도톤보리 · 신세카이'],
+        ['DAY 2','<b>아사히 스이타공장</b> · 오사카성 · 우메다'],
+        ['DAY 3','교토 <b>산토리</b> + <b>후시미</b> 당일'],
+        ['DAY 4','고베 <b>나다 사케</b> → KIX']]}},
+ '후쿠오카':{
+  A:{2:[['DAY 1','공항 → 하카타(5분) 체크인','캐널시티 산책','저녁 <b>나카스 야타이</b>'],
+        ['DAY 2','늦은 오전 <b>아사히 하카타공장</b>','오후 텐진 카페·쇼핑','저녁 모츠나베'],
+        ['DAY 3','하카타 라멘 · 여유 → 공항']],
+     3:[['DAY 1','하카타 체크인 · <b>나카스 야타이</b>'],
+        ['DAY 2','<b>아사히 하카타공장</b> · 텐진'],
+        ['DAY 3','<b>유후인</b> 이동 · 온천 료칸 1박'],
+        ['DAY 4','유후인 산책 → 하카타 → 공항']]},
+  B:{2:[['DAY 1','하카타 · 캐널시티 · <b>나카스 야타이</b>'],
+        ['DAY 2','오전 <b>아사히 하카타공장</b>','오후 다자이후 텐만구','저녁 모츠나베'],
+        ['DAY 3','텐진 쇼핑 · 라멘 → 공항']],
+     3:[['DAY 1','하카타 · <b>나카스 야타이</b>'],
+        ['DAY 2','<b>아사히 하카타공장</b> · 다자이후'],
+        ['DAY 3','<b>유후인</b> 온천 1박'],
+        ['DAY 4','벳푸 or 복귀 → 공항']]},
+  C:{2:[['DAY 1','하카타 · 캐널시티 · 텐진 · <b>나카스 야타이</b>'],
+        ['DAY 2','<b>아사히 하카타공장</b> → 다자이후 → 모모치 해변'],
+        ['DAY 3','라멘 스타디움 · 텐진 쇼핑 → 공항']],
+     3:[['DAY 1','하카타 · 텐진 · <b>나카스 야타이</b>'],
+        ['DAY 2','<b>아사히 하카타공장</b> · 다자이후 · 모모치'],
+        ['DAY 3','<b>유후인</b> → 벳푸 지옥순례 · 온천 1박'],
+        ['DAY 4','벳푸 → 하카타 쇼핑 → 공항']]}}
+};
+
+var curC='A', curD='2';
+var planEl=document.getElementById('plan'),
+    descEl=document.getElementById('crsdesc'),
+    noteEl=document.getElementById('plannote');
+
+function draw(){
+  descEl.innerHTML=CDESC[curC];
+  noteEl.innerHTML=CNOTE[curC];
+  var html='';
+  CITY.forEach(function(c){
+    var days=P[c.k][curC][curD]||[];
+    html+='<div class="col'+(c.hl?' hl':'')+'"><div class="ch"><div class="nm">'+c.k+'</div><div class="th">'+c.th+'</div></div><div class="cb">';
+    days.forEach(function(d){
+      html+='<div class="dl"><div class="d">'+d[0]+'</div><div class="t">'+d.slice(1).join(' · ')+'</div></div>';
+    });
+    html+='</div></div>';
+  });
+  planEl.innerHTML=html;
+}
+document.querySelectorAll('[data-c]').forEach(function(b){
+  b.addEventListener('click',function(){
+    curC=b.getAttribute('data-c');
+    document.querySelectorAll('[data-c]').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    draw();
+  });
+});
+document.querySelectorAll('[data-d]').forEach(function(b){
+  b.addEventListener('click',function(){
+    curD=b.getAttribute('data-d');
+    document.querySelectorAll('[data-d]').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    draw();
+  });
+});
+draw();
+
+/* ───────── 스크롤 엔진 ───────── */
+var deck=document.getElementById('deck');
+var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+var rail=document.getElementById('rail');
+var idx=0, animating=false, reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+scenes.forEach(function(s,i){
+  var b=document.createElement('button');
+  b.type='button';
+  b.setAttribute('aria-label',(s.dataset.nm||'')+' 장으로 이동');
+  b.innerHTML='<span>'+(s.dataset.nm||'')+'</span>';
+  b.addEventListener('click',function(){ go(i); });
+  rail.appendChild(b);
+});
+var dots=rail.querySelectorAll('button');
+function mark(i){
+  idx=i;
+  dots.forEach(function(d,n){ d.classList.toggle('on',n===i); });
+  scenes.forEach(function(s,n){ s.classList.toggle('live',n===i); });
+}
+function ease(t){ return t===1?1:1-Math.pow(2,-9*t); }
+function go(i){
+  i=Math.max(0,Math.min(scenes.length-1,i));
+  var target=scenes[i].offsetTop;
+  if(reduce){ deck.scrollTop=target; mark(i); return; }
+  var start=deck.scrollTop, dist=target-start;
+  if(Math.abs(dist)<2){ mark(i); return; }
+  animating=true;
+  var t0=null, dur=Math.min(900,520+Math.abs(dist)*0.12);
+  function step(ts){
+    if(t0===null) t0=ts;
+    var p=Math.min(1,(ts-t0)/dur);
+    deck.scrollTop=start+dist*ease(p);
+    if(p<1) requestAnimationFrame(step); else animating=false;
+  }
+  mark(i);
+  requestAnimationFrame(step);
+}
+var lock=false, lockT=null;
+if(window.matchMedia('(pointer: fine)').matches && window.innerWidth>860){
+  deck.addEventListener('wheel',function(e){
+    e.preventDefault();
+    if(animating||lock) return;
+    if(Math.abs(e.deltaY)<4) return;
+    lock=true; clearTimeout(lockT);
+    lockT=setTimeout(function(){ lock=false; },780);
+    go(idx+(e.deltaY>0?1:-1));
+  },{passive:false});
+}
+window.addEventListener('keydown',function(e){
+  if(/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
+  var k=e.key;
+  if(k==='ArrowDown'||k==='PageDown'||k===' '){ e.preventDefault(); go(idx+1); }
+  else if(k==='ArrowUp'||k==='PageUp'){ e.preventDefault(); go(idx-1); }
+  else if(k==='Home'){ e.preventDefault(); go(0); }
+  else if(k==='End'){ e.preventDefault(); go(scenes.length-1); }
+});
+if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(x){ if(x.isIntersecting&&!animating) mark(scenes.indexOf(x.target)); });
+  },{root:deck,threshold:.55});
+  scenes.forEach(function(s){ io.observe(s); });
+}
+mark(0);
+
+/* ───────── 결정 위젯 ───────── */
+var sels={}, order=['도시','구간','요일','코스','예산','논의필요'];
+var summary=document.getElementById('summary'),
+    voter=document.getElementById('voter'),
+    memo=document.getElementById('memo');
+function render(){
+  var parts=[];
+  order.forEach(function(k){
+    var v=sels[k]; if(!v) return;
+    if(Array.isArray(v)){ if(v.length) parts.push(k+': '+v.join(', ')); }
+    else parts.push(k+': '+v);
+  });
+  var anySpot=['나고야','교토','오사카','후쿠오카'].some(function(c){return spotSel[c].length>0;});
+  if(!parts.length && !anySpot){
+    summary.textContent='선택하면 여기에 요약이 만들어집니다.';
+    summary.classList.add('empty'); return;
+  }
+  var nm=voter.value.trim(), m=memo.value.trim();
+  var txt='[일본 여행 선택]'+(nm?' '+nm:'')+'\n'+parts.join('\n');
+  var picks=[];
+  ['나고야','교토','오사카','후쿠오카'].forEach(function(c){
+    if(spotSel[c].length) picks.push(c+' — '+spotSel[c].join(', '));
+  });
+  if(picks.length) txt+='\n가고 싶은 곳: '+picks.join(' / ');
+  if(m) txt+='\n메모: '+m;
+  summary.textContent=txt; summary.classList.remove('empty');
+}
+document.querySelectorAll('.q').forEach(function(q){
+  var key=q.getAttribute('data-q'), multi=q.getAttribute('data-multi')==='1';
+  if(multi) sels[key]=[];
+  q.querySelectorAll('.opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var v=btn.getAttribute('data-v');
+      if(multi){
+        var on=btn.getAttribute('aria-pressed')==='true';
+        btn.setAttribute('aria-pressed',on?'false':'true');
+        if(on) sels[key]=sels[key].filter(function(x){return x!==v;});
+        else sels[key].push(v);
+      }else{
+        q.querySelectorAll('.opt').forEach(function(b){b.setAttribute('aria-pressed','false');});
+        btn.setAttribute('aria-pressed','true');
+        sels[key]=v;
+      }
+      render();
+    });
+  });
+});
+voter.addEventListener('input',render);
+memo.addEventListener('input',render);
+drawSpots();
+document.getElementById('copyBtn').addEventListener('click',function(){
+  if(summary.classList.contains('empty')){
+    summary.textContent='먼저 위에서 항목을 선택해 주세요.'; return;
+  }
+  var text=summary.textContent, done=document.getElementById('copyDone');
+  function ok(){ done.classList.add('show'); setTimeout(function(){done.classList.remove('show');},2400); }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok,function(){fb(text);ok();});
+  }else{ fb(text); ok(); }
+});
+function fb(t){
+  var ta=document.createElement('textarea');
+  ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);
+}
+})();
+</script>
+</body>
+</html>
