@@ -1625,7 +1625,13 @@ class Component extends DCLogic {
     v.poster = H.poster; v.src = H.video; v.preload = 'auto';
     v.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover';
     host.appendChild(v);
-    const p = v.play(); if (p && p.catch) p.catch(()=>{});
+    // 원격(Pages)에서는 src 를 막 넣은 시점의 play() 가 데이터 없음으로 거부될 수 있다 →
+    // 재생 가능해질 때, 탭이 다시 보일 때 다시 시도한다.
+    const tryPlay = () => { try { const p = v.play(); if (p && p.catch) p.catch(()=>{}); } catch (e) {} };
+    v.addEventListener('loadeddata', tryPlay, { once: true });
+    v.addEventListener('canplay', tryPlay, { once: true });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && v.paused && v.isConnected) tryPlay(); });
+    tryPlay();
   }
 
   // 환율 — 열 때 한 번, 유럽중앙은행 참조환율(frankfurter.dev, CORS 허용). 실패하면 조용히 저장값 유지.
