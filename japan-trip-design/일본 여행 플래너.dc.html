@@ -91,7 +91,12 @@ main + div { z-index: 1100; }
   div:has(> table) { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
   div:has(> table) > table { min-width: 560px; }
   /* 05: 타일은 안쪽 스크롤 대신 페이지 스크롤, 지도는 기본 접힘 → '지도에서 보기' 버튼으로 펼침. flex order 로 토글·지도를 칩 바로 아래에 */
-  [data-screen-label="05 가고 싶은 곳"] [style*="max-height: 398px"] { max-height: none !important; overflow: visible !important; order: 2; }
+  [data-screen-label="05 가고 싶은 곳"] [style*="max-height: 398px"] { max-height: none !important; overflow: visible !important; order: 2; padding: 0 !important; border: 0 !important; background: transparent !important; }
+  /* 타일 압축: 2열, 설명·메타 줄 숨김 → 분류·이름·동네·지도 링크만 */
+  [data-screen-label="05 가고 싶은 곳"] [style*="minmax(196px, 1fr)"] { grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important; gap: 6px !important; }
+  [data-screen-label="05 가고 싶은 곳"] [style*="minmax(196px, 1fr)"] > div { padding: 8px 9px 6px !important; gap: 4px !important; min-width: 0 !important; }
+  [data-screen-label="05 가고 싶은 곳"] [style*="minmax(196px, 1fr)"] > div > span:nth-child(3), [data-screen-label="05 가고 싶은 곳"] [style*="minmax(196px, 1fr)"] > div > span:nth-child(4) { display: none !important; }
+  [data-screen-label="05 가고 싶은 곳"] [style*="minmax(196px, 1fr)"] > div > span:nth-child(2) { font-size: 13px !important; line-height: 1.3 !important; }
   [data-screen-label="05 가고 싶은 곳"] [style*="max-height: 398px"] + div { display: none !important; }
   [data-map-toggle] { display: flex !important; order: 1; }
   [data-map-open="0"] { display: none !important; }
@@ -496,6 +501,9 @@ main + div { z-index: 1100; }
                 </div>
               </sc-for>
             </div>
+            <sc-if value="{{ hasMoreSpots }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ moreSpots }}" style="{{ moreSpotsStyle }}" style-hover="border-color:var(--color-accent-400)">{{ moreSpotsLabel }}</button>
+            </sc-if>
           </div>
           <div style="{{ tileHintStyle }}">타일은 안에서 스크롤됩니다 · 총 {{ citySpotCount }}곳</div>
           <!-- 폰: 지도는 기본 접힘, 이 버튼으로 펼침 — 데스크톱은 숨김(모바일 CSS 가 켠다) -->
@@ -809,7 +817,7 @@ main + div { z-index: 1100; }
 // 선택은 브라우저 localStorage 에 자동 저장된다 — 폰에서 새로고침해도, 다음에 열어도 이어진다.
 // 저장 키에 버전을 붙여 두어 상태 모양이 바뀌면 키만 올리면 된다.
 const SAVE_KEY = 'japan-trip-planner-v1';
-const DEFAULT_STATE = { step: 0, period: null, nights: '2', dow: '수목금', city: null, flightOut: null, flightBack: null, spotCity: null, spotCat: '전체', spotGenre: '전체', spotMapOpen: false, spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, course: null, budget: null, stay: null, copied: false, home: true, leaving: false, prep: {}, fx: null, plan: {} };
+const DEFAULT_STATE = { step: 0, period: null, nights: '2', dow: '수목금', city: null, flightOut: null, flightBack: null, spotCity: null, spotCat: '전체', spotGenre: '전체', spotMapOpen: false, spotMore: null, spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, course: null, budget: null, stay: null, copied: false, home: true, leaving: false, prep: {}, fx: null, plan: {} };
 const loadSaved = () => {
   try {
     const j = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
@@ -829,6 +837,7 @@ const loadSaved = () => {
     st.spotCat = typeof st.spotCat === 'string' ? st.spotCat : '전체';
     st.spotGenre = typeof st.spotGenre === 'string' ? st.spotGenre : '전체';
     st.spotMapOpen = st.spotMapOpen === true;
+    st.spotMore = null;
     const sp = (j.spots && typeof j.spots === 'object') ? j.spots : {};
     st.spots = {};
     CITIES4.forEach(c => { st.spots[c] = Array.isArray(sp[c]) ? sp[c].filter(x => typeof x === 'string') : []; });
@@ -2210,6 +2219,14 @@ class Component extends DCLogic {
           pick:()=>{ const arr=picked.slice(); const i=arr.indexOf(name); if(i>-1)arr.splice(i,1); else arr.push(name); set({spots:{...s.spots,[spotCity]:arr}}); } };
       });
     const spotCount = picked.length;
+    // 폰(≤820px)에서는 타일을 24개씩 끊어 '더 보기'로 — 226개를 한 번에 그리면 문서가 3만px 를 넘는다.
+    // 페이지 수는 도시|분류|장르 키에 묶여, 필터가 바뀌면 자동으로 첫 페이지.
+    const SPOT_PAGE = 24;
+    const isPhone = typeof window !== 'undefined' && window.innerWidth <= 820;
+    const moreKey = spotCity+'|'+s.spotCat+'|'+s.spotGenre;
+    const spotShown = (isPhone && s.spotMore && s.spotMore.key === moreKey) ? s.spotMore.n : SPOT_PAGE;
+    const tileSpots = isPhone ? citySpots.slice(0, spotShown) : citySpots;
+    const spotRemain = citySpots.length - tileSpots.length;
 
     const courses = D.COURSES.map(c=>({ name:c.name, desc:c.desc, mark:s.course===c.id?'✓ 선택됨':'', pick:()=>set({course:c.id}), style:s.course===c.id?selCard:cardBase }));
     const budgets = D.BUDGETS.map(b=>({ tier:b.tier, amt:b.amt, l1:b.l1, l2:b.l2, l3:b.l3, mark:s.budget===b.id?'✓':'', pick:()=>set({budget:b.id}), style:s.budget===b.id?selCard:cardBase }));
@@ -2760,7 +2777,11 @@ class Component extends DCLogic {
       airTitle, airHead, airNote, airSum, hasAirTable, airTables,
       periods, dows, lengths, calendars, weatherRows,
       cities, cityRows,
-      spotTabs, spotCats, citySpots, spotCount, spotCity,
+      spotTabs, spotCats, citySpots: tileSpots, spotCount, spotCity,
+      hasMoreSpots: spotRemain > 0,
+      moreSpots: ()=>set({spotMore:{key:moreKey, n:spotShown+SPOT_PAGE}}),
+      moreSpotsLabel: '더 보기 · '+Math.min(SPOT_PAGE, spotRemain)+'곳 (남은 '+spotRemain+'곳)',
+      moreSpotsStyle:'display:flex;width:100%;align-items:center;justify-content:center;margin-top:8px;padding:12px 14px;border-radius:var(--radius-md);border:1px dashed var(--color-neutral-600);background:transparent;color:var(--color-accent-200);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit',
       spotEmpty: citySpots.length===0,
       spotEmptyMsg: spotCity+'에는 「'+(s.spotCat||'전체')+'」 항목이 없습니다 — 분류를 바꿔 보세요',
       spotEmptyStyle:'display:flex;align-items:center;justify-content:center;gap:10px;height:100%;min-height:120px;'
