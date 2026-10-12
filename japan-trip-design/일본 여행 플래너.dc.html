@@ -77,6 +77,15 @@ main + div { z-index: 1100; }
   [data-screen-label="00 메인"] > div:first-child { height: 100vh !important; height: 100svh !important; min-height: 0 !important; }
   [data-screen-label="00 메인"] > div:first-child + div { display: none !important; }
   [data-hero-fx] { display: flex !important; }
+  /* 소단계: 화면 루트의 data-sub(현재) 와 다른 data-sec 묶음은 숨김 — 한 화면에 한 묶음. 04 는 가는 편/오는 편 표를 nth-child 로 */
+  [data-sub="0"] [data-sec]:not([data-sec="0"]), [data-sub="1"] [data-sec]:not([data-sec="1"]), [data-sub="2"] [data-sec]:not([data-sec="2"]) { display: none !important; }
+  [data-sub="0"] [data-air] > div:nth-child(2), [data-sub="1"] [data-air] > div:nth-child(1) { display: none !important; }
+  [data-subind] { display: inline !important; }
+  /* 카드 설명은 고른 카드에서만 — 누르면 펼쳐진다. 카드 여백도 줄임 */
+  main button:not([style*="accent-900"]) [data-detail] { display: none !important; }
+  main button[style*="padding: 15px 16px"] { padding: 11px 13px !important; gap: 5px !important; }
+  main [data-sec][style*="display: grid"] { align-items: start; }
+  main [data-sec]:has(> button [data-detail])::after { content: '카드를 누르면 설명이 펼쳐집니다'; grid-column: 1 / -1; font-size: 11px; color: var(--color-neutral-500); }
   /* 제목·버튼은 정중앙보다 위로, 버튼 두 개는 한 단계 작게 */
   [data-screen-label="00 메인"] > div:first-child > div[style*="justify-content: center"] { padding-bottom: 22svh !important; }
   [data-screen-label="00 메인"] button[style*="border-radius: 99px"] { font-size: 13px !important; padding: 10px 18px !important; }
@@ -225,11 +234,11 @@ main + div { z-index: 1100; }
 
       <!-- ══════════ STEP 01 날짜·날씨 ══════════ -->
       <sc-if value="{{ isDate }}" hint-placeholder-val="{{ true }}">
-        <div data-screen-label="01 날짜·날씨">
-          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 01 — 날짜 · 날씨</div>
+        <div data-screen-label="01 날짜·날씨" data-sub="{{ subAttr }}">
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 01 — 날짜 · 날씨<span data-subind="1" style="display:none;margin-left:8px;color:var(--color-neutral-500);letter-spacing:0">{{ subInd }}</span></div>
           <h2 style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 4px">언제가 좋을까요?</h2>
           <div style="{{ headSpacer }}"></div>
-          <div style="margin-top:10px;border:1px solid var(--color-accent-700);border-radius:var(--radius-md);padding:10px 14px;margin-bottom:14px;display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+          <div data-sec="0" style="margin-top:10px;border:1px solid var(--color-accent-700);border-radius:var(--radius-md);padding:10px 14px;margin-bottom:14px;display:flex;gap:20px;align-items:center;flex-wrap:wrap">
             <div style="display:flex;flex-direction:column;gap:5px">
               <span style="font-size:11px;color:var(--color-accent-300);font-weight:600;letter-spacing:.06em">① 며칠 갈까요?</span>
               <div style="display:flex;gap:8px">
@@ -255,19 +264,19 @@ main + div { z-index: 1100; }
             </div>
           </div>
 
-          <div style="font-size:12px;color:var(--color-accent-300);font-weight:600;letter-spacing:.06em;margin-bottom:9px">③ 언제 갈까요?</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <div data-sec="1" style="font-size:12px;color:var(--color-accent-300);font-weight:600;letter-spacing:.06em;margin-bottom:9px">③ 언제 갈까요?</div>
+          <div data-sec="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
             <sc-for list="{{ periods }}" as="p" hint-placeholder-count="4">
               <button onClick="{{ p.pick }}" style="{{ p.style }}" style-hover="border-color:var(--color-accent-400)">
                 <span style="display:flex;align-items:baseline;gap:8px"><span style="{{ p.kickerStyle }}">{{ p.kicker }}</span><span style="margin-left:auto;font-size:11px;color:var(--color-accent-300)">{{ p.mark }}</span></span>
                 <span style="font-family:var(--font-heading);font-size:21px;color:var(--color-text)">{{ p.dates }}</span>
                 <span style="display:flex;align-items:baseline;gap:6px"><span style="font-family:var(--font-heading);font-size:26px;color:var(--color-text)">{{ p.hi }}</span><span style="font-size:12px;color:var(--color-neutral-400)">/ {{ p.lo }} 아침</span></span>
-                <span style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55">{{ p.line1 }}<br>{{ p.line2 }}</span>
-                <span style="font-size:11.5px;line-height:1.5;color:var(--color-accent-300)">{{ p.point }}</span>
+                <span data-detail="1" style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55">{{ p.line1 }}<br>{{ p.line2 }}</span>
+                <span data-detail="1" style="font-size:11.5px;line-height:1.5;color:var(--color-accent-300)">{{ p.point }}</span>
               </button>
             </sc-for>
           </div>
-          <sc-if value="{{ showEvidence }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ showEvidence }}" hint-placeholder-val="{{ true }}"><div data-sec="2">
             <div style="height:1px;background:linear-gradient(90deg,var(--color-neutral-700),transparent);margin:26px 0 18px"></div>
             <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px"><span style="font-size:12.5px;font-weight:500">조사 근거 ① — 공휴일 캘린더</span><span style="font-size:11px;color:var(--color-neutral-400)">한국 공휴일은 항공료를, 일본 공휴일은 현지 혼잡을 올립니다</span></div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
@@ -323,28 +332,28 @@ main + div { z-index: 1100; }
               <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:12px 14px"><div style="font-size:12px;font-weight:500">나고야 — 겨울 바람</div><div style="font-size:11px;color:var(--color-neutral-300);line-height:1.55;margin-top:4px">12월 이부키오로시(계절풍)로 체감 −2~3℃. 4곳 중 일몰이 가장 이름(11/12 16:49)</div></div>
               <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:12px 14px"><div style="font-size:12px;font-weight:500">후쿠오카 — 온화·흐림</div><div style="font-size:11px;color:var(--color-neutral-300);line-height:1.55;margin-top:4px">아침 최저가 교토보다 +2℃ 온화. 일몰이 교토보다 24분 늦음(11/12 17:18). 단 겨울은 흐리고 진눈깨비 잦음</div></div>
             </div>
-          </sc-if>
+          </div></sc-if>
         </div>
       </sc-if>
 
       <!-- ══════════ STEP 03 도시 ══════════ -->
       <sc-if value="{{ isCity }}" hint-placeholder-val="{{ false }}">
-        <div data-screen-label="03 도시">
-          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 03 — 도시</div>
+        <div data-screen-label="03 도시" data-sub="{{ subAttr }}">
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 03 — 도시<span data-subind="1" style="display:none;margin-left:8px;color:var(--color-neutral-500);letter-spacing:0">{{ subInd }}</span></div>
           <h2 style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 4px">어느 도시로 갈까요?</h2>
           <div style="{{ headSpacer }}"></div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px">
+          <div data-sec="0" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px">
             <sc-for list="{{ cities }}" as="c" hint-placeholder-count="4">
               <button onClick="{{ c.pick }}" style="{{ c.style }}" style-hover="border-color:var(--color-accent-400)">
                 <span style="display:flex;align-items:baseline"><span style="font-size:15px;font-weight:500;color:var(--color-text)">{{ c.name }}</span><span style="margin-left:auto;font-size:11px;color:var(--color-accent-300)">{{ c.mark }}</span></span>
                 <span style="font-size:11px;color:var(--color-accent-300)">{{ c.theme }}</span>
-                <span style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55">{{ c.p1 }}<br>{{ c.p2 }}<br>{{ c.p3 }}</span>
+                <span data-detail="1" style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55">{{ c.p1 }}<br>{{ c.p2 }}<br>{{ c.p3 }}</span>
               </button>
             </sc-for>
           </div>
 
 
-          <sc-if value="{{ showEvidence }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ showEvidence }}" hint-placeholder-val="{{ true }}"><div data-sec="1">
             <div style="height:1px;background:linear-gradient(90deg,var(--color-neutral-700),transparent);margin:26px 0 18px"></div>
             <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px"><span style="font-size:12.5px;font-weight:500">조사 근거 ① — 항공편</span><span style="font-size:11px;color:var(--color-neutral-400)">4곳 모두 인천 직항 · 차이는 공항→시내 시간</span></div>
             <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);overflow:hidden;margin-bottom:20px">
@@ -389,14 +398,14 @@ main + div { z-index: 1100; }
               </table>
             </div>
             <div style="margin-top:10px;font-size:11px;color:var(--color-neutral-400);line-height:1.6">기린 나고야공장은 <b style="color:var(--color-neutral-200);font-weight:500">월요일 휴관</b>(공휴일이면 다음 평일). 주말·공휴일에는 제조 라인이 멈춰 영상 견학으로 대체될 수 있습니다. 전 시설 사전 예약제이고 요금·운영이 바뀔 수 있으니(아사히 스이타는 2023년 유료 전환) 예약 시 공식 사이트를 확인하세요.</div>
-          </sc-if>
+          </div></sc-if>
         </div>
       </sc-if>
 
       <!-- ══════════ STEP 04 항공 ══════════ -->
       <sc-if value="{{ isAir }}" hint-placeholder-val="{{ false }}">
-        <div data-screen-label="04 항공">
-          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 04 — 항공</div>
+        <div data-screen-label="04 항공" data-sub="{{ subAttr }}">
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 04 — 항공<span data-subind="1" style="display:none;margin-left:8px;color:var(--color-neutral-500);letter-spacing:0">{{ subInd }}</span></div>
           <h2 style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 4px">{{ airTitle }}</h2>
           <div style="{{ headSpacer }}"></div>
           <div style="margin-top:10px;border:1px solid var(--color-accent-700);border-radius:var(--radius-md);padding:11px 14px;display:flex;gap:16px;align-items:baseline;flex-wrap:wrap">
@@ -405,7 +414,7 @@ main + div { z-index: 1100; }
             <span style="margin-left:auto;font-family:var(--font-heading);font-size:16px;color:var(--color-accent-200)">{{ airSum }}</span>
           </div>
           <sc-if value="{{ hasAirTable }}" hint-placeholder-val="{{ true }}">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+            <div data-air="1" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
               <sc-for list="{{ airTables }}" as="t" hint-placeholder-count="2">
                 <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);overflow:hidden">
                   <div style="display:flex;align-items:baseline;gap:10px;padding:9px 12px;background:var(--color-neutral-900)"><span style="font-size:12.5px;font-weight:500">{{ t.title }}</span><span style="font-size:11px;color:var(--color-neutral-400)">{{ t.sub }}</span></div>
@@ -427,7 +436,7 @@ main + div { z-index: 1100; }
             </div>
           </sc-if>
           <div style="margin-top:14px"></div>
-          <div style="margin-top:14px;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 15px">
+          <div data-sec="1" style="margin-top:14px;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 15px">
             <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px">
               <span style="font-size:12.5px;font-weight:500">항공권 바로 조회</span>
               <span style="font-size:11px;color:var(--color-neutral-400)">{{ flightNote }}</span>
@@ -446,7 +455,7 @@ main + div { z-index: 1100; }
 
       <!-- ══════════ STEP 05 가고 싶은 곳 ══════════ -->
       <sc-if value="{{ isSpot }}" hint-placeholder-val="{{ false }}">
-        <div data-screen-label="05 가고 싶은 곳" style="display:flex;flex-direction:column;min-height:0;flex:1">
+        <div data-screen-label="05 가고 싶은 곳" data-sub="{{ subAttr }}" style="display:flex;flex-direction:column;min-height:0;flex:1">
           <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 05 — 가고 싶은 곳</div>
           <h2 style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 4px">{{ spotHeading }}</h2>
           <div style="{{ headSpacer }}"></div>
@@ -537,56 +546,56 @@ main + div { z-index: 1100; }
 
       <!-- ══════════ STEP 02 일정·예산 ══════════ -->
       <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ false }}">
-        <div data-screen-label="02 일정·예산">
-          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 02 — 일정 · 예산</div>
+        <div data-screen-label="02 일정·예산" data-sub="{{ subAttr }}">
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 02 — 일정 · 예산<span data-subind="1" style="display:none;margin-left:8px;color:var(--color-neutral-500);letter-spacing:0">{{ subInd }}</span></div>
           <h2 style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 4px">어떤 밀도와 예산으로?</h2>
           <div style="{{ headSpacer }}"></div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+          <div data-sec="0" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
             <sc-for list="{{ courses }}" as="co" hint-placeholder-count="3">
               <button onClick="{{ co.pick }}" style="{{ co.style }}" style-hover="border-color:var(--color-accent-400)">
                 <span style="display:flex;align-items:baseline"><span style="font-size:14px;font-weight:500;color:var(--color-text)">{{ co.name }}</span><span style="margin-left:auto;font-size:11px;color:var(--color-accent-300)">{{ co.mark }}</span></span>
-                <span style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55">{{ co.desc }}</span>
+                <span data-detail="1" style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55">{{ co.desc }}</span>
               </button>
             </sc-for>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <div data-sec="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
             <sc-for list="{{ budgets }}" as="b" hint-placeholder-count="4">
               <button onClick="{{ b.pick }}" style="{{ b.style }}" style-hover="border-color:var(--color-accent-400)">
                 <span style="display:flex;align-items:baseline"><span style="font-size:11px;color:var(--color-neutral-400);font-weight:600;letter-spacing:.08em">{{ b.tier }}</span><span style="margin-left:auto;font-size:11px;color:var(--color-accent-300)">{{ b.mark }}</span></span>
                 <span style="font-family:var(--font-heading);font-size:24px;color:var(--color-text)">{{ b.amt }}</span>
                 <span style="font-size:10px;color:var(--color-neutral-400)">1인 · 2박 3일 · 추정</span>
-                <span style="font-size:11px;color:var(--color-neutral-300);line-height:1.55;margin-top:4px">{{ b.l1 }}<br>{{ b.l2 }}<br>{{ b.l3 }}</span>
+                <span data-detail="1" style="font-size:11px;color:var(--color-neutral-300);line-height:1.55;margin-top:4px">{{ b.l1 }}<br>{{ b.l2 }}<br>{{ b.l3 }}</span>
               </button>
             </sc-for>
           </div>
-          <sc-if value="{{ showEvidence }}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{ showEvidence }}" hint-placeholder-val="{{ true }}"><div data-sec="2">
             <div style="height:1px;background:linear-gradient(90deg,var(--color-neutral-700),transparent);margin:24px 0 16px"></div>
             <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px"><span style="font-size:12.5px;font-weight:500">조사 근거 — 기간·도시별 가감</span></div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
               <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 15px"><div style="font-size:12px;font-weight:500">3박 4일로 늘리면</div><div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.6;margin-top:4px">숙박 1박 + 식사 3끼 + 근교 이동 추가 → 1인 +40~60만.<br>실속 150 / 표준 200 / 여유 250 / 프리미엄 310만+. 온천 료칸 1박은 대개 한 구간 위로 밀어올립니다.</div></div>
               <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 15px"><div style="font-size:12px;font-weight:500">도시별 가감</div><div style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.6;margin-top:4px">나고야·후쿠오카 — 표 기준 그대로.<br>오사카 — 비슷하나 유흥·쇼핑 지출이 늘기 쉬움.<br>교토 11월 — 숙박비 급등으로 1인 +20~40만.</div></div>
             </div>
-          </sc-if>
+          </div></sc-if>
         </div>
       </sc-if>
 
       <!-- ══════════ STEP 06 숙소 ══════════ -->
       <sc-if value="{{ isStay }}" hint-placeholder-val="{{ false }}">
-        <div data-screen-label="06 숙소">
-          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 06 — 숙소</div>
+        <div data-screen-label="06 숙소" data-sub="{{ subAttr }}">
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 06 — 숙소<span data-subind="1" style="display:none;margin-left:8px;color:var(--color-neutral-500);letter-spacing:0">{{ subInd }}</span></div>
           <h2 style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 4px">어디서 잘까요?</h2>
           <div style="{{ headSpacer }}"></div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <div data-sec="0" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
             <sc-for list="{{ stays }}" as="v" hint-placeholder-count="4">
               <button onClick="{{ v.pick }}" style="{{ v.style }}" style-hover="border-color:var(--color-accent-400)">
                 <span style="display:flex;align-items:baseline"><span style="font-size:11px;color:var(--color-neutral-400);font-weight:600;letter-spacing:.08em">{{ v.tier }}</span><span style="margin-left:auto;font-size:11px;color:var(--color-accent-300)">{{ v.mark }}</span></span>
                 <span style="font-size:15px;font-weight:500;color:var(--color-text)">{{ v.name }}</span>
                 <span style="font-size:11px;color:var(--color-accent-300)">{{ v.pair }}</span>
-                <span style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55">{{ v.l1 }}<br>{{ v.l2 }}<br>{{ v.l3 }}</span>
+                <span data-detail="1" style="font-size:11.5px;color:var(--color-neutral-300);line-height:1.55">{{ v.l1 }}<br>{{ v.l2 }}<br>{{ v.l3 }}</span>
               </button>
             </sc-for>
           </div>
-          <div style="margin-top:16px;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 15px">
+          <div data-sec="1" style="margin-top:16px;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 15px">
             <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px">
               <span style="font-size:12.5px;font-weight:500">{{ stayHead }}</span>
               <span style="font-size:11px;color:var(--color-neutral-400)">{{ stayNote }}</span>
@@ -631,7 +640,7 @@ main + div { z-index: 1100; }
 
       <!-- ══════════ STEP 07 종합 ══════════ -->
       <sc-if value="{{ isSum }}" hint-placeholder-val="{{ false }}">
-        <div data-screen-label="07 종합">
+        <div data-screen-label="07 종합" data-sub="{{ subAttr }}">
           <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 07 — 종합</div>
           <h2 style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 4px">내 여행</h2>
           <div style="{{ headSpacer }}"></div>
@@ -743,12 +752,12 @@ main + div { z-index: 1100; }
 
       <!-- ══════════ STEP 08 준비 · 교통 ══════════ -->
       <sc-if value="{{ isPrep }}" hint-placeholder-val="{{ false }}">
-        <div data-screen-label="08 준비 · 교통">
-          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 08 — 준비 · 교통</div>
+        <div data-screen-label="08 준비 · 교통" data-sub="{{ subAttr }}">
+          <div style="font-size:11px;letter-spacing:.14em;color:var(--color-accent);font-weight:600">STEP 08 — 준비 · 교통<span data-subind="1" style="display:none;margin-left:8px;color:var(--color-neutral-500);letter-spacing:0">{{ subInd }}</span></div>
           <h2 style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 4px">떠나기 전에</h2>
           <div style="{{ headSpacer }}"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px">
-            <div>
+            <div data-sec="0">
               <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px">
                 <span style="font-size:12.5px;font-weight:500">준비물 체크리스트</span>
                 <span style="font-size:11px;color:var(--color-accent-300)">{{ prepProgress }}</span>
@@ -773,7 +782,7 @@ main + div { z-index: 1100; }
                 </sc-for>
               </div>
             </div>
-            <div>
+            <div data-sec="1">
               <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px">
                 <span style="font-size:12.5px;font-weight:500">{{ transitHead }}</span>
                 <span style="font-size:11px;color:var(--color-neutral-400)">{{ transitNote }}</span>
@@ -817,7 +826,7 @@ main + div { z-index: 1100; }
 // 선택은 브라우저 localStorage 에 자동 저장된다 — 폰에서 새로고침해도, 다음에 열어도 이어진다.
 // 저장 키에 버전을 붙여 두어 상태 모양이 바뀌면 키만 올리면 된다.
 const SAVE_KEY = 'japan-trip-planner-v1';
-const DEFAULT_STATE = { step: 0, period: null, nights: '2', dow: '수목금', city: null, flightOut: null, flightBack: null, spotCity: null, spotCat: '전체', spotGenre: '전체', spotMapOpen: false, spotMore: null, spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, course: null, budget: null, stay: null, copied: false, home: true, leaving: false, prep: {}, fx: null, plan: {} };
+const DEFAULT_STATE = { step: 0, period: null, nights: '2', dow: '수목금', city: null, flightOut: null, flightBack: null, spotCity: null, spotCat: '전체', spotGenre: '전체', spotMapOpen: false, spotMore: null, sub: 0, spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, course: null, budget: null, stay: null, copied: false, home: true, leaving: false, prep: {}, fx: null, plan: {} };
 const loadSaved = () => {
   try {
     const j = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
@@ -838,6 +847,7 @@ const loadSaved = () => {
     st.spotGenre = typeof st.spotGenre === 'string' ? st.spotGenre : '전체';
     st.spotMapOpen = st.spotMapOpen === true;
     st.spotMore = null;
+    st.sub = 0;
     const sp = (j.spots && typeof j.spots === 'object') ? j.spots : {};
     st.spots = {};
     CITIES4.forEach(c => { st.spots[c] = Array.isArray(sp[c]) ? sp[c].filter(x => typeof x === 'string') : []; });
@@ -1954,7 +1964,7 @@ class Component extends DCLogic {
     // 단계 이동 — 방향을 CSS 변수로 먼저 알려 두면 새 화면이 그 방향에서 들어온다(iOS 푸시/팝).
     const goStep = (i) => {
       try { document.documentElement.style.setProperty('--jt-dx', (i > s.step ? 28 : i < s.step ? -28 : 0) + 'px'); } catch (e) {}
-      set({step:i});
+      set({step:i, sub:0});
     };
     const reset = () => { try { if (typeof confirm === 'function' && !confirm('모든 선택(날짜·도시·항공·가고 싶은 곳·숙소·체크리스트)을 지울까요?')) return; } catch (e) {} try { localStorage.removeItem(SAVE_KEY); } catch (e) {} this.setState(Object.assign({}, DEFAULT_STATE, { spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, prep: {}, plan: {}, home: false, fx: s.fx })); };
     const showEvidence = this.props.showEvidence ?? true;
@@ -2227,6 +2237,12 @@ class Component extends DCLogic {
     const spotShown = (isPhone && s.spotMore && s.spotMore.key === moreKey) ? s.spotMore.n : SPOT_PAGE;
     const tileSpots = isPhone ? citySpots.slice(0, spotShown) : citySpots;
     const spotRemain = citySpots.length - tileSpots.length;
+    // 폰 소단계 수(단계별) — 조사 근거는 showEvidence 일 때만, 04 는 도시를 골라 항공표가 있을 때만 둘로
+    const ev = showEvidence ? 1 : 0;
+    const SUBS = [2+ev, 2+ev, 1+ev, (s.city ? 2 : 1), 1, 2, 1, 2];
+    const SUB_LABELS = [['기간 · 요일','③ 언제 갈까요','조사 근거'], ['코스','예산','조사 근거'], ['도시','조사 근거'], ['가는 편','오는 편 · 조회'], ['가고 싶은 곳'], ['숙소 유형','후보 · 링크'], ['종합'], ['준비물','교통']];
+    const nSub = isPhone ? SUBS[s.step] : 1;
+    const sub = Math.min(Math.max(0, s.sub|0), nSub-1);
 
     const courses = D.COURSES.map(c=>({ name:c.name, desc:c.desc, mark:s.course===c.id?'✓ 선택됨':'', pick:()=>set({course:c.id}), style:s.course===c.id?selCard:cardBase }));
     const budgets = D.BUDGETS.map(b=>({ tier:b.tier, amt:b.amt, l1:b.l1, l2:b.l2, l3:b.l3, mark:s.budget===b.id?'✓':'', pick:()=>set({budget:b.id}), style:s.budget===b.id?selCard:cardBase }));
@@ -2756,7 +2772,9 @@ class Component extends DCLogic {
     // 모바일에서 단계 스트립이 가로 스크롤이라, 현재 단계 버튼이 보이도록 당겨 온다.
     if (typeof setTimeout !== 'undefined' && typeof document !== 'undefined') setTimeout(()=>{ try { const b=document.querySelectorAll('aside nav button')[s.step];
       // 단계가 바뀌면 문서 맨 위로 — 아래쪽 '다음' 버튼으로 넘어와도 새 화면을 제목부터 본다. html 의 scroll-behavior:smooth 를 무시하고 즉시.
-      if(b && this._lastStep !== s.step) { try { window.scrollTo({top:0,left:0,behavior:'instant'}); } catch(e2) { window.scrollTo(0,0); } }
+      const key = s.step+':'+(s.sub|0);
+      if(b && this._lastKey !== key) { try { window.scrollTo({top:0,left:0,behavior:'instant'}); } catch(e2) { window.scrollTo(0,0); } }
+      if(b) this._lastKey = key;
       if(b && b.scrollIntoView && window.innerWidth<=820 && this._lastStep !== s.step) b.scrollIntoView({inline:'center',block:'nearest'}); if(b) this._lastStep = s.step; } catch(e){} }, 0);
     if (typeof document !== 'undefined' && !this._visHooked) {
       this._visHooked = true;
@@ -2868,11 +2886,15 @@ class Component extends DCLogic {
       copiedStyle:'font-size:12px;color:var(--color-accent-300);font-weight:500;opacity:'+(s.copied?1:0)+';transition:opacity .3s',
       barChips: chips2,
       reset, resetStyle: navBtn+';border:1px solid var(--color-neutral-800);color:var(--color-neutral-500)',
-      prev:()=>goStep(Math.max(0,s.step-1)),
-      next:()=>goStep(s.step===7 ? 0 : s.step+1),
-      prevStyle: navBtn+';border:1px solid var(--color-neutral-700);color:var(--color-neutral-300);visibility:'+(s.step===0?'hidden':'visible'),
+      // 폰(≤820px)에서는 한 단계를 소단계로 쪼개 '다음'이 먼저 소단계를 넘긴다 — 한 화면에 한 묶음만.
+      // 템플릿의 data-sec 번호와 짝: 01 기간·요일/언제/근거, 02 코스/예산/근거, 03 도시/근거, 04 가는 편/오는 편, 06 유형/후보, 08 준비물/교통
+      prev:()=>(isPhone && sub>0) ? set({sub:sub-1}) : goStep(Math.max(0,s.step-1)),
+      next:()=>(isPhone && sub<nSub-1) ? set({sub:sub+1}) : goStep(s.step===7 ? 0 : s.step+1),
+      prevStyle: navBtn+';border:1px solid var(--color-neutral-700);color:var(--color-neutral-300);visibility:'+((s.step===0 && sub===0)?'hidden':'visible'),
       nextStyle: navBtn+';border:1px solid var(--color-accent);color:var(--color-accent-300)',
-      nextLabel: s.step===7 ? '처음으로' : '다음: '+stepLabels[s.step+1]+' →'
+      nextLabel: (isPhone && sub<nSub-1) ? '다음: '+SUB_LABELS[s.step][sub+1]+' →' : (s.step===7 ? '처음으로' : '다음: '+stepLabels[s.step+1]+' →'),
+      subAttr: String(sub),
+      subInd: nSub>1 ? (sub+1)+' / '+nSub+' · '+SUB_LABELS[s.step][sub] : ''
     };
   }
 }
