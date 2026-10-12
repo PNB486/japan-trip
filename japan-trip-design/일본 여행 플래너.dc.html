@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -40,6 +40,9 @@ button:active, a:active { transform: scale(.965); }
 div[style*="cursor: pointer"]:active, div[style*="cursor:pointer"]:active { transform: scale(.985); }
 aside nav button { transition: transform .16s cubic-bezier(.32,.72,0,1), background-color .28s cubic-bezier(.32,.72,0,1), border-color .28s cubic-bezier(.32,.72,0,1), color .28s ease; }
 html { scroll-behavior: smooth; }
+/* Leaflet 컨트롤(z-index 1000)이 sticky 사이드바·하단 바 위로 그려지지 않게 */
+aside { z-index: 1100 !important; }
+main + div { z-index: 1100; }
 @media (prefers-reduced-motion: no-preference) {
   [data-screen-label] { animation: jt-screen-in .5s cubic-bezier(.32,.72,0,1) backwards; }
   [data-screen-label="00 메인"] { --jt-dx: 0px; }
@@ -54,7 +57,7 @@ html { scroll-behavior: smooth; }
 @media (max-width: 820px) {
   html { -webkit-text-size-adjust: 100%; }
   div[data-theme] { display: block !important; }
-  aside { animation-name: jt-bar-in; position: sticky !important; top: 0 !important; z-index: 20; height: auto !important; padding: 8px 10px 6px !important;
+  aside { animation-name: jt-bar-in; position: sticky !important; top: 0 !important; z-index: 20; height: auto !important; padding: calc(8px + env(safe-area-inset-top)) 10px 6px !important;
           border-right: 0 !important; border-bottom: 1px solid var(--color-neutral-800); background: var(--color-bg); }
   aside > div:first-child { display: none !important; }
   aside > div:nth-child(2) { font-size: 15px !important; margin: 0 0 8px !important; }
@@ -64,8 +67,10 @@ html { scroll-behavior: smooth; }
   aside nav button { flex: none; width: auto !important; padding: 6px 9px !important; gap: 6px !important; align-items: center !important; }
   aside nav button > span:nth-child(2) > span:nth-child(1) { font-size: 12px !important; white-space: nowrap; }
   aside nav button > span:nth-child(2) > span:nth-child(2) { display: none !important; }
-  main { padding: 16px 14px 20px !important; }
-  [data-screen-label="00 메인"] > div:first-child { height: 76vh !important; min-height: 360px !important; }
+  main { padding: 16px 14px 20px !important; overflow-x: clip; }
+  /* 화면 전환이 ±28px 로 미끄러져 들어오는 0.5초 동안 문서가 가로로 14px 늘어나 폰에서 좌우로 밀린다 — 잘라낸다 */
+  body { overflow-x: clip; }
+  [data-screen-label="00 메인"] > div:first-child { height: 76vh !important; height: 76svh !important; min-height: 360px !important; }
   [data-screen-label="00 메인"] h1 { font-size: 30px !important; }
   main h2 { font-size: 21px !important; }
   [style*="repeat(4, 1fr)"], [style*="repeat(4,1fr)"] { grid-template-columns: 1fr 1fr !important; }
@@ -76,7 +81,7 @@ html { scroll-behavior: smooth; }
   div:has(> table) { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
   div:has(> table) > table { min-width: 560px; }
   [data-screen-label="05 가고 싶은 곳"] > div:has(> #spot-map) { height: 300px !important; min-height: 300px !important; flex: none !important; }
-  [style*="max-height: 398px"], [style*="max-height:398px"] { max-height: 300px !important; }
+  [style*="max-height: 398px"], [style*="max-height:398px"] { max-height: max(300px, 58vh) !important; }
   [data-screen-label="04 항공"] button[style*="border-bottom"] { gap: 6px !important; padding: 7px 8px !important; }
   [data-screen-label="04 항공"] button[style*="border-bottom"] > span:nth-child(1) { width: 56px !important; font-size: 10px !important; }
   [data-screen-label="04 항공"] button[style*="border-bottom"] > span:nth-child(2) { width: 54px !important; }
@@ -86,14 +91,19 @@ html { scroll-behavior: smooth; }
   aside nav button { padding: 9px 11px !important; }
   [data-screen-label="04 항공"] button[style*="border-bottom"] { padding: 10px 8px !important; }
   [data-screen-label="05 가고 싶은 곳"] button[style*="border-radius: 99px"], [data-screen-label="05 가고 싶은 곳"] button[style*="border-radius:99px"] { padding: 8px 13px !important; font-size: 12.5px !important; }
-  [data-screen-label="05 가고 싶은 곳"] a[href] { font-size: 11.5px !important; padding: 6px 10px !important; margin: 2px -4px -2px !important; }
+  [data-screen-label="05 가고 싶은 곳"] a[href]:not(.leaflet-container *) { font-size: 11.5px !important; padding: 6px 10px !important; margin: 2px -4px -2px !important; }
   [data-screen-label="05 가고 싶은 곳"] [style*="font-size: 9.5px"], [data-screen-label="05 가고 싶은 곳"] [style*="font-size: 9.8px"], [data-screen-label="05 가고 싶은 곳"] [style*="font-size: 10px"] { font-size: 11px !important; }
   [data-screen-label="01 날짜·날씨"] [style*="font-size: 9px"] { font-size: 11px !important; }
   [data-screen-label="01 날짜·날씨"] [style*="font-size: 10px"] { font-size: 11px !important; }
+  /* 11px 미만 본문 글자는 폰에서 전부 11px 로 — 07 보딩패스 라벨(9.5px)·08 메모(10px) 포함 */
+  main [style*="font-size: 9px"], main [style*="font-size: 9.5px"], main [style*="font-size: 9.8px"], main [style*="font-size: 10px"],
+  main [style*="font: 600 9.5px"], main [style*="font: 600 10px"], main [style*="font: 500 10px"], main [style*="font: 400 10px"] { font-size: 11px !important; }
+  /* 06 숙소 '지도 ↗' 링크 30×16 → 터치 영역 확장(레이아웃은 음수 마진으로 유지) */
+  [data-screen-label="06 숙소"] a[href]:not(.leaflet-container *) { font-size: 11.5px !important; padding: 7px 10px !important; margin: -7px -10px -7px auto !important; }
   [style*="right: 187px"], [style*="right:187px"] { display: none !important; }
-  [data-plan-item] button { padding: 7px 8px !important; font-size: 12px !important; }
+  [data-plan-item] button { padding: 7px 8px !important; font-size: 12px !important; min-width: 36px !important; min-height: 36px !important; }
   [data-plan-handle] { font-size: 16px !important; padding: 6px 8px 6px 2px !important; }
-  main + div { padding: 8px 10px !important; gap: 6px !important; }
+  main + div { padding: 8px 10px calc(8px + env(safe-area-inset-bottom)) !important; gap: 6px !important; }
   main + div > span:not(:last-child) { display: none !important; }
   main + div > span:last-child { margin-left: 0 !important; width: 100%; }
   main + div > span:last-child button { flex: 1; padding-left: 8px !important; padding-right: 8px !important; }
@@ -2686,7 +2696,7 @@ class Component extends DCLogic {
     // 화면이 다시 보일 때도 한 번 맞춰 준다 — 그동안 미뤄진 크기 계산을 반영하려고.
     if (typeof setTimeout !== 'undefined') setTimeout(()=>{ this.syncMaps(); this.syncHero(); this.syncPlanDrag(); }, 0);
     // 모바일에서 단계 스트립이 가로 스크롤이라, 현재 단계 버튼이 보이도록 당겨 온다.
-    if (typeof setTimeout !== 'undefined' && typeof document !== 'undefined') setTimeout(()=>{ try { const b=document.querySelectorAll('aside nav button')[s.step]; if(b && b.scrollIntoView && window.innerWidth<=820 && this._lastStep !== s.step) b.scrollIntoView({inline:'center',block:'nearest'}); this._lastStep = s.step; } catch(e){} }, 0);
+    if (typeof setTimeout !== 'undefined' && typeof document !== 'undefined') setTimeout(()=>{ try { const b=document.querySelectorAll('aside nav button')[s.step]; if(b && b.scrollIntoView && window.innerWidth<=820 && this._lastStep !== s.step) b.scrollIntoView({inline:'center',block:'nearest'}); if(b) this._lastStep = s.step; } catch(e){} }, 0);
     if (typeof document !== 'undefined' && !this._visHooked) {
       this._visHooked = true;
       document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) this.syncMaps(); });
