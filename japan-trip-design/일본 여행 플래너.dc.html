@@ -65,7 +65,8 @@ main + div { z-index: 1100; }
   aside nav { flex-direction: row !important; gap: 6px !important; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
   aside nav::-webkit-scrollbar { display: none; }
   aside nav button { flex: none; width: auto !important; padding: 6px 9px !important; gap: 6px !important; align-items: center !important; }
-  aside nav button > span:nth-child(2) > span:nth-child(1) { font-size: 12px !important; white-space: nowrap; }
+  aside nav button > span:nth-child(1) { display: none !important; }
+  aside nav button > span:nth-child(2) > span:nth-child(1) { font-size: 13px !important; white-space: nowrap; }
   aside nav button > span:nth-child(2) > span:nth-child(2) { display: none !important; }
   main { padding: 16px 14px 20px !important; overflow-x: clip; }
   /* 화면 전환이 ±28px 로 미끄러져 들어오는 0.5초 동안 문서가 가로로 14px 늘어나 폰에서 좌우로 밀린다 — 잘라낸다 */
@@ -89,8 +90,14 @@ main + div { z-index: 1100; }
   [style*="border-left: 2px dashed"], [style*="border-left:2px dashed"] { border-left: 0 !important; border-top: 2px dashed rgba(255,255,255,.28) !important; }
   div:has(> table) { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
   div:has(> table) > table { min-width: 560px; }
-  [data-screen-label="05 가고 싶은 곳"] > div:has(> #spot-map) { height: 300px !important; min-height: 300px !important; flex: none !important; }
-  [style*="max-height: 398px"], [style*="max-height:398px"] { max-height: max(300px, 58vh) !important; }
+  /* 05: 타일은 안쪽 스크롤 대신 페이지 스크롤, 지도는 기본 접힘 → '지도에서 보기' 버튼으로 펼침. flex order 로 토글·지도를 칩 바로 아래에 */
+  [data-screen-label="05 가고 싶은 곳"] [style*="max-height: 398px"] { max-height: none !important; overflow: visible !important; order: 2; }
+  [data-screen-label="05 가고 싶은 곳"] [style*="max-height: 398px"] + div { display: none !important; }
+  [data-map-toggle] { display: flex !important; order: 1; }
+  [data-map-open="0"] { display: none !important; }
+  [data-map-open="1"] { height: 62vh !important; min-height: 320px !important; flex: none !important; order: 1; margin-bottom: 10px; }
+  [data-map-open] ~ div { order: 3; }
+  [data-map-open] ~ div > span[style*="margin-left: auto"] { display: none !important; }
   [data-screen-label="04 항공"] button[style*="border-bottom"] { gap: 6px !important; padding: 7px 8px !important; }
   [data-screen-label="04 항공"] button[style*="border-bottom"] > span:nth-child(1) { width: 56px !important; font-size: 10px !important; }
   [data-screen-label="04 항공"] button[style*="border-bottom"] > span:nth-child(2) { width: 54px !important; }
@@ -111,12 +118,29 @@ main + div { z-index: 1100; }
   [data-screen-label="06 숙소"] a[href]:not(.leaflet-container *) { font-size: 11.5px !important; padding: 7px 10px !important; margin: -7px -10px -7px auto !important; }
   [style*="right: 187px"], [style*="right:187px"] { display: none !important; }
   [data-plan-item] button { padding: 7px 8px !important; font-size: 12px !important; min-width: 36px !important; min-height: 36px !important; }
+  /* 07: 티켓 장식(스텁·노치·바코드)을 걷어내고 세로 요약으로 — 라벨 왼쪽·값 오른쪽 한 줄, 날짜 카드는 1열 */
+  [data-screen-label="07 종합"] [style*="grid-template-columns: minmax(0px, 1fr)"] > span { display: none !important; }
+  [data-screen-label="07 종합"] [style*="grid-template-columns: minmax(0px, 1fr)"] > div:last-child { display: none !important; }
+  [data-screen-label="07 종합"] [style*="padding: 22px 24px 20px"] { padding: 16px 14px 16px !important; }
+  [data-screen-label="07 종합"] [style*="letter-spacing: 0.02em"] { font-size: 30px !important; }
+  [data-screen-label="07 종합"] [style*="minmax(104px, 1fr)"] { grid-template-columns: 1fr !important; gap: 0 !important; margin-top: 12px !important; }
+  [data-screen-label="07 종합"] [style*="minmax(104px, 1fr)"] > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,.12); }
+  [data-screen-label="07 종합"] [style*="minmax(104px, 1fr)"] > div > div:first-child { flex: none; }
+  [data-screen-label="07 종합"] [style*="minmax(104px, 1fr)"] > div > div:last-child { margin-top: 0 !important; text-align: right; font-size: 13.5px !important; }
+  [data-screen-label="07 종합"] [style*="minmax(132px, 1fr)"] { grid-template-columns: 1fr !important; gap: 12px !important; }
+  [data-screen-label="07 종합"] [style*="minmax(132px, 1fr)"] [style*="font-size: 15px"] { font-size: 16px !important; }
+  [data-screen-label="07 종합"] [style*="minmax(158px, 1fr)"] { grid-template-columns: 1fr !important; }
+  [data-plan-item] > span[style*="flex: 1"] { font-size: 13px !important; }
+  [data-screen-label="07 종합"] [style*="font-size: 11.5px"][style*="line-height: 1.6"] { font-size: 12.5px !important; }
   [data-plan-handle] { font-size: 16px !important; padding: 6px 8px 6px 2px !important; }
   main + div { padding: 8px 10px calc(8px + env(safe-area-inset-bottom)) !important; gap: 6px !important; }
   main + div > span:not(:last-child) { display: none !important; }
   main + div > span:last-child { margin-left: 0 !important; width: 100%; }
-  main + div > span:last-child button { flex: 1; padding-left: 8px !important; padding-right: 8px !important; }
-  main + div > span:last-child button[data-reset] { flex: none; }
+  /* 하단 바: 초기화는 ↺ 아이콘으로 줄이고, '이전'은 좁게·'다음'은 넓게 */
+  main + div > span:last-child button { flex: 1; padding: 12px 8px !important; font-size: 13.5px !important; }
+  main + div > span:last-child button:nth-child(2) { flex: 0 0 26%; }
+  main + div > span:last-child button[data-reset] { flex: none; font-size: 0 !important; padding: 0 13px !important; }
+  main + div > span:last-child button[data-reset]::before { content: '↺'; font-size: 17px; line-height: 1; }
 }
 </style>
 </helmet>
@@ -474,7 +498,9 @@ main + div { z-index: 1100; }
             </div>
           </div>
           <div style="{{ tileHintStyle }}">타일은 안에서 스크롤됩니다 · 총 {{ citySpotCount }}곳</div>
-          <div style="{{ mapBoxStyle }}">
+          <!-- 폰: 지도는 기본 접힘, 이 버튼으로 펼침 — 데스크톱은 숨김(모바일 CSS 가 켠다) -->
+          <button data-map-toggle="1" onClick="{{ toggleSpotMap }}" style="{{ mapToggleStyle }}">{{ mapToggleLabel }}</button>
+          <div data-map-open="{{ spotMapOpenAttr }}" style="{{ mapBoxStyle }}">
             <sc-if value="{{ hasMapImg }}" hint-placeholder-val="{{ false }}">
               <div data-map-fallback="1" data-map-city="{{ spotCity }}" style="{{ rasterImgStyle }}"></div>
             </sc-if>
@@ -783,7 +809,7 @@ main + div { z-index: 1100; }
 // 선택은 브라우저 localStorage 에 자동 저장된다 — 폰에서 새로고침해도, 다음에 열어도 이어진다.
 // 저장 키에 버전을 붙여 두어 상태 모양이 바뀌면 키만 올리면 된다.
 const SAVE_KEY = 'japan-trip-planner-v1';
-const DEFAULT_STATE = { step: 0, period: null, nights: '2', dow: '수목금', city: null, flightOut: null, flightBack: null, spotCity: null, spotCat: '전체', spotGenre: '전체', spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, course: null, budget: null, stay: null, copied: false, home: true, leaving: false, prep: {}, fx: null, plan: {} };
+const DEFAULT_STATE = { step: 0, period: null, nights: '2', dow: '수목금', city: null, flightOut: null, flightBack: null, spotCity: null, spotCat: '전체', spotGenre: '전체', spotMapOpen: false, spots: {나고야:[],교토:[],오사카:[],후쿠오카:[]}, course: null, budget: null, stay: null, copied: false, home: true, leaving: false, prep: {}, fx: null, plan: {} };
 const loadSaved = () => {
   try {
     const j = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
@@ -802,6 +828,7 @@ const loadSaved = () => {
     st.stay = typeof st.stay === 'string' ? st.stay : null;
     st.spotCat = typeof st.spotCat === 'string' ? st.spotCat : '전체';
     st.spotGenre = typeof st.spotGenre === 'string' ? st.spotGenre : '전체';
+    st.spotMapOpen = st.spotMapOpen === true;
     const sp = (j.spots && typeof j.spots === 'object') ? j.spots : {};
     st.spots = {};
     CITIES4.forEach(c => { st.spots[c] = Array.isArray(sp[c]) ? sp[c].filter(x => typeof x === 'string') : []; });
@@ -2710,7 +2737,10 @@ class Component extends DCLogic {
     // 화면이 다시 보일 때도 한 번 맞춰 준다 — 그동안 미뤄진 크기 계산을 반영하려고.
     if (typeof setTimeout !== 'undefined') setTimeout(()=>{ this.syncMaps(); this.syncHero(); this.syncPlanDrag(); }, 0);
     // 모바일에서 단계 스트립이 가로 스크롤이라, 현재 단계 버튼이 보이도록 당겨 온다.
-    if (typeof setTimeout !== 'undefined' && typeof document !== 'undefined') setTimeout(()=>{ try { const b=document.querySelectorAll('aside nav button')[s.step]; if(b && b.scrollIntoView && window.innerWidth<=820 && this._lastStep !== s.step) b.scrollIntoView({inline:'center',block:'nearest'}); if(b) this._lastStep = s.step; } catch(e){} }, 0);
+    if (typeof setTimeout !== 'undefined' && typeof document !== 'undefined') setTimeout(()=>{ try { const b=document.querySelectorAll('aside nav button')[s.step];
+      // 단계가 바뀌면 문서 맨 위로 — 아래쪽 '다음' 버튼으로 넘어와도 새 화면을 제목부터 본다. html 의 scroll-behavior:smooth 를 무시하고 즉시.
+      if(b && this._lastStep !== s.step) { try { window.scrollTo({top:0,left:0,behavior:'instant'}); } catch(e2) { window.scrollTo(0,0); } }
+      if(b && b.scrollIntoView && window.innerWidth<=820 && this._lastStep !== s.step) b.scrollIntoView({inline:'center',block:'nearest'}); if(b) this._lastStep = s.step; } catch(e){} }, 0);
     if (typeof document !== 'undefined' && !this._visHooked) {
       this._visHooked = true;
       document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) this.syncMaps(); });
@@ -2752,6 +2782,11 @@ class Component extends DCLogic {
       spotHeading: cityFixed ? spotCity+'에서 가고 싶은 곳은?' : spotCity+'에서 가고 싶은 곳은? (미리 보기)',
       browseHintStyle:'flex-basis:100%;font-size:10.5px;color:var(--color-neutral-500);border:1px dashed var(--color-neutral-700);border-radius:99px;padding:3px 10px;align-self:flex-start;width:fit-content', stopClick,
       mapDots, mapFar, distNote, citySpotCount:citySpots.length,
+      // 폰 전용 지도 토글 — 접힌 지도는 display:none 이라 ResizeObserver 가 펼칠 때 invalidateSize 를 돌린다
+      toggleSpotMap: ()=>set({spotMapOpen:!s.spotMapOpen}),
+      spotMapOpenAttr: s.spotMapOpen ? '1' : '0',
+      mapToggleLabel: s.spotMapOpen ? '지도 접기 ▲' : '지도에서 보기 ▼ · '+citySpots.length+'곳',
+      mapToggleStyle:'display:none;width:100%;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border-radius:var(--radius-md);border:1px solid var(--color-neutral-700);background:var(--color-neutral-900);color:var(--color-text);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;margin:0 0 10px',
       // 타일은 두 줄만 남기고 안에서 스크롤 — 나머지 세로 공간은 지도가 쓴다.
       // grid-auto-rows:min-content 라야 카드가 늘어나지 않아 빈 공간이 안 생긴다.
       tileScrollStyle:'flex:none;max-height:398px;overflow-y:auto;overscroll-behavior:contain;'
