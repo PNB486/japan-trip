@@ -70,7 +70,16 @@ main + div { z-index: 1100; }
   main { padding: 16px 14px 20px !important; overflow-x: clip; }
   /* 화면 전환이 ±28px 로 미끄러져 들어오는 0.5초 동안 문서가 가로로 14px 늘어나 폰에서 좌우로 밀린다 — 잘라낸다 */
   body { overflow-x: clip; }
-  [data-screen-label="00 메인"] > div:first-child { height: 76vh !important; height: 76svh !important; min-height: 360px !important; }
+  /* 메인은 스크롤 없는 한 화면 — 히어로 100svh, 아래 환율 섹션(카드·그래프)은 숨기고 오늘 환율만 히어로 바닥 스트립으로 */
+  div[data-theme] { min-height: 100svh !important; }
+  [data-screen-label="00 메인"] { min-height: 100svh !important; }
+  [data-screen-label="00 메인"] > div:first-child { height: 100vh !important; height: 100svh !important; min-height: 0 !important; }
+  [data-screen-label="00 메인"] > div:first-child + div { display: none !important; }
+  [data-hero-fx] { display: flex !important; }
+  /* 제목·버튼은 정중앙보다 위로, 버튼 두 개는 한 단계 작게 */
+  [data-screen-label="00 메인"] > div:first-child > div[style*="justify-content: center"] { padding-bottom: 22svh !important; }
+  [data-screen-label="00 메인"] button[style*="border-radius: 99px"] { font-size: 13px !important; padding: 10px 18px !important; }
+  [data-screen-label="00 메인"] a[style*="border-radius: 99px"] { font-size: 12px !important; padding: 10px 14px !important; }
   [data-screen-label="00 메인"] h1 { font-size: 30px !important; }
   main h2 { font-size: 21px !important; }
   [style*="repeat(4, 1fr)"], [style*="repeat(4,1fr)"] { grid-template-columns: 1fr 1fr !important; }
@@ -129,6 +138,11 @@ main + div { z-index: 1100; }
             <a href="https://pnb486.github.io/japan-food-guide/" target="_blank" rel="noopener" style="{{ heroLinkStyle }}" style-hover="background:rgba(255,255,255,.1)">일본 맛집 가이드 725곳 ↗</a>
           </div>
           <div style="margin-top:18px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;letter-spacing:.22em;color:#c6b99e;opacity:.5;text-shadow:0 1px 8px rgba(0,0,0,.6)">Featured by Soul</div>
+        </div>
+        <!-- 폰: 환율 섹션 대신 히어로 바닥에 오늘 환율만 반투명 스트립으로 — 데스크톱에서는 숨김(모바일 CSS 가 켠다) -->
+        <div data-hero-fx style="display:none;position:absolute;left:0;right:0;bottom:0;padding:26px 20px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(16,15,14,0) 0%,rgba(16,15,14,.55) 50%,rgba(16,15,14,.8) 100%);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);flex-direction:column;align-items:center;gap:4px;text-align:center">
+          <div style="display:flex;align-items:baseline;gap:9px"><span style="font-size:11px;letter-spacing:.18em;color:var(--color-accent-200);font-weight:600;opacity:.9">엔화 · 100엔</span><span style="font-family:var(--font-heading);font-size:24px;line-height:1;color:#f3eee6;text-shadow:0 1px 10px rgba(0,0,0,.6)">{{ fx100 }}</span></div>
+          <div style="font-size:11px;color:rgba(236,231,224,.55)">{{ fxDateNote }}</div>
         </div>
       </div>
       <div style="max-width:1100px;width:100%;margin:0 auto;padding:22px 24px 52px;box-sizing:border-box">
